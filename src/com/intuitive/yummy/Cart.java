@@ -5,54 +5,48 @@ import java.util.ArrayList;
 
 public class Cart implements Serializable {
 	
-	private ArrayList<MenuItem> Items = new ArrayList<MenuItem>();
-	private double totalprice = 0;
-	
-	//Set the array of items in the cart
-	public void setItems(ArrayList<MenuItem> Item){
-		Items = Item;
-	}
+	private ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+	private double totalPrice = 0;
 	
 	//Update the total price of all items
-	private void updateTotalPrice() {
-		totalprice = 0;
+	private void update() {
+		totalPrice = 0;
 		
-		for (int i = 0; i < Items.size(); i++) {
-			totalprice += Items.get(i).getPrice();
+		for (int i = 0; i < items.size(); i++) {
+			totalPrice += items.get(i).getPrice();
 		}
 	}
-	
+	//Add an item to the cart
+	public void addItem(MenuItem item){
+		items.add(item);
+		update();
+	}
+	//Remove an item from the cart
+	public void removeItem(MenuItem item) {
+		for (int i = 0; i < items.size(); i++)
+		{
+			if (items.get(i).getName().equals(item.getName()))
+				items.remove(i);
+		}
+		update();
+	}
 	//Return the items in the cart
 	public ArrayList<MenuItem> getItems(){
-		return Items;
+		return items;
 	}
-	
 	//Return the total price
 	public double getTotalPrice(){
-		return totalprice;
+		return totalPrice;
 	}
-	
-	//Add an item to the cart
-	public void addItem(MenuItem Item){
-		Items.add(Item);
-		updateTotalPrice();
-	}
-	
-	//Remove an item from the cart
-	public void removeItem(MenuItem Item){
-		Items.remove(Item);
-		updateTotalPrice();
-	}
-	
 	//Remove all items from the cart
 	public void removeAllItems(){
-		Items.clear();
-		updateTotalPrice();
+		items.clear();
+		totalPrice = 0;
 	}
 	
 	//Constructor
-	Cart(ArrayList<MenuItem> Item, double Totalprice){
-		Items = Item;
-		totalprice = Totalprice;
+	Cart(ArrayList<MenuItem> items){
+		this.items = items;
+		update();
 	}
 }

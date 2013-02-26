@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -109,6 +110,11 @@ public class VendorActivity extends Activity {
         }
         TextView vendorStatus = (TextView) findViewById(R.id.currentStatus);
         vendorStatus.setText(status);
+        Button menuButton = (Button) findViewById(R.id.button_menu);
+        if (vendor.getMenu().getMenuItem().size() != 0)
+        	menuButton.setEnabled(true);
+        else
+        	menuButton.setEnabled(false);
     }
 
     @Override
@@ -120,6 +126,14 @@ public class VendorActivity extends Activity {
     public void viewMenu(View v){
     	Intent intent = new Intent(this, MenuActivity.class);
     	intent.putExtra("Menu", vendor.getMenu());
+    	intent.putExtra("Activity", "Vendor");
+   	startActivity(intent);
+   }
+    public void viewReviews(View v){
+    	Intent intent = new Intent(this, ReadReviewActivity.class);
+    	intent.putExtra("vendorId", vendor.getID());
+    	intent.putExtra("VendorName", vendor.getName());
+    	intent.putExtra("Activity", "Vendor");
     	startActivity(intent);
    }
 }

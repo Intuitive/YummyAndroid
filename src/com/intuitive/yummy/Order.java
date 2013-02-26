@@ -4,52 +4,50 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Order implements Serializable {
-	private int ID = 0;
-	private int Duration = 0;  
-	private ArrayList<MenuItem> Item = new ArrayList<MenuItem>();
-	private double TotalPrice = 0;
-	private enum Status {
-        Cancelled, InProgress, Finished   
-	}
-	private Status status;
+	private int id;
+	private int duration = 0;  
+	private ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+	private double totalPrice = 0;
+	private int status;
 	
-	//Set the wait time of the order
-	public void setWaitingTime(int orderTime){
-		Duration = orderTime;
+	//Set the order ID
+	public void setId(int id) {
+		this.id = id;
 	}
-	
 	//Return the order ID
-	public int getOrderIdNumber(){
-		return ID;
+	public int getOrderId(){
+		return id;
 	}
-	
+	//Set the wait time of the order
+	public void setDuration(int duration){
+		this.duration = duration;
+	}
 	//Return how long the order will take
 	public int getDuration(){
-		return Duration;
+		return duration;
 	}
-	
-	//Return the status of the order
-	public Status getStatus(){
-		return status;
-	}
-	
 	//Return the items of the order
 	public ArrayList<MenuItem> getOrderItems(){
-		return Item;
+		return items;
 	}
-		
+	//Set the order status
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	//Return the status of the order
+	public int getStatus(){
+		return status;
+	}
 	//Return the total price of the order
 	public double getTotalOrderPrice(){
-		return TotalPrice;
+		return totalPrice;
 	}
 	
 	//Constructor
-	Order(int id, int duration, Status stat,ArrayList<MenuItem> item, double totalPrice){
-		ID = id;
-		Duration = duration;
-		status = stat;
-		Item = item;
-		TotalPrice = totalPrice;
-		
+	Order(int id, int duration, int status,ArrayList<MenuItem> items){
+		this.id = id;
+		this.duration = duration;
+		this.status = status;
+		this.items = items;
 	}
 }

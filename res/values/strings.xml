@@ -80,5 +80,10 @@
     <string name="format">Please enter in 24 hour format</string>
     <string name="closeHint">Enter 00 on all for closed</string>
     <string name="save">Save</string>
-
+    
+    <!-- Read Rating Activity -->
+    <string name="title_activity_read_review">ReadReviewActivity</string>
+    <string name="rating">Rating</string>
+    <string name="average_rating">Average Rating: </string>
+    
 </resources>

@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReadReviewActivity" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+	    <TextView
+	        android:id="@+id/read_review_vendor_name"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:gravity="left" />
+	    <TextView
+	        android:id="@+id/average_rating"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:layout_alignLeft="@id/read_review_vendor_name"
+	        android:layout_below="@id/read_review_vendor_name"
+	        android:gravity="left"
+	        android:text="@string/average_rating" />
+	    <ImageView
+	        android:id="@+id/read_review_vendor_rating"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:adjustViewBounds="true"
+	        android:maxHeight="36px"
+	        android:scaleType="fitCenter"
+			android:layout_alignBottom="@+id/average_rating"
+			android:layout_toRightOf="@+id/average_rating"
+	        android:gravity="left"
+	        android:contentDescription="@string/average_rating" />
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/listReview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
+</LinearLayout>

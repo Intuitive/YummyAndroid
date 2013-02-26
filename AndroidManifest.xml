@@ -53,6 +53,10 @@
             android:name="com.intuitive.yummy.VendorEditActivity"
             android:label="@string/title_activity_vendor_edit" >
         </activity>
+        <activity
+            android:name="com.intuitive.yummy.ReadReviewActivity"
+            android:label="@string/title_activity_read_review" >
+        </activity>
     </application>
 
 </manifest>
