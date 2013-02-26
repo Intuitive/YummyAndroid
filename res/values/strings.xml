@@ -80,5 +80,8 @@
     <string name="format">Please enter in 24 hour format</string>
     <string name="closeHint">Enter 00 on all for closed</string>
     <string name="save">Save</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_cart">MainActivity</string>
+    <string name="title_activity_order_confirmation">OrderConfirmationActivity</string>
 
 </resources>
