@@ -1,17 +1,26 @@
 package com.intuitive.yummy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SearchResultsActivity extends ListActivity {
-	
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class SearchResultsActivity extends ListActivity implements RestResponseReceiver.Receiver{
+
+	public RestResponseReceiver receiver;
 	private String [] values = new String[7];
 	
 	//dummy data for vendors
@@ -48,12 +57,96 @@ public class SearchResultsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         
         Intent intent = getIntent();
-        
+        /*
         if(intent.getStringExtra("criteria").equals("nearby")){
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
         			android.R.layout.simple_list_item_1, values);
             setListAdapter(adapter);
-        }
+        }*/
+        
+        receiver = new RestResponseReceiver(new Handler());
+        receiver.setReceiver(this);
+        
+        final Intent apiIntent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
+        apiIntent.putExtra("receiver", receiver);
+        apiIntent.putExtra("class","Vendor");
+        apiIntent.putExtra("operation", "read");
+        
+        Log.d("yummy", "Starting service...");
+        startService(intent);
+        
+    }
+    
+    
+    @Override
+    public void onResume() {
+    	Log.d("yummy", "Resumed...");
+    	super.onResume();
+    }
+    
+    @Override
+    public void onPause() {
+    	Log.d("yummy", "We paused");
+        receiver.setReceiver(null); // clear receiver so no leaks.
+        super.onPause();
+    }
+    
+    
+    
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        
+    	final int  running = 0;
+    	final int finished = 1;
+    	final int error = 2;
+    	
+    	try{
+	    	switch (resultCode) {
+		        case running:
+		            //show progress
+		            break;
+		        case finished:
+		            String response = resultData.getString("response");
+		            // Getting Array of vendors
+		            JSONObject json = new JSONObject(response);
+	                JSONArray vendorsResponse = json.getJSONArray("vendors");
+	                ArrayList<HashMap<String, String>> vendorsList =  new ArrayList<HashMap<String, String>>();
+	                
+	                List<String> vendorNameList = new ArrayList<String>();
+	                
+	                // looping through All vendors
+	                for (int i = 0; i < vendorsResponse.length(); i++) {
+	                    JSONObject c = vendorsResponse.getJSONObject(i);
+	
+	                    // Storing each json item in variable
+	                    //String id = c.getString("id");
+	                    String name = c.getString("name");
+	                    vendorNameList.add(name);
+	                   
+	                    // creating new HashMap
+	                    //HashMap<String, String> map = new HashMap<String, String>();
+	
+	                    // adding each child node to HashMap key => value
+	                    //map.put("id", id);
+	                    //map.put("name", name);
+	
+	                    // adding HashList to ArrayList
+	                    //vendorsList.add(map);
+	                    
+	                    // update UI
+	                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+	                			android.R.layout.simple_list_item_1, vendorNameList);
+	                    setListAdapter(adapter);
+	                }
+		            
+		            // hide progress
+		            break;
+		        case error:
+		            // handle the error;
+		            break;
+	        }
+    	} catch(JSONException e){
+    		e.printStackTrace();
+    	}
     }
     
     @Override
@@ -69,5 +162,7 @@ public class SearchResultsActivity extends ListActivity {
     	intent.putExtra("Vendor", vendor);
     	startActivity(intent);    	
     }
+    
+    
     
 }
