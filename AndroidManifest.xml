@@ -57,6 +57,16 @@
             android:name="com.intuitive.yummy.ReadReviewActivity"
             android:label="@string/title_activity_read_review" >
         </activity>
+
+        <activity
+            android:name="com.intuitive.yummy.OrderConfirmationActivity"
+            android:label="@string/title_activity_order_confirmation" >
+        </activity>
+		
+		<activity
+            android:name="com.intuitive.yummy.CartActivity"
+            android:label="@string/title_activity_cart" >
+        </activity>
     </application>
 
 </manifest>

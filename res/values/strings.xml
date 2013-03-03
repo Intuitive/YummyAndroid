@@ -85,5 +85,7 @@
     <string name="title_activity_read_review">ReadReviewActivity</string>
     <string name="rating">Rating</string>
     <string name="average_rating">Average Rating: </string>
-    
-</resources>
+
+	 <string name="hello_world">Hello world!</string>
+    <string name="title_activity_cart">MainActivity</string>
+    <string name="title_activity_order_confirmation">OrderConfirmationActivity</string></resources>

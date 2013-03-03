@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderConfirmationActivity" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="home"
+        android:text="Home" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="cart"
+        android:text="Cart" />
+
+    <TextView
+        android:id="@+id/confirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="Your order has been submitted"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/confirmation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="Your order number is"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/orderNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/order"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/wait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/orderNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="Your waiting time is"
+        android:textSize="25dp" />
+
+    <TextView
+        android:id="@+id/waitTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wait"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:textSize="25dp" />
+    
+        <TextView
+        android:id="@+id/thankyou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/waitTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="Thank You!"
+        android:textSize="25dp" />
+
+</RelativeLayout>
