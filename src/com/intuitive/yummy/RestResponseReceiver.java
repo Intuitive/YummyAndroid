@@ -5,14 +5,14 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 
 public class RestResponseReceiver extends ResultReceiver {
-	private Receiver receiver;
+	private Receiver mReceiver;
 
     public RestResponseReceiver(Handler handler) {
         super(handler);
     }
 
     public void setReceiver(Receiver receiver) {
-    	this.receiver = receiver;
+    	this.mReceiver = receiver;
     }
 
     public interface Receiver {
@@ -21,8 +21,8 @@ public class RestResponseReceiver extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-        if (receiver != null) {
-        	receiver.onReceiveResult(resultCode, resultData);
+        if (mReceiver != null) {
+        	mReceiver.onReceiveResult(resultCode, resultData);
         }
     }
 }

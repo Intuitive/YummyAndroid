@@ -20,10 +20,11 @@ import org.json.JSONObject;
 
 public class SearchResultsActivity extends ListActivity implements RestResponseReceiver.Receiver{
 
-	public RestResponseReceiver receiver;
+	public RestResponseReceiver mReceiver;
 	private String [] values = new String[7];
-	
+	private ArrayList<Vendor> vendors = new ArrayList<Vendor>();
 	//dummy data for vendors
+	/*
 	private Vendor[] vendors = {
 			new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>())),
 			new Vendor(2, "Sally's Subs", "Welcome to Sally's Subs", "",  new int[][] {{830,1800}, {830,1800}, {830,1800}, {830,1800}, {830,1800}, {0,0}, {0,0}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>())),
@@ -33,11 +34,13 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 			new Vendor(6, "Carlos' Cuisine", "Welcome to Carlos' Cuisine", "",  new int[][] {{0,0}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>())),
 			new Vendor(7, "Isabel's Ice Cream", "Isabel's Ice Cream\nThe Best Ice Cream In The World", "",  new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {900,1800}, {900,1800}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>()))
 			};
+	*/
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	//Get the list of vendor and create a array of vendors by name only
-    	//then pass it to the list adapter to display it as a list in the app
+    	// Get the list of vendor and create a array of vendors by name only
+    	// then pass it to the list adapter to display it as a list in the app
+    	/*
     	for (int i = 0; i < vendors.length; i++)
     	{
     		values[i] = vendors[i].getName();
@@ -53,41 +56,42 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     	vendors[0].getMenu().addMenuItem(new MenuItem(8, "Chicken Cheesesteak", 6, "Cheesesteak", "Cheesesteak filled with chicken", true, null, null));
     	vendors[0].getMenu().addMenuItem(new MenuItem(9, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null, null));
     	vendors[0].getMenu().addMenuItem(new MenuItem(10, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null, null));
-    	    	
-        super.onCreate(savedInstanceState);
+    	*/	
         
-        Intent intent = getIntent();
+    	super.onCreate(savedInstanceState);
+        
         /*
+        Intent intent = getIntent();
+        
         if(intent.getStringExtra("criteria").equals("nearby")){
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
         			android.R.layout.simple_list_item_1, values);
             setListAdapter(adapter);
-        }*/
-        
-        receiver = new RestResponseReceiver(new Handler());
-        receiver.setReceiver(this);
+        }
+        */
+        mReceiver = new RestResponseReceiver(new Handler());
+        mReceiver.setReceiver(this);
         
         final Intent apiIntent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
-        apiIntent.putExtra("receiver", receiver);
+        apiIntent.putExtra("receiver", mReceiver);
         apiIntent.putExtra("class","Vendor");
         apiIntent.putExtra("operation", "read");
         
-        Log.d("yummy", "Starting service...");
-        startService(intent);
+        startService(apiIntent);
+        Log.d("yummy", "Starting up REST service...");
         
     }
     
     
     @Override
     public void onResume() {
-    	Log.d("yummy", "Resumed...");
+    	mReceiver.setReceiver(this);
     	super.onResume();
     }
     
     @Override
     public void onPause() {
-    	Log.d("yummy", "We paused");
-        receiver.setReceiver(null); // clear receiver so no leaks.
+        mReceiver.setReceiver(null); // clear receiver so no leaks.
         super.onPause();
     }
     
@@ -101,50 +105,56 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     	
     	try{
 	    	switch (resultCode) {
-		        case running:
-		            //show progress
+		        
+	    		case running:
+		            // TODO show progress
 		            break;
+		            
 		        case finished:
 		            String response = resultData.getString("response");
-		            // Getting Array of vendors
-		            JSONObject json = new JSONObject(response);
-	                JSONArray vendorsResponse = json.getJSONArray("vendors");
-	                ArrayList<HashMap<String, String>> vendorsList =  new ArrayList<HashMap<String, String>>();
-	                
-	                List<String> vendorNameList = new ArrayList<String>();
-	                
-	                // looping through All vendors
-	                for (int i = 0; i < vendorsResponse.length(); i++) {
-	                    JSONObject c = vendorsResponse.getJSONObject(i);
-	
-	                    // Storing each json item in variable
-	                    //String id = c.getString("id");
-	                    String name = c.getString("name");
-	                    vendorNameList.add(name);
-	                   
-	                    // creating new HashMap
-	                    //HashMap<String, String> map = new HashMap<String, String>();
-	
-	                    // adding each child node to HashMap key => value
-	                    //map.put("id", id);
-	                    //map.put("name", name);
-	
-	                    // adding HashList to ArrayList
-	                    //vendorsList.add(map);
+
+		            // TODO check result code before continuing
+		            
+		            JSONArray vendors_json = (new JSONObject(response)).getJSONArray("data");
+		            
+	                // looping through all vendors
+	                for (int i = 0; i < vendors_json.length(); i++) {
 	                    
+	                	JSONObject v = vendors_json.getJSONObject(i);
+
+	                    // specifically get Vendor class attributes of vendor
+	                    JSONObject vendorInfo = v.getJSONObject("Vendor");
+	                    
+	                    // create Vendor object
+	                    Vendor vendor = new Vendor();
+	                    vendor.setID(vendorInfo.getInt("id"));
+	                    vendor.setName(vendorInfo.getString("name"));
+	                    vendor.setDescription(vendorInfo.getString("description"));
+	                    Boolean isOpen = vendorInfo.getBoolean("status");
+	                    if(isOpen){
+	                    	vendor.openTruck();
+	                    }else{
+	                    	vendor.closeTruck();
+	                    }
+	                    
+	                    //add to list of Vendors
+	                    vendors.add(vendor);
+	                                       
 	                    // update UI
-	                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-	                			android.R.layout.simple_list_item_1, vendorNameList);
+	                    ArrayAdapter<Vendor> adapter = new ArrayAdapter<Vendor>(this,
+	                			android.R.layout.simple_list_item_1, vendors);
+	                    
 	                    setListAdapter(adapter);
 	                }
 		            
-		            // hide progress
+		            // TODO hide progress
 		            break;
 		        case error:
 		            // handle the error;
 		            break;
 	        }
     	} catch(JSONException e){
+    		// TODO handle this
     		e.printStackTrace();
     	}
     }
@@ -157,8 +167,9 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     
     //get the correspond vendor and pass it to the VendorActivity
     protected void onListItemClick(ListView lv, View v, int position, long id){
-    	Vendor vendor = vendors[position];
+    	Vendor vendor = vendors.get(position);
     	Intent intent = new Intent(this, VendorActivity.class);
+    	
     	intent.putExtra("Vendor", vendor);
     	startActivity(intent);    	
     }

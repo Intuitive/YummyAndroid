@@ -70,7 +70,9 @@
             android:label="@string/title_activity_cart" >
         </activity>
         
-		  <service android:name=".RestService" />
+		<service 
+		    android:enabled="true" 
+		    android:name="com.intuitive.yummy.RestService" />
 		  
 		  
     </application>

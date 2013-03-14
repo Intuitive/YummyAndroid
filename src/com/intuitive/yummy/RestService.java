@@ -12,15 +12,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.ResultReceiver;
 import android.util.Log;
 
 public class RestService extends IntentService {
 	
+	public RestService(){
+		super("RestAPI service");
+		Log.d("yummy", "RestService started");
+	}
+	
 	public RestService(String name) {
-		
 		super(name);
-		// TODO Auto-generated constructor stub
-		Log.d("yummy", "RestService constructed");
+		Log.d("yummy", "RestService started");
 	}
 	
 	JSONParser jParser = new JSONParser();
@@ -30,12 +34,13 @@ public class RestService extends IntentService {
 	
 	protected void onHandleIntent(Intent intent) {
 		Log.d("yummy", "Handling JSON request intent...");
-        final RestResponseReceiver receiver = intent.getParcelableExtra("receiver");
+        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
         Bundle b = new Bundle();
         
         receiver.send(RestResultCode.RUNNING.getValue(), Bundle.EMPTY);
         try {
         	// getting JSON string from URL
+        	Log.d("yummy", "Making HTTP request...");
         	JSONObject json = jParser.makeHttpRequest(vendorUrl, "GET", null);
 
         	// Check your log cat for JSON reponse
@@ -43,18 +48,15 @@ public class RestService extends IntentService {
 
         	try {
         		// Checking for SUCCESS TAG
-        		int success = json.getInt("success");
-
-        		if (success == 1) {
-        			// products found
-        			b.putString("response", json.toString());
+        		b.putString("response", json.toString());
+        		
+        		Boolean success = json.getBoolean("success");
+        		if (success) {
         			receiver.send(RestResultCode.FINISHED.getValue(), b);
-
         		} else {
-        			// no products found
-        			b.putString("response", json.toString());
         			receiver.send(RestResultCode.ERROR.getValue(), b);
         		}
+        		
         	} catch (JSONException e) {
         		e.printStackTrace();
         	}
