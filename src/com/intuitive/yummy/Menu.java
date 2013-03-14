@@ -21,7 +21,11 @@ public class Menu implements Serializable {
 		return menuItems;
 	}
 	
-	Menu(ArrayList<MenuItem> menuItems) {
+	public Menu(){
+		
+	}
+	
+	public Menu(ArrayList<MenuItem> menuItems) {
 		this.menuItems = menuItems;
 	}
 
