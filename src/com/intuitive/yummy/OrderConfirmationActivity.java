@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+
 import android.widget.TextView;
 
 public class OrderConfirmationActivity extends Activity {
@@ -38,12 +39,6 @@ public class OrderConfirmationActivity extends Activity {
 	//Go to home page when home button is clicked
     public void home(View v){
     	Intent intent = new Intent(this, MainActivity.class);
-    	startActivity(intent);
-    }
-    
-    //Go to cart page when cart button is clicked
-    public void cart(View v){
-    	Intent intent = new Intent(this, CartActivity.class);
     	startActivity(intent);
     }
 

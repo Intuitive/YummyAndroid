@@ -22,10 +22,15 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 
 	public RestResponseReceiver mReceiver;
 	private String [] values = new String[7];
+	
 	private ArrayList<Vendor> vendors = new ArrayList<Vendor>();
+
+	// dummy data for vendors
 	private com.intuitive.yummy.Menu menu = new com.intuitive.yummy.Menu();
-	//dummy data for vendors
+	private int[][] hours = new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}};
+	
 	/*
+	 * 	//dummy data for vendors
 	private Vendor[] vendors = {
 			new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>())),
 			new Vendor(2, "Sally's Subs", "Welcome to Sally's Subs", "",  new int[][] {{830,1800}, {830,1800}, {830,1800}, {830,1800}, {830,1800}, {0,0}, {0,0}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>())),
@@ -133,6 +138,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 	                    vendor.setName(vendorInfo.getString("name"));
 	                    vendor.setDescription(vendorInfo.getString("description"));
 	                    vendor.setMenu(menu);
+	                    vendor.setHours(hours);
 	                    Boolean isOpen = vendorInfo.getBoolean("status");
 	                    if(isOpen){
 	                    	vendor.openTruck();
