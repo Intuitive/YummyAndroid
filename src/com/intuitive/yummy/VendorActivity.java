@@ -102,19 +102,29 @@ public class VendorActivity extends Activity {
         
         TextView vendorName = (TextView) findViewById(R.id.vendorName);
         vendorName.setText(name);
+        
         TextView vendorDescription = (TextView) findViewById(R.id.vendorDescription);
         vendorDescription.setText(description);
+        
         ImageView vendorPicture = (ImageView) findViewById(R.id.vendorPicture);
         if (vendor.getPictureURL() != null) {
         	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureURL()));
         }
+        
         TextView vendorStatus = (TextView) findViewById(R.id.currentStatus);
         vendorStatus.setText(status);
+        
         Button menuButton = (Button) findViewById(R.id.button_menu);
-        if (vendor.getMenu().getMenuItem().size() != 0)
-        	menuButton.setEnabled(true);
-        else
+        
+        try{
+        	if (vendor.getMenu().getMenuItem().size() != 0)
+            	menuButton.setEnabled(true);
+            else
+            	menuButton.setEnabled(false);	
+        }catch(NullPointerException e){
         	menuButton.setEnabled(false);
+        }
+        
     }
 
     @Override

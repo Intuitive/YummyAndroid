@@ -38,7 +38,7 @@ public class SpecialOffers implements Serializable {
 	}
 	
 	//Constructor
-	SpecialOffers(MenuItem Item, double price, int duration){
+	public SpecialOffers(MenuItem Item, double price, int duration){
 		menuItem = Item;
 		Price = price;
 		Duration = duration;

@@ -41,7 +41,7 @@ public class User {
 	}
 	
 	//Constructor
-	User (String username, String firstName, String lastName, String email, int phoneNumber) {
+	public User (String username, String firstName, String lastName, String email, int phoneNumber) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
