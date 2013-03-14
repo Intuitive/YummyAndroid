@@ -66,8 +66,10 @@ public class Vendor implements Serializable {
 		return menu;
 	}
 	
-	//constructor
-	Vendor (int id, String name, String description, String address, int[][] hours, boolean status, String pictureURL, Menu menu) {
+	//constructors
+	public Vendor(){}
+	
+	public Vendor (int id, String name, String description, String address, int[][] hours, boolean status, String pictureURL, Menu menu) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -76,5 +78,9 @@ public class Vendor implements Serializable {
 		this.status = status;
 		this.pictureURL = pictureURL;
 		this.menu = menu;
+	}
+	
+	public String toString(){
+		return name;
 	}
 }
