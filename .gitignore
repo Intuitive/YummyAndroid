@@ -6,7 +6,7 @@ gen/*
 .classpath
 project.properties
 .project
-
+.settings/
 # OS generated files #
 ######################
 .DS_Store
