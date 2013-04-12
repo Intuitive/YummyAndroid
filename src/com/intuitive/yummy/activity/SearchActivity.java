@@ -1,4 +1,8 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activity;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;

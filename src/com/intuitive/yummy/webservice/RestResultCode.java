@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.webservice;
 
 public enum RestResultCode {
     	RUNNING(0),

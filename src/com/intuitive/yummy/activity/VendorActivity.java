@@ -1,9 +1,17 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activity;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.model.Vendor;
+import com.intuitive.yummy.model.Vendor.VendorStatus;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +34,7 @@ public class VendorActivity extends Activity {
 
         //String address;
         String status;
-        if (vendor.getStatus())
+        if (vendor.getStatus() == VendorStatus.OPEN)
         	status = "Open";
         else
         	status = "Closed";
@@ -107,8 +115,8 @@ public class VendorActivity extends Activity {
         vendorDescription.setText(description);
         
         ImageView vendorPicture = (ImageView) findViewById(R.id.vendorPicture);
-        if (vendor.getPictureURL() != null) {
-        	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureURL()));
+        if (vendor.getPictureUrl() != null) {
+        	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureUrl()));
         }
         
         TextView vendorStatus = (TextView) findViewById(R.id.currentStatus);
@@ -135,7 +143,7 @@ public class VendorActivity extends Activity {
     
     public void viewMenu(View v){
     	Intent intent = new Intent(this, MenuActivity.class);
-    	intent.putExtra("Menu", vendor.getMenu());
+    	intent.putExtra("Menu", (Parcelable) vendor.getMenu());
     	intent.putExtra("Activity", "Vendor");
    	startActivity(intent);
    }

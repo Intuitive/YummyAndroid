@@ -1,6 +1,14 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activity;
 
 import java.util.ArrayList;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.drawable;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.model.ReviewAdapter;
+import com.intuitive.yummy.model.VendorReview;
 
 import android.os.Bundle;
 import android.app.Activity;

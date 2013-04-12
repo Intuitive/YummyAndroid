@@ -1,4 +1,11 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activity;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.model.MenuItem;
+import com.intuitive.yummy.model.MenuItemAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class MenuActivity extends Activity {
-	private com.intuitive.yummy.Menu menu;
+	private com.intuitive.yummy.model.Menu menu;
 	private ListView listView;
 
     @Override
@@ -20,7 +27,7 @@ public class MenuActivity extends Activity {
 		setContentView(R.layout.activity_menu);
         
         Intent intent = getIntent();
-        menu = (com.intuitive.yummy.Menu)intent.getSerializableExtra("Menu");
+        menu = (com.intuitive.yummy.model.Menu)intent.getSerializableExtra("Menu");
         MenuItem[] itemsArray = new MenuItem[menu.getMenuItem().size()];
         menu.getMenuItem().toArray(itemsArray);
 

@@ -1,10 +1,18 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activity;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.model.Vendor;
+import com.intuitive.yummy.model.Vendor.VendorStatus;
+
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -39,7 +47,7 @@ public class VendorEditActivity extends Activity {
 		location = (EditText)findViewById(R.id.location_field);
 		location.setText(vendor.getAddress());
         toggle = (ToggleButton)findViewById(R.id.status_field);
-        toggle.setChecked(vendor.getStatus());
+        toggle.setChecked(vendor.getStatus() == VendorStatus.OPEN);
         
 		ArrayList<EditText> temp = new ArrayList<EditText> ();
 		monOpenHour = (EditText)findViewById(R.id.monOpenHour);
@@ -141,9 +149,9 @@ public class VendorEditActivity extends Activity {
 	
 	public void changeStatus(View v) {
 		if (toggle.isChecked())
-			vendor.openTruck();
+			vendor.setStatus(VendorStatus.OPEN);
 		else
-			vendor.closeTruck();
+			vendor.setStatus(VendorStatus.CLOSED);
 	}
 	
 	public void save(View v) {
@@ -160,7 +168,7 @@ public class VendorEditActivity extends Activity {
 			}
 	    	Intent intent = new Intent(this, VendorAdminAccountActivity.class);
 	    	intent.putExtra("Activity", "Edit");
-	    	intent.putExtra("Vendor", vendor);
+	    	intent.putExtra("Vendor", (Parcelable) vendor);
 	    	startActivity(intent);
 		}
 	}

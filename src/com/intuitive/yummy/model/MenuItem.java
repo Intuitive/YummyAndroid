@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class MenuItem implements Serializable {
 		return ingredients;
 	}
 	
-	MenuItem(int id, String name, double price, String category, String description, boolean availability, String pictureURL, ArrayList<Ingredient> ingredients) {
+	public MenuItem(int id, String name, double price, String category, String description, boolean availability, String pictureURL, ArrayList<Ingredient> ingredients) {
 		this.id = id;
 		this.name = name;
 		this.price = price;

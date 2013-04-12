@@ -1,4 +1,8 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.model;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.drawable;
+import com.intuitive.yummy.R.id;
 
 import android.app.Activity;
 import android.content.Context;

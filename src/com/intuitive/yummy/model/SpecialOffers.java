@@ -1,6 +1,7 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.model;
 
 import java.io.Serializable;
+
 
 public class SpecialOffers implements Serializable {
 	private MenuItem menuItem;

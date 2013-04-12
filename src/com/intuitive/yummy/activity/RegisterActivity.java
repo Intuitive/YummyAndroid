@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -12,6 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
 
 public class RegisterActivity extends Activity {
 	Button cancel;
