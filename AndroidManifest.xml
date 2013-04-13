@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme" 
         android:allowBackup="false">
         <activity
-            android:name="com.intuitive.yummy.activity.MainActivity"
+            android:name="com.intuitive.yummy.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
@@ -24,52 +24,52 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.LoginActivity"
+            android:name="com.intuitive.yummy.activities.LoginActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.SearchActivity"
+            android:name="com.intuitive.yummy.activities.SearchActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.SearchResultsActivity"
+            android:name="com.intuitive.yummy.activities.SearchResultsActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.VendorActivity"
+            android:name="com.intuitive.yummy.activities.VendorActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.MenuActivity"
+            android:name="com.intuitive.yummy.activities.MenuActivity"
             android:label="@string/app_name" >
         </activity>
   		<activity
-  		    android:name="com.intuitive.yummy.activity.VendorAdminAccountActivity"
+  		    android:name="com.intuitive.yummy.activities.VendorAdminAccountActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.RegisterActivity"
+            android:name="com.intuitive.yummy.activities.RegisterActivity"
             android:label="@string/app_name" >
         </activity>
 		<activity
-		    android:name="com.intuitive.yummy.activity.VendorEditActivity"
+		    android:name="com.intuitive.yummy.activities.VendorEditActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.activity.ReadReviewActivity"
+            android:name="com.intuitive.yummy.activities.ReadReviewActivity"
             android:label="@string/app_name" >
         </activity>
 
-        <activity			android:name="com.intuitive.yummy.activity.OrderConfirmationActivity"
+        <activity			android:name="com.intuitive.yummy.activities.OrderConfirmationActivity"
             android:label="@string/app_name" >
         </activity>
-		<activity			android:name="com.intuitive.yummy.activity.CartActivity"
+		<activity			android:name="com.intuitive.yummy.activities.CartActivity"
             android:label="@string/app_name" >
         </activity>
         
 		<service 
 		    android:enabled="true" 
-		    android:name="com.intuitive.yummy.webservice.RestService" />
+		    android:name="com.intuitive.yummy.webservices.RestService" />
 		  
 		  
     </application>
