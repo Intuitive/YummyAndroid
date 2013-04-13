@@ -38,7 +38,7 @@ public class VendorAdminAccountActivity extends Activity {
         TextView vendorName = (TextView)findViewById(R.id.adminVendorName);
 		vendorName.setText(vendor.getName());
 		TextView vendorAddress = (TextView)findViewById(R.id.adminVendorAddress);
-		vendorAddress.setText(vendor.getAddress());
+		vendorAddress.setText(vendor.getLocation());
 		TextView vendorStatus = (TextView)findViewById(R.id.adminVendorStatus);
 		if (vendor.getStatus() == VendorStatus.OPEN)
 			vendorStatus.setText("Open");

@@ -51,6 +51,7 @@ public class RestService extends IntentService {
 		DELETE
 	}
 	
+	public final static String BundleObjectKey = "objects";
 	
 	
 	private final static HashMap<Class<?>,String> controllerNames = new HashMap<Class<?>, String>() {
@@ -114,7 +115,6 @@ public class RestService extends IntentService {
 
 		// build URL
 		String requestUrl = getUrl(modelType, action, null);
-		
 		// create receiver and alert to progress
 		final ResultReceiver receiver = intent.getParcelableExtra(IntentExtraKeys.RECEIVER);
         receiver.send(RestResultCode.RUNNING.getValue(), Bundle.EMPTY);
@@ -140,18 +140,17 @@ public class RestService extends IntentService {
         			}
         			
         			// convert JSONArray items to model objects
-        			Model[] objectArray = new Model[objects.length()];
+        			ArrayList<Model> objectList = new ArrayList<Model>();
         			for(int i=0; i<objects.length(); i++){
         				
         				Model object = (Model) modelType.newInstance();
         				JSONObject jsonObject = objects.getJSONObject(i).getJSONObject(object.getModelName());
         				object.parseJson(jsonObject);
         				
-        				objectArray[i] = object;
+        				objectList.add(object);
         			}
         			
-        			b.putParcelableArray("objectsArray", objectArray);
-    
+        			b.putParcelableArrayList(BundleObjectKey, objectList);
         			receiver.send(RestResultCode.FINISHED.getValue(), b);
         			
         		} else {

@@ -22,10 +22,7 @@ import com.intuitive.yummy.webservice.*;
 public class SearchResultsActivity extends ListActivity implements RestResponseReceiver.Receiver{
 
 	public RestResponseReceiver mReceiver;
-	private String [] values = new String[7];
-	
-	private ArrayList<Vendor> vendors = new ArrayList<Vendor>();
-
+	ArrayList<Vendor> vendors;
 	// dummy data for vendors
 	private com.intuitive.yummy.model.Menu menu = new com.intuitive.yummy.model.Menu();
 	private int[][] hours = new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}};
@@ -90,8 +87,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		        
 		    case finished:
 		    	
-		    	// TODO problem is that cast needs to happen before here (if anywhere...)
-		    	Vendor[] vendors = (Vendor[]) objectData.getParcelableArray("objectsArray");
+		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
 		    	
 		    	// update UI
 		    	ArrayAdapter<Vendor> adapter = new ArrayAdapter<Vendor>(this,

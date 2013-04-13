@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 //Contain vendor's information
@@ -24,7 +25,7 @@ public class Vendor implements Serializable, Model {
 	private int id;
 	private String name;
 	private String description;
-	private String address;
+	private String location;
 	private int[][] hours;
 	private VendorStatus status;
 	private String pictureUrl;
@@ -41,23 +42,13 @@ public class Vendor implements Serializable, Model {
 	
 	/* constructors */
 	public Vendor(){}
-	
-	public Vendor(Parcel parcel){
-		id = parcel.readInt();
-		name = parcel.readString();
-		description = parcel.readString();
-		status = parcel.readInt() == 1 ? VendorStatus.OPEN : VendorStatus.CLOSED; 
-		menu = parcel.readParcelable(Menu.class.getClassLoader());
-		dateCreated = Date.valueOf(parcel.readString());
-		dateLastModified = Date.valueOf(parcel.readString());
-		isDeleted = parcel.readInt() == 1;
-	}
+
 	
 	public Vendor (
 			int id, 
 			String name, 
 			String description, 
-			String address, 
+			String location, 
 			int[][] hours, 
 			VendorStatus status, 
 			String pictureUrl, 
@@ -65,7 +56,7 @@ public class Vendor implements Serializable, Model {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.address = address;
+		this.location = location;
 		this.hours = hours;
 		this.status = status;
 		this.pictureUrl = pictureUrl;
@@ -83,7 +74,7 @@ public class Vendor implements Serializable, Model {
 			id = json.getInt("id");
 			name = json.getString("name");
 			description = json.getString("description");
-			address = json.getString("address");
+			location = json.getString("location");
 			Boolean isOpen = json.getBoolean("status");
 			status = isOpen ? VendorStatus.OPEN : VendorStatus.CLOSED;
 			pictureUrl = json.getString("picture_url");
@@ -104,8 +95,8 @@ public class Vendor implements Serializable, Model {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	public void setHours(int[][] hours) {
 		this.hours = hours;
@@ -139,8 +130,8 @@ public class Vendor implements Serializable, Model {
 	public String getDescription() {
 		return description;
 	}
-	public String getAddress() {
-		return address;
+	public String getLocation() {
+		return location;
 	}
 	public int[][] getHours() {
 		return hours;
@@ -176,27 +167,80 @@ public class Vendor implements Serializable, Model {
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		// TODO Auto-generated method stub
+		
 		out.writeInt(id);
-		out.writeString(name);
-		out.writeString(description);
-		out.writeString(address);
 		
-		if(status == VendorStatus.OPEN)
-			out.writeInt(1);
-		else
+		// null values will be preceded by 0, non-null 1
+		// in order to facilitate unmarshalling in parcel constructor
+		if(name == null)
 			out.writeInt(0);
-		
-		out.writeString(pictureUrl);
-		out.writeParcelable(menu, 0); // TODO look into flag here
-		out.writeString(dateCreated.toString());
-		out.writeString(dateLastModified.toString());
-		
-		if(isDeleted)
+		else{
 			out.writeInt(1);
-		else
-			out.writeInt(0);
+			out.writeString(name);
+		}
 		
+
+		if(description == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(description);
+		}
+
+		if(location == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(location);
+		}
+
+		if(status == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			if(status == VendorStatus.OPEN)
+				out.writeInt(1);
+			else
+				out.writeInt(0);
+		}
+
+		if(pictureUrl == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(pictureUrl);
+		}
+
+		if(menu == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeParcelable(menu, 0); // TODO look into flag here
+		}
+
+		if(dateCreated == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(dateCreated.toString());
+		}
+
+		if(dateLastModified == null)
+			out.writeInt(1);
+		else{
+			out.writeInt(0);
+			out.writeString(dateLastModified.toString());
+		}
+
+		if(isDeleted == null)
+			out.writeInt(1);
+		else{
+			out.writeInt(0);
+			if(isDeleted)
+				out.writeInt(1);
+			else
+				out.writeInt(0);
+		}
 	}
 
 
@@ -205,7 +249,47 @@ public class Vendor implements Serializable, Model {
 		return new Vendor(parcel);
 	}
 
+	
+	public Vendor(Parcel parcel){
+		
+		id = parcel.readInt();
+		
+		if(parcel.readInt() == 1)
+			name = parcel.readString();
+		
+		if(parcel.readInt() == 1)
+			description = parcel.readString();
 
+		if(parcel.readInt() == 1){
+			status = parcel.readInt() == 1 ? VendorStatus.OPEN : VendorStatus.CLOSED;
+		}
+			
+		if(parcel.readInt() == 1)
+			menu = parcel.readParcelable(Menu.class.getClassLoader());
+
+		if(parcel.readInt() == 1)
+			dateCreated = Date.valueOf(parcel.readString());
+
+		if(parcel.readInt() == 1)
+			dateLastModified = Date.valueOf(parcel.readString());
+
+		if(parcel.readInt() == 1)
+			isDeleted = parcel.readInt() == 1;
+	}
+
+	public static final Parcelable.Creator<Vendor> CREATOR = new Creator<Vendor>() {
+
+	    public Vendor createFromParcel(Parcel source) {
+	        return new Vendor(source);
+	    }
+
+	    public Vendor[] newArray(int size) {
+	        return new Vendor[size];
+	    }
+
+	};
+	
+	
 	@Override
 	public Model[] newArray(int size) {
 		return null;

@@ -45,7 +45,7 @@ public class VendorEditActivity extends Activity {
 		description = (EditText)findViewById(R.id.description_field);
 		description.setText(vendor.getDescription());
 		location = (EditText)findViewById(R.id.location_field);
-		location.setText(vendor.getAddress());
+		location.setText(vendor.getLocation());
         toggle = (ToggleButton)findViewById(R.id.status_field);
         toggle.setChecked(vendor.getStatus() == VendorStatus.OPEN);
         
@@ -158,7 +158,7 @@ public class VendorEditActivity extends Activity {
 		if (check()) {
 			vendor.setName(name.getText().toString());
 			vendor.setDescription(description.getText().toString());
-			vendor.setAddress(location.getText().toString());
+			vendor.setLocation(location.getText().toString());
 			int[][] hours = vendor.getHours();
 			for (int i = 0; i < 7; i++) {
 				int open = Integer.parseInt(arrayEditText.get(i).get(0).getText().toString())*100 + Integer.parseInt(arrayEditText.get(i).get(1).getText().toString());
