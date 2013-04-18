@@ -1,8 +1,17 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activities;
 
 import java.util.ArrayList;
 
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.models.MenuItem;
+import com.intuitive.yummy.models.Vendor;
+import com.intuitive.yummy.models.Vendor.VendorStatus;
+
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -12,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class VendorAdminAccountActivity extends Activity {
-	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>()));
+	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, VendorStatus.CLOSED, null, new com.intuitive.yummy.models.Menu(new ArrayList<MenuItem>()));
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +32,15 @@ public class VendorAdminAccountActivity extends Activity {
         	vendor = (Vendor)intent.getSerializableExtra("Vendor");
 		
         ImageView vendorPicture = (ImageView) findViewById(R.id.adminVendorPicture);
-        if (vendor.getPictureURL() != null) {
-        	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureURL()));
+        if (vendor.getPictureUrl() != null) {
+        	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureUrl()));
         }
         TextView vendorName = (TextView)findViewById(R.id.adminVendorName);
 		vendorName.setText(vendor.getName());
 		TextView vendorAddress = (TextView)findViewById(R.id.adminVendorAddress);
-		vendorAddress.setText(vendor.getAddress());
+		vendorAddress.setText(vendor.getLocation());
 		TextView vendorStatus = (TextView)findViewById(R.id.adminVendorStatus);
-		if (vendor.getStatus())
+		if (vendor.getStatus() == VendorStatus.OPEN)
 			vendorStatus.setText("Open");
 		else
 			vendorStatus.setText("Close");
@@ -46,7 +55,7 @@ public class VendorAdminAccountActivity extends Activity {
 	
 	public void editGeneralInfo(View v) {
     	Intent intent = new Intent(this, VendorEditActivity.class);
-    	intent.putExtra("Vendor", vendor);
+    	intent.putExtra("Vendor", (Parcelable) vendor);
     	startActivity(intent);
 	}
 

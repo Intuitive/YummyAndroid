@@ -1,10 +1,18 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.activities;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
+import com.intuitive.yummy.R.layout;
+import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.models.Vendor;
+import com.intuitive.yummy.models.Vendor.VendorStatus;
+
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -37,9 +45,9 @@ public class VendorEditActivity extends Activity {
 		description = (EditText)findViewById(R.id.description_field);
 		description.setText(vendor.getDescription());
 		location = (EditText)findViewById(R.id.location_field);
-		location.setText(vendor.getAddress());
+		location.setText(vendor.getLocation());
         toggle = (ToggleButton)findViewById(R.id.status_field);
-        toggle.setChecked(vendor.getStatus());
+        toggle.setChecked(vendor.getStatus() == VendorStatus.OPEN);
         
 		ArrayList<EditText> temp = new ArrayList<EditText> ();
 		monOpenHour = (EditText)findViewById(R.id.monOpenHour);
@@ -141,16 +149,16 @@ public class VendorEditActivity extends Activity {
 	
 	public void changeStatus(View v) {
 		if (toggle.isChecked())
-			vendor.openTruck();
+			vendor.setStatus(VendorStatus.OPEN);
 		else
-			vendor.closeTruck();
+			vendor.setStatus(VendorStatus.CLOSED);
 	}
 	
 	public void save(View v) {
 		if (check()) {
 			vendor.setName(name.getText().toString());
 			vendor.setDescription(description.getText().toString());
-			vendor.setAddress(location.getText().toString());
+			vendor.setLocation(location.getText().toString());
 			int[][] hours = vendor.getHours();
 			for (int i = 0; i < 7; i++) {
 				int open = Integer.parseInt(arrayEditText.get(i).get(0).getText().toString())*100 + Integer.parseInt(arrayEditText.get(i).get(1).getText().toString());
@@ -160,7 +168,7 @@ public class VendorEditActivity extends Activity {
 			}
 	    	Intent intent = new Intent(this, VendorAdminAccountActivity.class);
 	    	intent.putExtra("Activity", "Edit");
-	    	intent.putExtra("Vendor", vendor);
+	    	intent.putExtra("Vendor", (Parcelable) vendor);
 	    	startActivity(intent);
 		}
 	}

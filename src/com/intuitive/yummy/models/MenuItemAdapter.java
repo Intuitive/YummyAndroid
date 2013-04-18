@@ -1,6 +1,9 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.models;
 
 import java.text.NumberFormat;
+
+import com.intuitive.yummy.R;
+import com.intuitive.yummy.R.id;
 
 import android.app.Activity;
 import android.content.Context;

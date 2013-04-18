@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;

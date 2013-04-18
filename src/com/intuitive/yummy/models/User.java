@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.models;
 
 //Contain user information
 

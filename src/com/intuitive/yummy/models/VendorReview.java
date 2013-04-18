@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.models;
 
 //contain comment and star rating for each review
 public class VendorReview {
@@ -22,7 +22,7 @@ public class VendorReview {
 		return star;
 	}
 	
-	VendorReview(String comment, int star)
+	public VendorReview(String comment, int star)
 	{
 		this.comment = comment;
 		this.star = star;

@@ -1,4 +1,4 @@
-package com.intuitive.yummy;
+package com.intuitive.yummy.webservices;
 
 import android.os.Bundle;
 import android.os.Handler;
