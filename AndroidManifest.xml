@@ -7,19 +7,20 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="17" />
-	
-	<uses-permission android:name="android.permission.INTERNET" />
-    
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:allowBackup="false">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.intuitive.yummy.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -43,36 +44,43 @@
             android:name="com.intuitive.yummy.activities.MenuActivity"
             android:label="@string/app_name" >
         </activity>
-  		<activity
-  		    android:name="com.intuitive.yummy.activities.VendorAdminAccountActivity"
+        <activity
+            android:name="com.intuitive.yummy.activities.VendorAdminAccountActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.RegisterActivity"
             android:label="@string/app_name" >
         </activity>
-		<activity
-		    android:name="com.intuitive.yummy.activities.VendorEditActivity"
+        <activity
+            android:name="com.intuitive.yummy.activities.VendorEditActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.ReadReviewActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.intuitive.yummy.activities.OrderConfirmationActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.intuitive.yummy.activities.CartActivity"
+            android:label="@string/app_name" >
+        </activity>
 
-        <activity			android:name="com.intuitive.yummy.activities.OrderConfirmationActivity"
-            android:label="@string/app_name" >
+        <service
+            android:name="com.intuitive.yummy.webservices.RestService"
+            android:enabled="true" />
+
+        <activity
+            android:name="com.intuitive.yummy.VendorEditMenuItemActivity"
+            android:label="@string/title_activity_vendor_edit_menu_item" >
         </activity>
-		<activity			android:name="com.intuitive.yummy.activities.CartActivity"
-            android:label="@string/app_name" >
+        <activity
+            android:name="com.intuitive.yummy.VendorEditMenuActivity"
+            android:label="@string/title_activity_vendor_edit_menu" >
         </activity>
-        
-		<service 
-		    android:enabled="true" 
-		    android:name="com.intuitive.yummy.webservices.RestService" />
-		  
-		  
     </application>
 
-    
 </manifest>

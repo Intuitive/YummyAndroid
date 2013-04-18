@@ -40,6 +40,8 @@ public class VendorEditActivity extends Activity {
 		setContentView(R.layout.activity_vendor_edit);
         Intent intent = getIntent();
         vendor = (Vendor)intent.getSerializableExtra("Vendor");
+        // Get the vendor info from server using vendor id
+        int vendorID = (Integer)intent.getSerializableExtra("VendorID");
 		name = (EditText)findViewById(R.id.name_field);
 		name.setText(vendor.getName());
 		description = (EditText)findViewById(R.id.description_field);
