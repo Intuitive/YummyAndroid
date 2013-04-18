@@ -1,6 +1,5 @@
 package com.intuitive.yummy.models;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 import org.json.JSONException;
@@ -12,7 +11,7 @@ import android.util.Log;
 
 //Contain vendor's information
 
-public class Vendor implements Serializable, Model {
+public class Vendor implements Model {
 	
 	/**
 	 * TODO this is just default
