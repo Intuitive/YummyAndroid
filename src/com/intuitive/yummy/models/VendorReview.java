@@ -26,6 +26,13 @@ public class VendorReview implements Model {
 	private Boolean isDeleted;
 	
 	public VendorReview() {}
+
+	public VendorReview(String title, String description, int rating)
+	{
+		this.title = title;
+		this.description = description;
+		this.rating = rating;
+	}
 	
 	public VendorReview(int ID, int userID, String title, int vendorID, String description, int rating)
 	{
@@ -86,22 +93,13 @@ public class VendorReview implements Model {
 		return rating;
 	}
 	
-	public VendorReview(String description, int rating)
-	{
-		this.description = description;
-		this.rating = rating;
-	}
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		// TODO Auto-generated method stub
 		out.writeInt(ID);
-		
-		out.writeInt(1);
 		out.writeInt(userID);
 		if (title == null)
 			out.writeInt(0);
@@ -125,7 +123,6 @@ public class VendorReview implements Model {
 			out.writeInt(1);
 			out.writeString(dateCreated.toString());
 		}
-		out.writeInt(1);
 		out.writeInt(vendorID);
 		if(isDeleted == null)
 			out.writeInt(0);
@@ -146,8 +143,7 @@ public class VendorReview implements Model {
 	public VendorReview(Parcel parcel)
 	{
 		ID = parcel.readInt();
-		if (parcel.readInt() == 1)
-			userID = parcel.readInt();
+		userID = parcel.readInt();
 		if (parcel.readInt() == 1)
 			title = parcel.readString();
 		if (parcel.readInt() == 1)
@@ -156,8 +152,7 @@ public class VendorReview implements Model {
 			rating = parcel.readInt();
 		if (parcel.readInt() == 1)
 			dateCreated = Date.valueOf(parcel.readString());
-		if (parcel.readInt() == 1)
-			vendorID = parcel.readInt();
+		vendorID = parcel.readInt();
 		if (parcel.readInt() == 1)
 			isDeleted = parcel.readInt() == 1;
 	}
@@ -176,12 +171,10 @@ public class VendorReview implements Model {
 
 	@Override
 	public Model[] newArray(int size) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public void parseJson(JSONObject json) {
-		// TODO Auto-generated method stub
 		try {
 			ID = json.getInt("id");
 			title = json.getString("title");
@@ -195,7 +188,6 @@ public class VendorReview implements Model {
 	}
 	@Override
 	public String getModelName() {
-		// TODO Auto-generated method stub
 		return modelName;
 	}
 }

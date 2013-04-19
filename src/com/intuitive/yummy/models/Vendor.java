@@ -225,16 +225,16 @@ public class Vendor implements Model {
 		}
 
 		if(dateLastModified == null)
-			out.writeInt(1);
-		else{
 			out.writeInt(0);
+		else{
+			out.writeInt(1);
 			out.writeString(dateLastModified.toString());
 		}
 
 		if(isDeleted == null)
-			out.writeInt(1);
-		else{
 			out.writeInt(0);
+		else{
+			out.writeInt(1);
 			if(isDeleted)
 				out.writeInt(1);
 			else
