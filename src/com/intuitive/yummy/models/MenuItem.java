@@ -159,10 +159,7 @@ public class MenuItem implements Model {
 			out.writeInt(0);
 		else{
 			out.writeInt(1);
-			if(isDeleted)
-				out.writeInt(1);
-			else
-				out.writeInt(0);
+			out.writeInt(isDeleted ? 1 : 0);
 		}
 	}
 	@Override
@@ -214,11 +211,7 @@ public class MenuItem implements Model {
 			category = json.getString("category");
 			price = json.getDouble("price");
 			description = json.getString("description");
-			int available = json.getInt("available");
-			if (available == 1)
-				availability = true;
-			else
-				availability = false;
+			availability = json.getBoolean("available");
 			pictureURL = json.getString("picture_url");
 			vendorID = json.getInt("vendor_id");
 		} catch (JSONException e) {

@@ -49,7 +49,7 @@
     <string name="title_activity_menu">Menu</string>
 
     <!-- Vendor Admin Account Activity -->
-    <string name="title_activity_vender_admin_account">Vendor Account</string>
+    <string name="title_activity_vendor_admin_account">Vendor Account</string>
     <string name="edit_general_info">Edit General Info</string>
     <string name="edit_menu">Edit Menu</string>
     <string name="view_order_history">View Order History</string>
