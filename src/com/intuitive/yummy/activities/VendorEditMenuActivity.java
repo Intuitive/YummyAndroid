@@ -1,11 +1,10 @@
 package com.intuitive.yummy.activities;
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
 import com.intuitive.yummy.models.*;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.AdapterView.OnItemClickListener;
 import android.app.Activity;
 import android.content.Intent;
@@ -78,7 +77,7 @@ public class VendorEditMenuActivity extends Activity {
     private void startEditMenuItemActivity(View v, MenuItem menuItem) {
     	Intent intent = new Intent(this, VendorEditMenuItemActivity.class);
     	intent.putExtra("MenuItemID", menuItem.getID());
-    	intent.putExtra("MenuItem", menuItem);
+    	intent.putExtra("MenuItem", (Parcelable)menuItem);
     	System.out.println("MenuItemID: " + menuItem.getID() + ", MenuItemName: " + menuItem.getName());
     	startActivity(intent);    	
 
