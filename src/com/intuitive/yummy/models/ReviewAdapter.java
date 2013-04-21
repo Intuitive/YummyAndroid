@@ -34,6 +34,7 @@ public class ReviewAdapter extends ArrayAdapter<VendorReview> {
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			row = inflater.inflate(layoutResourceId, parent, false);
 			holder = new ReviewHolder();
+			holder.title = (TextView)row.findViewById(R.id.title);
 			holder.rating = (ImageView)row.findViewById(R.id.rating);
 			holder.comment = (TextView)row.findViewById(R.id.comment);
 			row.setTag(holder);
@@ -41,6 +42,7 @@ public class ReviewAdapter extends ArrayAdapter<VendorReview> {
 			holder = (ReviewHolder)row.getTag();
 		}
 		VendorReview review = data[position];
+		holder.title.setText(review.getTitle());
 		holder.comment.setText(review.getComment());
 		holder.rating.setImageDrawable(context.getResources().getDrawable(getStarPic(review.getStar())));
 		
@@ -49,6 +51,7 @@ public class ReviewAdapter extends ArrayAdapter<VendorReview> {
 	
 	static class ReviewHolder
 	{
+		TextView title;
 		ImageView rating;
 		TextView comment;
 	}

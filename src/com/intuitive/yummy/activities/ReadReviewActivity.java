@@ -3,10 +3,6 @@ package com.intuitive.yummy.activities;
 import java.util.ArrayList;
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.drawable;
-import com.intuitive.yummy.R.id;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
 import com.intuitive.yummy.models.ReviewAdapter;
 import com.intuitive.yummy.models.VendorReview;
 
@@ -19,16 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ReadReviewActivity extends Activity {
-	private VendorReview r5 = new VendorReview("Sample 5 star Review", 5);
-	private VendorReview r4 = new VendorReview("Sample 4 star Review", 4);
-	private VendorReview r3 = new VendorReview("Sample 3 star Review", 3);
-	private VendorReview r2 = new VendorReview("Sample 2 star Review", 2);
-	private VendorReview r1 = new VendorReview("Sample 1 star Review", 1);
-	private VendorReview r5l = new VendorReview("Sample long long long long long long long long long long long long 5 star Review", 5);
-	private VendorReview r4l = new VendorReview("Sample long long long long long long long long long long long long 4 star Review", 4);
-	private VendorReview r3l = new VendorReview("Sample long long long long long long long long long long long long 3 star Review", 3);
-	private VendorReview r2l = new VendorReview("Sample long long long long long long long long long long long long 2 star Review", 2);
-	private VendorReview r1l = new VendorReview("Sample long long long long long long long long long long long long 1 star Review", 1);
+	private VendorReview r5 = new VendorReview("Title", "Sample 5 star Review", 5);
+	private VendorReview r4 = new VendorReview("Title", "Sample 4 star Review", 4);
+	private VendorReview r3 = new VendorReview("Title", "Sample 3 star Review", 3);
+	private VendorReview r2 = new VendorReview("Title", "Sample 2 star Review", 2);
+	private VendorReview r1 = new VendorReview("Title", "Sample 1 star Review", 1);
+	private VendorReview r5l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 5 star Review", 5);
+	private VendorReview r4l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 4 star Review", 4);
+	private VendorReview r3l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 3 star Review", 3);
+	private VendorReview r2l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 2 star Review", 2);
+	private VendorReview r1l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 1 star Review", 1);
 	
 	private ArrayList<VendorReview> reviews = new ArrayList<VendorReview> ();
 	private ListView listView;

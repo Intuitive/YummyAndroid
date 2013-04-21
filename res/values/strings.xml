@@ -10,7 +10,7 @@
     <string name="cart">Cart</string>
 
     <!-- Main Activity -->
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Yummy</string>
     <string name="activity_main_button_searchNearby">Search</string>
     <string name="activity_main_button_search">Find Food Trucks</string>
     <string name="search_by_location">City, Zip Code, Street, etc</string>
@@ -19,19 +19,19 @@
     <string name="food_type">What would you like?</string>
 
     <!-- Login Activity -->
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Login</string>
     <string name="activity_login_hint_username">Username</string>
     <string name="activity_login_hint_password">Password</string>
     <string name="activity_login_textView_signIn">Enter Your Account Information:</string>
 
     <!-- Search Activity -->
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Search</string>
 
     <!-- Search Result Activity -->
-    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="title_activity_search_results">Search Result</string>
 
     <!-- Vendor Activity -->
-    <string name="title_activity_vendor">VendorActivity</string>
+    <string name="title_activity_vendor">Vendor</string>
     <string name="vendorPicture">Vendor Picture</string>
     <string name="view_menu">Browse Menu</string>
     <string name="view_review">Read Reviews</string>
@@ -46,16 +46,16 @@
     <string name="status">Status:</string>
 
     <!-- Menu Activity -->
-    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_activity_menu">Menu</string>
 
     <!-- Vendor Admin Account Activity -->
-    <string name="title_activity_vender_admin_account">VendorAdminAccountActivity</string>
+    <string name="title_activity_vendor_admin_account">Vendor Account</string>
     <string name="edit_general_info">Edit General Info</string>
     <string name="edit_menu">Edit Menu</string>
     <string name="view_order_history">View Order History</string>
 
     <!-- Register Activity -->
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">Register</string>
     <string name="register_label">Please enter your information:</string>
     <string name="username_label">Username:</string>
     <string name="password_label">Password:</string>
@@ -67,7 +67,7 @@
     <string name="email_label">Email:</string>
 
     <!-- Vendor Edit Activity -->
-    <string name="title_activity_vendor_edit">VendorEditActivity</string>
+    <string name="title_activity_vendor_edit">Vendor Edit</string>
     <string name="edit_general_information">Edit General Information</string>
     <string name="edit_name_label">Name:</string>
     <string name="edit_description_label">Description:</string>
@@ -81,12 +81,31 @@
     <string name="format">Please enter in 24 hour format</string>
     <string name="closeHint">Enter 00 on all for closed</string>
     <string name="save">Save</string>
-    
+
     <!-- Read Rating Activity -->
-    <string name="title_activity_read_review">ReadReviewActivity</string>
+    <string name="title_activity_read_review">Read Reviews</string>
     <string name="rating">Rating</string>
     <string name="average_rating">Average Rating: </string>
 
-	 <string name="hello_world">Hello world!</string>
-    <string name="title_activity_cart">MainActivity</string>
-    <string name="title_activity_order_confirmation">OrderConfirmationActivity</string></resources>
+    <!-- Cart Activity -->
+    <string name="title_activity_cart">Cart</string>
+
+    <!-- Order Confirmation Activity -->
+    <string name="title_activity_order_confirmation">Order Confirmation</string>
+
+    <!-- Vendor Edit Menu Activity -->
+    <string name="title_activity_vendor_edit_menu">Vendor Edit Menu</string>
+    <string name="select_or_add">Select an item to edit:</string>
+    <string name="add_item">Add item</string>
+
+    <!-- Vendor Edit Menu Item Activity -->
+    <string name="title_activity_vendor_edit_menu_item">Vendor Edit Menu Item</string>
+    <string name="edit_menu_item">Edit Menu Item</string>
+    <string name="item_name">Name:</string>
+    <string name="item_price">Price:</string>
+    <string name="item_description">Description:</string>
+    <string name="item_category">Category:</string>
+    <string name="delete">Delete</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
