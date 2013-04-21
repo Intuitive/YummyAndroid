@@ -1,6 +1,6 @@
 package com.intuitive.yummy.models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -27,8 +27,8 @@ public class MenuItem implements Model {
 	private boolean availability;
 	private String pictureURL;
 	private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-	private Date dateCreated;
-	private Date dateLastModified;
+	private Timestamp dateCreated;
+	private Timestamp dateLastModified;
 	private Boolean isDeleted;
 	
 	public void setID(int id) {
@@ -183,9 +183,9 @@ public class MenuItem implements Model {
 		if(parcel.readInt() == 1)
 			pictureURL = parcel.readString();
 		if(parcel.readInt() == 1)
-			dateCreated = Date.valueOf(parcel.readString());
+			dateCreated = Timestamp.valueOf(parcel.readString());
 		if(parcel.readInt() == 1)
-			dateLastModified = Date.valueOf(parcel.readString());
+			dateLastModified = Timestamp.valueOf(parcel.readString());
 		if(parcel.readInt() == 1)
 			isDeleted = parcel.readInt() == 1;
 	}
