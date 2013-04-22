@@ -1,9 +1,10 @@
 package com.intuitive.yummy.models;
 
 import java.sql.Date;
-
+import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,7 +22,7 @@ public class Vendor implements Model {
 	// what the model is referred to on the backend
 	private static final String modelName = "Vendor";
 	
-	private int id;
+	private int id = -1;
 	private String name;
 	private String description;
 	private String location;
@@ -40,8 +41,7 @@ public class Vendor implements Model {
 	}
 	
 	/* constructors */
-	public Vendor(){}
-
+	public Vendor (){}
 	
 	public Vendor (
 			int id, 
@@ -50,8 +50,7 @@ public class Vendor implements Model {
 			String location, 
 			int[][] hours, 
 			VendorStatus status, 
-			String pictureUrl, 
-			Menu menu) {
+			String pictureUrl) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -59,7 +58,6 @@ public class Vendor implements Model {
 		this.hours = hours;
 		this.status = status;
 		this.pictureUrl = pictureUrl;
-		this.menu = menu;
 	}
 	
 	public String toString(){
@@ -210,12 +208,6 @@ public class Vendor implements Model {
 			out.writeString(pictureUrl);
 		}
 
-		if(menu == null)
-			out.writeInt(0);
-		else{
-			out.writeInt(1);
-			out.writeParcelable(menu, 0); // TODO look into flag here
-		}
 
 		if(dateCreated == null)
 			out.writeInt(0);
@@ -259,13 +251,17 @@ public class Vendor implements Model {
 		if(parcel.readInt() == 1)
 			description = parcel.readString();
 
+		if(parcel.readInt() == 1)
+			location = parcel.readString();
+		
 		if(parcel.readInt() == 1){
 			status = parcel.readInt() == 1 ? VendorStatus.OPEN : VendorStatus.CLOSED;
 		}
-			
-		if(parcel.readInt() == 1)
-			menu = parcel.readParcelable(Menu.class.getClassLoader());
-
+		
+		if(parcel.readInt() == 1){
+			pictureUrl = parcel.readString();
+		}
+		
 		if(parcel.readInt() == 1)
 			dateCreated = Date.valueOf(parcel.readString());
 
@@ -292,5 +288,32 @@ public class Vendor implements Model {
 	@Override
 	public Model[] newArray(int size) {
 		return null;
+	}
+
+	@Override
+	public HashMap<String, String> getPostData() {
+		HashMap<String, String> postData = new HashMap<String, String>();
+		
+		if(id == -1) postData.put("id", String.valueOf(id));
+		if(name != null) postData.put("name", name);
+		if(description != null) postData.put("description", description);
+		if(location != null) postData.put("location", location);
+		if(status != null) postData.put("status", status == VendorStatus.OPEN ? "true" : "false");
+		// TODO skipping Menu for now
+		if(pictureUrl != null) postData.put("picture_url", pictureUrl);
+		if(dateCreated != null) postData.put("date_created", dateCreated.toString());
+		if(dateLastModified != null) postData.put("date_last_modified", dateLastModified.toString());
+		if(isDeleted != null) postData.put("deleted", isDeleted ? "true" : "false");
+		
+		return postData;
 	}	
+	
+	public Vendor (int id, String name, String description, VendorStatus status, String pictureURL) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.status = status;
+		this.pictureUrl = pictureURL;
+		this.isDeleted = false;
+	}
 }

@@ -1,6 +1,5 @@
 package com.intuitive.yummy.webservices;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,9 +13,6 @@ import com.intuitive.yummy.models.Vendor;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.ResultReceiver;
 import android.util.Log;
 
@@ -29,10 +25,7 @@ public class RestService extends IntentService {
 	
 	private JSONParser jParser = new JSONParser();
 	private static String baseUrl = "http://yummy.edgarpaz.com/cakephp";
-	
-	private JSONArray vendors = null;
-	private ArrayList<HashMap<String, String>> vendorsList =  new ArrayList<HashMap<String, String>>();
-	
+
 	public RestService(){
 		super("RestAPI service");
 		Log.d("yummy", "RestService started");
@@ -53,7 +46,6 @@ public class RestService extends IntentService {
 	
 	public final static String BundleObjectKey = "objects";
 	
-	
 	private final static HashMap<Class<?>,String> controllerNames = new HashMap<Class<?>, String>() {
 		private static final long serialVersionUID = 1L;
 	{
@@ -73,26 +65,42 @@ public class RestService extends IntentService {
 		put(Action.DELETE, "delete");
 	}};
 	
+	private final static HashMap<Action,String> actionMethodMapping = new HashMap<Action, String>() {
+		private static final long serialVersionUID = 1L;
+	{
+		put(Action.CREATE, "POST");
+		put(Action.READSINGLE, "GET");
+		put(Action.READALL, "GET");
+		put(Action.UPDATE, "POST");
+		put(Action.DELETE, "DELETE");
+	}};
+	
 	/**
 	 * Builds the request URL based on the model type and action
 	 * @param modelType - the class of the resource to request
 	 * @param action - the action the URL will be used to perform
 	 * @return entire request URL
 	 */
-	private final static String getUrl(Class<?> modelType, Action action, ArrayList<Object> parameters){
+	private final static String buildUrl(Class<?> modelType, Action action, Intent intent){
 		
 		StringBuilder url = new StringBuilder(baseUrl);
 		url.append("/".concat(controllerNames.get(modelType)));
 		url.append("/".concat(actionNames.get(action)));
 		
 		// add parameters
-		// TODO add some sort of checks to make sure the correct # of params
-		// have been passed given the action being performed
-		if(parameters != null && parameters.size() > 0){
-			for (Object param : parameters){
-				url.append("/".concat(param.toString()));
-			}	
+		// TODO add support for option params i.e., paging, limit, etc
+		if(action == Action.READSINGLE){
+			if(!intent.hasExtra(IntentExtraKeys.MODEL_ID))
+				throw new IllegalArgumentException("An id parameter must be supplied when reading a single Model object.");
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
 		}
+		else if(action == Action.UPDATE){
+			if(!intent.hasExtra(IntentExtraKeys.MODEL_ID))
+				throw new IllegalArgumentException("An id parameter must be supplied when reading a single Model object.");
+			
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
+		}
+		
 		
 		return url.toString();
 	}
@@ -107,14 +115,13 @@ public class RestService extends IntentService {
 		ArrayList<String> parameters = new ArrayList<String>();
 		
 		// get parameters
-		int param = 1;
-		while(intent.hasExtra(IntentExtraKeys.PARAMETER(param))){
-			parameters.add(intent.getStringExtra(IntentExtraKeys.PARAMETER(param)));
-			param++;
+		for(int i=0; intent.hasExtra(IntentExtraKeys.PARAMETER(i)); i++){
+			parameters.add(intent.getStringExtra(IntentExtraKeys.PARAMETER(i)));
 		}
 
 		// build URL
-		String requestUrl = getUrl(modelType, action, null);
+		String requestUrl = buildUrl(modelType, action, intent);
+		
 		// create receiver and alert to progress
 		final ResultReceiver receiver = intent.getParcelableExtra(IntentExtraKeys.RECEIVER);
         receiver.send(RestResultCode.RUNNING.getValue(), Bundle.EMPTY);
@@ -122,40 +129,78 @@ public class RestService extends IntentService {
         // initialize bundle to pass back to caller
         Bundle b = new Bundle();
        
-        // fire HTTP request and handle response
+        
         try {
         	
-        	Log.v("yummy", "Making HTTP request...");
-        	JSONObject json = jParser.makeHttpRequest(requestUrl, "GET", null);
+        	// get postData is action is a POST action
+        	ArrayList<PostParameter> postParams = null;
+        	if(actionMethodMapping.get(action) == "POST")
+        	{
+        		Model modelObject = intent.getParcelableExtra(IntentExtraKeys.MODEL);
+        		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
+        	}        	
+        	
+        	// log URL and post data
+        	// TODO take this out for production? or use debug var to check
+        	Log.v("yummy", "Making HTTP request to URL: " + requestUrl);
+        	if(actionMethodMapping.get(action) == "POST")
+        	{
+        		StringBuilder postData_logMsg = new StringBuilder();
+        		postData_logMsg.append("POST data:\n");
+        		for(PostParameter param : postParams){
+        			postData_logMsg.append("key: " + param.getName() + ", value: " + param.getValue());
+        		}
+        		Log.d("yummy", postData_logMsg.toString());
+        	}
+        	
+        	// fire HTTP request and handle response
+        	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams);
         	Log.d("yummy", "JSON response: ".concat(json.toString()));
 
         	try {
         		// only continue on success
-        		Boolean success = json.getBoolean("success");
-        		if (success) {
-
-        			JSONArray objects = json.getJSONArray("data");
-        			if(!json.has("data")){
-        				throw new JSONException("JSON response badly formatted. No 'data' element.");
-        			}
+        		String success = json.getString("success");
+        		        			
+        		if(action == Action.READALL || action == Action.READSINGLE){
+	        			if (success.equals("false"))
+	            			throw new Exception();
+	            		
         			
-        			// convert JSONArray items to model objects
-        			ArrayList<Model> objectList = new ArrayList<Model>();
-        			for(int i=0; i<objects.length(); i++){
-        				
-        				Model object = (Model) modelType.newInstance();
-        				JSONObject jsonObject = objects.getJSONObject(i).getJSONObject(object.getModelName());
-        				object.parseJson(jsonObject);
-        				
-        				objectList.add(object);
-        			}
-        			
-        			b.putParcelableArrayList(BundleObjectKey, objectList);
-        			receiver.send(RestResultCode.FINISHED.getValue(), b);
-        			
-        		} else {
-        			receiver.send(RestResultCode.ERROR.getValue(), b);
-        		}
+	        			if(!json.has("data")){
+	        				throw new JSONException("JSON response badly formatted. No 'data' element.");
+	        			}
+			        			
+	        			// create list to return via bundle
+		        		ArrayList<Model> objectList = new ArrayList<Model>();
+		        		
+		        		if(json.getInt("count") == 1){
+		        			JSONObject obj_json = json.getJSONObject("data");
+		
+		        			Model object = (Model) modelType.newInstance();
+		        			JSONObject jsonObject = obj_json.getJSONObject(object.getModelName());
+		        			object.parseJson(jsonObject);
+		
+		        			objectList.add(object);
+		        		}else if(json.getInt("count") > 1){
+			        		JSONArray objects_json = json.optJSONArray("data"); 
+		        			
+			        		// convert JSONArray items to model objects
+		        			for(int i=0; i<objects_json.length(); i++){
+		        				// create a new Model type and fill it using the JSON data
+		        				Model object = (Model) modelType.newInstance();
+		        				JSONObject jsonObject = objects_json.getJSONObject(i).getJSONObject(object.getModelName());
+		        				object.parseJson(jsonObject);
+		        				
+		        				objectList.add(object);
+		        			}
+		        		}
+		        		b.putParcelableArrayList(BundleObjectKey, objectList);
+		        		
+	        		}else{
+	        			b.putBoolean(IntentExtraKeys.SUCCESS, success.equals("true"));
+	        		}
+        		
+        		receiver.send(RestResultCode.FINISHED.getValue(), b);
         		
         	} catch (JSONException e) {
         		e.printStackTrace();
@@ -163,7 +208,8 @@ public class RestService extends IntentService {
         	}
 
         } catch(Exception e) {
-        	b.putString(Intent.EXTRA_TEXT, e.toString());
+        	Log.e("yummy", e.toString());
+        	b.putString(IntentExtraKeys.ERROR, e.getMessage());
         	receiver.send(RestResultCode.ERROR.getValue(), b);
         }    
 	}

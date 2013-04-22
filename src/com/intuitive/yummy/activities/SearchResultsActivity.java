@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.MenuItem;
 import com.intuitive.yummy.models.Vendor;
+import com.intuitive.yummy.models.Vendor.VendorStatus;
 import com.intuitive.yummy.webservices.*;
 
 public class SearchResultsActivity extends ListActivity implements RestResponseReceiver.Receiver{
@@ -50,9 +51,24 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         mReceiver.setReceiver(this);
          
         final Intent apiIntent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
+        
         apiIntent.putExtra(IntentExtraKeys.RECEIVER, mReceiver);
         apiIntent.putExtra(IntentExtraKeys.MODEL_TYPE, Vendor.class);
-        apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.READALL);
+
+        // update
+        Vendor v = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", VendorStatus.CLOSED, "adgsdagf");
+        apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.UPDATE);
+        apiIntent.putExtra(IntentExtraKeys.MODEL, (Parcelable) v);
+        apiIntent.putExtra(IntentExtraKeys.MODEL_ID, v.getID());
+        
+        
+        // read all
+        // apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.READALL);
+        
+        
+        // read single 
+        //apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.READSINGLE);
+        //apiIntent.putExtra(IntentExtraKeys.MODEL_ID, "1");
         
         startService(apiIntent);
         Log.d("yummy", "Starting up REST service...");
@@ -74,7 +90,6 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     
     
     public void onReceiveResult(int resultCode, Bundle objectData) {
-        
     	final int  running = 0;
     	final int finished = 1;
     	final int error = 2;
@@ -86,9 +101,17 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		        break;
 		        
 		    case finished:
+		    
+		    	// to test reads
+		    	//vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
 		    	
-		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
-		    	
+		    	// to test others
+		    	String success = objectData.getBoolean(IntentExtraKeys.SUCCESS) ? "true" : "false";
+		    	Vendor v = new Vendor();
+		    	v.setName(success);
+		    	vendors = new ArrayList<Vendor>();
+		    	vendors.add(v);
+
 		    	// update UI
 		    	ArrayAdapter<Vendor> adapter = new ArrayAdapter<Vendor>(this,
 		    			android.R.layout.simple_list_item_1, vendors);
@@ -99,7 +122,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		        // TODO hide progress
 		        break;
 		    case error:
-		        // TODO handle the error;
+		        	//RestResultCode.ERROR.getValue()
 		        break;
 		}
     }

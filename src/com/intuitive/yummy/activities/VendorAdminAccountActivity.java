@@ -1,12 +1,6 @@
 package com.intuitive.yummy.activities;
 
-import java.util.ArrayList;
-
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.id;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
-import com.intuitive.yummy.models.MenuItem;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.Vendor.VendorStatus;
 
@@ -21,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class VendorAdminAccountActivity extends Activity {
-	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, VendorStatus.CLOSED, null, new com.intuitive.yummy.models.Menu(new ArrayList<MenuItem>()));
+	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, VendorStatus.CLOSED, null);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
