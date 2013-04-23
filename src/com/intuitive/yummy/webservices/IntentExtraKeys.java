@@ -7,7 +7,7 @@ package com.intuitive.yummy.webservices;
  */
 public class IntentExtraKeys {
 	public static final String RECEIVER = "RECEIVER";
-	public static final String MODEL_TYPE = "MODEL_TYPE";
+	public static final String MODEL_CLASS = "MODEL_CLASS";
 	public static final String ACTION = "ACTION";
 	public static final String POST_DATA= "POST_DATA";
 	public static final String ERROR = "ERROR";

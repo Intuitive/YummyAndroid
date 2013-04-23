@@ -110,7 +110,7 @@ public class RestService extends IntentService {
         
 		// get data properties
 		@SuppressWarnings("unchecked")
-		Class<Model> modelType = (Class<Model>) intent.getSerializableExtra(IntentExtraKeys.MODEL_TYPE);
+		Class<Model> modelType = (Class<Model>) intent.getSerializableExtra(IntentExtraKeys.MODEL_CLASS);
 		Action action = (Action) intent.getSerializableExtra(IntentExtraKeys.ACTION);
 		ArrayList<String> parameters = new ArrayList<String>();
 		

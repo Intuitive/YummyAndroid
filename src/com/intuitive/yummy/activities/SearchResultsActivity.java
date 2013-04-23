@@ -53,13 +53,13 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         final Intent apiIntent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
         
         apiIntent.putExtra(IntentExtraKeys.RECEIVER, mReceiver);
-        apiIntent.putExtra(IntentExtraKeys.MODEL_TYPE, Vendor.class);
+        apiIntent.putExtra(IntentExtraKeys.MODEL_CLASS, Vendor.class);
 
         // update
-        Vendor v = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", VendorStatus.CLOSED, "adgsdagf");
-        apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.UPDATE);
-        apiIntent.putExtra(IntentExtraKeys.MODEL, (Parcelable) v);
-        apiIntent.putExtra(IntentExtraKeys.MODEL_ID, v.getID());
+//        Vendor v = new Vendor(25, "Jack's Pizza", "We sell Pizzas!", VendorStatus.CLOSED, "adgsdagf");
+//        apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.UPDATE);
+//        apiIntent.putExtra(IntentExtraKeys.MODEL, (Parcelable) v);
+//        apiIntent.putExtra(IntentExtraKeys.MODEL_ID, v.getID());
         
         
         // read all
@@ -69,6 +69,10 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         // read single 
         //apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.READSINGLE);
         //apiIntent.putExtra(IntentExtraKeys.MODEL_ID, "1");
+        
+        // TODO create
+        
+        
         
         startService(apiIntent);
         Log.d("yummy", "Starting up REST service...");

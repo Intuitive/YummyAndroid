@@ -294,7 +294,7 @@ public class Vendor implements Model {
 	public HashMap<String, String> getPostData() {
 		HashMap<String, String> postData = new HashMap<String, String>();
 		
-		if(id == -1) postData.put("id", String.valueOf(id));
+		if(id != -1) postData.put("id", String.valueOf(id));
 		if(name != null) postData.put("name", name);
 		if(description != null) postData.put("description", description);
 		if(location != null) postData.put("location", location);
