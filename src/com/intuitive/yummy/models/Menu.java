@@ -10,7 +10,7 @@ import android.os.Parcel;
 //Contain menu information includes a list of menu items
 
 public class Menu implements Serializable, Model {
-	private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
+	private static ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
 	private int id;
 	
 	public int getId() {
@@ -31,6 +31,9 @@ public class Menu implements Serializable, Model {
 	}
 	public ArrayList<MenuItem> getMenuItem() {
 		return menuItems;
+	}
+	public static MenuItem get(int position) {
+		return menuItems.get(position);
 	}
 	
 	public Menu(){

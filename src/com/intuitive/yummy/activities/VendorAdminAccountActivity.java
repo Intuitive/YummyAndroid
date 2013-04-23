@@ -26,7 +26,7 @@ public class VendorAdminAccountActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_vender_admin_account);
+		setContentView(R.layout.activity_vendor_admin_account);
         Intent intent = getIntent();
         if (intent.getStringExtra("Activity").equals("Edit"))
         	vendor = (Vendor)intent.getSerializableExtra("Vendor");
@@ -56,7 +56,14 @@ public class VendorAdminAccountActivity extends Activity {
 	public void editGeneralInfo(View v) {
     	Intent intent = new Intent(this, VendorEditActivity.class);
     	intent.putExtra("Vendor", (Parcelable) vendor);
+    	intent.putExtra("VendorID", vendor.getID());
     	startActivity(intent);
+	}
+	
+	public void editMenu(View v) {
+		Intent intent = new Intent(this, VendorEditMenuActivity.class);
+		intent.putExtra("VendorID", vendor.getID());
+		startActivity(intent);
 	}
 
 }

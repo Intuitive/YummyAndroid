@@ -117,6 +117,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     	Intent intent = new Intent(this, VendorActivity.class);
     	
     	intent.putExtra("Vendor", (Parcelable) vendor);
+    	intent.putExtra("VendorID", vendor.getID());
     	startActivity(intent);    	
     }
     
