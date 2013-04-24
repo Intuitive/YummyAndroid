@@ -118,7 +118,7 @@ public class Vendor implements Model {
 	}
 	
 	/* getters */
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 	public String getName() {
@@ -310,6 +310,21 @@ public class Vendor implements Model {
 	
 	public Vendor (int id, String name, String description, VendorStatus status, String pictureURL) {
 		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.status = status;
+		this.pictureUrl = pictureURL;
+		this.isDeleted = false;
+	}
+	
+	/**
+	 * Creates new Vendor with id = -1. Use to persist new Vendor objects.
+	 * @param name
+	 * @param description
+	 * @param status
+	 * @param pictureURL
+	 */
+	public Vendor (String name, String description, VendorStatus status, String pictureURL) {
 		this.name = name;
 		this.description = description;
 		this.status = status;

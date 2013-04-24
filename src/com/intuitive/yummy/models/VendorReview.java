@@ -190,4 +190,9 @@ public class VendorReview implements Model {
 	public String getModelName() {
 		return modelName;
 	}
+	@Override
+	public int getId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -18,6 +18,7 @@ import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.MenuItem;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.Vendor.VendorStatus;
+
 import com.intuitive.yummy.webservices.*;
 
 public class SearchResultsActivity extends ListActivity implements RestResponseReceiver.Receiver{
@@ -26,8 +27,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 	ArrayList<Vendor> vendors;
 	// dummy data for vendors
 	private com.intuitive.yummy.models.Menu menu = new com.intuitive.yummy.models.Menu();
-	private int[][] hours = new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}};
-	
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	// Get the list of vendor and create a array of vendors by name only
@@ -49,36 +49,25 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 
         mReceiver = new RestResponseReceiver(new Handler());
         mReceiver.setReceiver(this);
-         
-        final Intent apiIntent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
         
-        apiIntent.putExtra(IntentExtraKeys.RECEIVER, mReceiver);
-        apiIntent.putExtra(IntentExtraKeys.MODEL_CLASS, Vendor.class);
-
-        // update
-//        Vendor v = new Vendor(25, "Jack's Pizza", "We sell Pizzas!", VendorStatus.CLOSED, "adgsdagf");
-//        apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.UPDATE);
-//        apiIntent.putExtra(IntentExtraKeys.MODEL, (Parcelable) v);
-//        apiIntent.putExtra(IntentExtraKeys.MODEL_ID, v.getID());
+        // test read all
+        Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
+          
+        // test read single
+        //Intent intent = RestService.getReadByIdIntent(25, Vendor.class, this, mReceiver);
+          
+     
+        // test create
+        //Vendor v = new Vendor("Cheesteaks & Cheesecakes", "The best of both worlds!", VendorStatus.OPEN, "");
+        //Intent intent = RestService.getCreateIntent(v, this, mReceiver);
+                
+        // test delete
+        //Intent intent = RestService.getDeleteIntent(36, Vendor.class, this, mReceiver);
         
-        
-        // read all
-        // apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.READALL);
-        
-        
-        // read single 
-        //apiIntent.putExtra(IntentExtraKeys.ACTION, RestService.Action.READSINGLE);
-        //apiIntent.putExtra(IntentExtraKeys.MODEL_ID, "1");
-        
-        // TODO create
-        
-        
-        
-        startService(apiIntent);
+        startService(intent);
         Log.d("yummy", "Starting up REST service...");
         
     }
-    
     
     @Override
     public void onResume() {
@@ -107,21 +96,21 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		    case finished:
 		    
 		    	// to test reads
-		    	//vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
+		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
 		    	
 		    	// to test others
+/*
 		    	String success = objectData.getBoolean(IntentExtraKeys.SUCCESS) ? "true" : "false";
 		    	Vendor v = new Vendor();
 		    	v.setName(success);
 		    	vendors = new ArrayList<Vendor>();
 		    	vendors.add(v);
-
+*/
 		    	// update UI
 		    	ArrayAdapter<Vendor> adapter = new ArrayAdapter<Vendor>(this,
 		    			android.R.layout.simple_list_item_1, vendors);
 
 		    	setListAdapter(adapter);
-		        
 		        
 		        // TODO hide progress
 		        break;

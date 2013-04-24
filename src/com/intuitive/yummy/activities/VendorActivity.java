@@ -149,7 +149,7 @@ public class VendorActivity extends Activity {
    }
     public void viewReviews(View v){
     	Intent intent = new Intent(this, ReadReviewActivity.class);
-    	intent.putExtra("vendorId", vendor.getID());
+    	intent.putExtra("vendorId", vendor.getId());
     	intent.putExtra("VendorName", vendor.getName());
     	intent.putExtra("Activity", "Vendor");
     	startActivity(intent);

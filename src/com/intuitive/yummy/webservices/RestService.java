@@ -10,9 +10,11 @@ import org.json.JSONArray;
 import com.intuitive.yummy.models.Model;
 import com.intuitive.yummy.models.Vendor;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.ResultReceiver;
 import android.util.Log;
 
@@ -72,7 +74,7 @@ public class RestService extends IntentService {
 		put(Action.READSINGLE, "GET");
 		put(Action.READALL, "GET");
 		put(Action.UPDATE, "POST");
-		put(Action.DELETE, "DELETE");
+		put(Action.DELETE, "POST");
 	}};
 	
 	/**
@@ -88,22 +90,128 @@ public class RestService extends IntentService {
 		url.append("/".concat(actionNames.get(action)));
 		
 		// add parameters
-		// TODO add support for option params i.e., paging, limit, etc
-		if(action == Action.READSINGLE){
-			if(!intent.hasExtra(IntentExtraKeys.MODEL_ID))
-				throw new IllegalArgumentException("An id parameter must be supplied when reading a single Model object.");
+		if(action == Action.READALL){
+			// TODO add support for option params i.e., paging, limit, etc
 			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
 		}
-		else if(action == Action.UPDATE){
-			if(!intent.hasExtra(IntentExtraKeys.MODEL_ID))
-				throw new IllegalArgumentException("An id parameter must be supplied when reading a single Model object.");
-			
+		else if(action != Action.CREATE)
 			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
-		}
-		
 		
 		return url.toString();
 	}
+	
+	public static Intent getCreateIntent(Model modelObj, Activity activity, RestResponseReceiver receiver){
+		
+		if(modelObj.getId() > 0){
+			throw new IllegalArgumentException("Models can only be created with Id < 1. For updates/edits, use RestService.getUpdateIntent().");
+		}
+		
+		if(!Model.class.isAssignableFrom(modelObj.getClass())){
+			throw new IllegalArgumentException("model class must implement Model interface");
+		}
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.CREATE);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		
+      	intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) modelObj);
+      	intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelObj.getClass());
+      	
+      	return intent;
+	}
+	
+	/**
+	 * Creates an intent for the RestService to read a single Model object
+	 * @param modelId The Id of the Model object to read
+	 * @param activity An instance of the calling activity
+	 * @return An intent with the proper extras attached
+	 */
+	public static Intent getReadByIdIntent(int modelId, Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
+		
+		if(modelId < 1){
+			throw new IllegalArgumentException("modelId must be > 0");
+		}
+		if(!Model.class.isAssignableFrom(modelClass)){
+			throw new IllegalArgumentException("model class must implement Model interface");
+		}
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.READSINGLE);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+	
+		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
+		
+		return intent;
+	}
+	
+	/**
+	 * Creates an intent for the RestService to read multiple Model objects
+	 * @param modelClass The class of Model objects to read.
+	 * @param activity An instance of the calling activity
+	 * @return An intent with the proper extras attached
+	 */
+	public static Intent getReadManyIntent(Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
+		
+		if(!Model.class.isAssignableFrom(modelClass)){
+			throw new IllegalArgumentException("model class must implement Model interface");
+		}		
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.READALL);
+		
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, Vendor.class);
+		
+		return intent;
+	}
+	
+	/**
+	 * Creates an intent for the RestService to persist an existing Model.
+	 * @param modelObj The model object to persist.
+	 * @param activity An instance of the calling activity
+	 * @return An intent with the proper extras attached
+	 */
+	public static Intent getUpdateIntent(Model modelObj, Activity activity, RestResponseReceiver receiver){
+		
+		if(modelObj.getId() > 0){
+			throw new IllegalArgumentException("Model Id must be > 0 in order to update object.");
+		}
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.UPDATE);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelObj.getClass());
+		intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) modelObj);
+		
+		
+		
+		return intent;
+	}
+	
+	/**
+	 * Creates an intent for the RestService when deleting a Model  
+	 * @param modelId The id of the Model to delete
+	 * @param activity An instance of the calling activity
+	 * @return An intent with the proper extras attached
+	 */
+	public static Intent getDeleteIntent(int modelId, Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
+		
+		if(modelId < 1){
+			throw new IllegalArgumentException("modelId must be > 0");
+		}
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.ACTION, RestService.Action.DELETE);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
+		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
+		
+		return intent;
+	}
+	
 	
 	protected void onHandleIntent(Intent intent) {
 		Log.d("yummy", "Handling JSON request intent...");
@@ -134,7 +242,7 @@ public class RestService extends IntentService {
         	
         	// get postData is action is a POST action
         	ArrayList<PostParameter> postParams = null;
-        	if(actionMethodMapping.get(action) == "POST")
+        	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE)
         	{
         		Model modelObject = intent.getParcelableExtra(IntentExtraKeys.MODEL);
         		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
@@ -143,7 +251,7 @@ public class RestService extends IntentService {
         	// log URL and post data
         	// TODO take this out for production? or use debug var to check
         	Log.v("yummy", "Making HTTP request to URL: " + requestUrl);
-        	if(actionMethodMapping.get(action) == "POST")
+        	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE)
         	{
         		StringBuilder postData_logMsg = new StringBuilder();
         		postData_logMsg.append("POST data:\n");
