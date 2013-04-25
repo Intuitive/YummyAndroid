@@ -2,6 +2,7 @@ package com.intuitive.yummy.models;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class MenuItem implements Model {
 	private Timestamp dateLastModified;
 	private Boolean isDeleted;
 	
-	public void setID(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public void setVendorID(int vendorID) {
@@ -64,7 +65,8 @@ public class MenuItem implements Model {
 	public void removeIngredient(Ingredient ingredient) {
 		ingredients.remove(ingredient);
 	}
-	public int getID() {
+	@Override
+	public int getId() {
 		return id;
 	}
 	public int getVendorID() {
@@ -223,5 +225,11 @@ public class MenuItem implements Model {
 	public String getModelName() {
 		return modelName;
 	}
+	@Override
+	public HashMap<String, String> getPostData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 }

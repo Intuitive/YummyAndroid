@@ -50,13 +50,13 @@ public class VendorAdminAccountActivity extends Activity {
 	public void editGeneralInfo(View v) {
     	Intent intent = new Intent(this, VendorEditActivity.class);
     	intent.putExtra("Vendor", (Parcelable) vendor);
-    	intent.putExtra("VendorID", vendor.getID());
+    	intent.putExtra("VendorID", vendor.getId());
     	startActivity(intent);
 	}
 	
 	public void editMenu(View v) {
 		Intent intent = new Intent(this, VendorEditMenuActivity.class);
-		intent.putExtra("VendorID", vendor.getID());
+		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
 	}
 

@@ -50,8 +50,8 @@ public class VendorEditMenuActivity extends Activity {
         	}
         });
 
-        MenuItem[] itemsArray = new MenuItem[menu.getMenuItem().size()];
-        menu.getMenuItem().toArray(itemsArray);
+        MenuItem[] itemsArray = new MenuItem[menu.getMenuItems().size()];
+        menu.getMenuItems().toArray(itemsArray);
 
 		System.out.println("creating adapter");
 		MenuItemAdapter adapter = new MenuItemAdapter(this, R.layout.list_menuitem, itemsArray);
@@ -76,9 +76,9 @@ public class VendorEditMenuActivity extends Activity {
 
     private void startEditMenuItemActivity(View v, MenuItem menuItem) {
     	Intent intent = new Intent(this, VendorEditMenuItemActivity.class);
-    	intent.putExtra("MenuItemID", menuItem.getID());
+    	intent.putExtra("MenuItemID", menuItem.getId());
     	intent.putExtra("MenuItem", (Parcelable)menuItem);
-    	System.out.println("MenuItemID: " + menuItem.getID() + ", MenuItemName: " + menuItem.getName());
+    	System.out.println("MenuItemID: " + menuItem.getId() + ", MenuItemName: " + menuItem.getName());
     	startActivity(intent);    	
 
     }

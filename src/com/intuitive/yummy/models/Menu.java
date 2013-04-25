@@ -1,24 +1,21 @@
 package com.intuitive.yummy.models;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
 import org.json.JSONObject;
 
 import android.os.Parcel;
 
 //Contain menu information includes a list of menu items
-
-<<<<<<< HEAD
-public class Menu implements Serializable, Model {
-	private static ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
-=======
 public class Menu implements Model {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
->>>>>>> d2457ab... fixing CRUD on RestServices + Model functionality
+
 	private int id;
 	
 	public int getId() {
@@ -28,6 +25,9 @@ public class Menu implements Model {
 		this.id = id;
 	}
 	
+	public ArrayList<MenuItem> getMenuItems() {
+		return menuItems;
+	}
 	public void setMenuItem(ArrayList<MenuItem> menuItems) {
 		this.menuItems = menuItems;
 	}
@@ -37,10 +37,8 @@ public class Menu implements Model {
 	public void removeMenuItem(MenuItem menuItem) {
 		menuItems.remove(menuItem);
 	}
-	public ArrayList<MenuItem> getMenuItem() {
-		return menuItems;
-	}
-	public static MenuItem get(int position) {
+
+	public MenuItem get(int position) {
 		return menuItems.get(position);
 	}
 	
@@ -51,6 +49,7 @@ public class Menu implements Model {
 	public Menu(ArrayList<MenuItem> menuItems) {
 		this.menuItems = menuItems;
 	}
+	
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -86,4 +85,6 @@ public class Menu implements Model {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }
+

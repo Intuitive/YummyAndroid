@@ -125,7 +125,7 @@ public class VendorActivity extends Activity {
         Button menuButton = (Button) findViewById(R.id.button_menu);
         
         try{
-        	if (vendor.getMenu().getMenuItem().size() != 0)
+        	if (vendor.getMenu().getMenuItems().size() != 0)
             	menuButton.setEnabled(true);
             else
             	menuButton.setEnabled(false);	

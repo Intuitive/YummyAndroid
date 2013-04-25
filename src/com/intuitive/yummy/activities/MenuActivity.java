@@ -28,8 +28,8 @@ public class MenuActivity extends Activity {
         
         Intent intent = getIntent();
         menu = (com.intuitive.yummy.models.Menu)intent.getSerializableExtra("Menu");
-        MenuItem[] itemsArray = new MenuItem[menu.getMenuItem().size()];
-        menu.getMenuItem().toArray(itemsArray);
+        MenuItem[] itemsArray = new MenuItem[menu.getMenuItems().size()];
+        menu.getMenuItems().toArray(itemsArray);
 
 		System.out.println("creating adapter");
 		MenuItemAdapter adapter = new MenuItemAdapter(this, R.layout.list_menuitem, itemsArray);
