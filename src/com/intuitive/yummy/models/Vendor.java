@@ -15,7 +15,7 @@ import android.util.Log;
 public class Vendor implements Model {
 	
 	/**
-	 * TODO this is just default
+	 * TODO this is  default
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -58,6 +58,30 @@ public class Vendor implements Model {
 		this.hours = hours;
 		this.status = status;
 		this.pictureUrl = pictureUrl;
+	}
+	
+	public Vendor (int id, String name, String description, VendorStatus status, String pictureURL) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.status = status;
+		this.pictureUrl = pictureURL;
+		this.isDeleted = false;
+	}
+	
+	/**
+	 * Creates new Vendor with id = -1. Use to create new Vendor objects to persist.
+	 * @param name
+	 * @param description
+	 * @param status
+	 * @param pictureURL
+	 */
+	public Vendor (String name, String description, VendorStatus status, String pictureURL) {
+		this.name = name;
+		this.description = description;
+		this.status = status;
+		this.pictureUrl = pictureURL;
+		this.isDeleted = false;
 	}
 	
 	public String toString(){
@@ -281,7 +305,6 @@ public class Vendor implements Model {
 	    public Vendor[] newArray(int size) {
 	        return new Vendor[size];
 	    }
-
 	};
 	
 	
@@ -308,27 +331,5 @@ public class Vendor implements Model {
 		return postData;
 	}	
 	
-	public Vendor (int id, String name, String description, VendorStatus status, String pictureURL) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.status = status;
-		this.pictureUrl = pictureURL;
-		this.isDeleted = false;
-	}
 	
-	/**
-	 * Creates new Vendor with id = -1. Use to persist new Vendor objects.
-	 * @param name
-	 * @param description
-	 * @param status
-	 * @param pictureURL
-	 */
-	public Vendor (String name, String description, VendorStatus status, String pictureURL) {
-		this.name = name;
-		this.description = description;
-		this.status = status;
-		this.pictureUrl = pictureURL;
-		this.isDeleted = false;
-	}
 }

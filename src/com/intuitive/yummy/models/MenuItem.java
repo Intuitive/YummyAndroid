@@ -19,15 +19,14 @@ public class MenuItem implements Model {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String modelName = "MenuItem";
-	private int id;
-	private int vendorID;
+	private int id = -1;
+	private int vendorId;
 	private String name;
 	private double price;
 	private String category;
 	private String description;
 	private boolean availability;
-	private String pictureURL;
-	private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+	private String pictureUrl;
 	private Timestamp dateCreated;
 	private Timestamp dateLastModified;
 	private Boolean isDeleted;
@@ -36,7 +35,7 @@ public class MenuItem implements Model {
 		this.id = id;
 	}
 	public void setVendorID(int vendorID) {
-		this.vendorID = vendorID;
+		this.vendorId = vendorID;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -54,23 +53,14 @@ public class MenuItem implements Model {
 		this.availability = availability;
 	}
 	public void setPictureURL(String pictureURL) {
-		this.pictureURL = pictureURL;
-	}
-	public void setIngredient(ArrayList<Ingredient> ingredients) {
-		this.ingredients = ingredients;
-	}
-	public void addIngredient(Ingredient ingredient) {
-		ingredients.add(ingredient);
-	}
-	public void removeIngredient(Ingredient ingredient) {
-		ingredients.remove(ingredient);
+		this.pictureUrl = pictureURL;
 	}
 	@Override
 	public int getId() {
 		return id;
 	}
 	public int getVendorID() {
-		return vendorID;
+		return vendorId;
 	}
 	public String getName() {
 		return name;
@@ -88,22 +78,19 @@ public class MenuItem implements Model {
 		return availability;
 	}
 	public String getPictureURL() {
-		return pictureURL;
-	}
-	public ArrayList<Ingredient> getIngredient() {
-		return ingredients;
+		return pictureUrl;
 	}
 	
 	public MenuItem() {};
-	public MenuItem(int id, String name, double price, String category, String description, boolean availability, String pictureURL, ArrayList<Ingredient> ingredients) {
+	public MenuItem(int id, int vendorId, String name, double price, String category, String description, boolean availability, String pictureURL) {
 		this.id = id;
+		this.vendorId = vendorId;
 		this.name = name;
 		this.price = price;
 		this.category = category;
 		this.description = description;
 		this.availability = availability;
-		this.pictureURL = pictureURL;
-		this.ingredients = ingredients;
+		this.pictureUrl = pictureURL;
 	}
 	@Override
 	public int describeContents() {
@@ -138,12 +125,12 @@ public class MenuItem implements Model {
 			out.writeInt(1);
 		else
 			out.writeInt(0);
-		if(pictureURL == null)
+		if(pictureUrl == null)
 			out.writeInt(0);
 		else
 		{
 			out.writeInt(1);
-			out.writeString(pictureURL);
+			out.writeString(pictureUrl);
 		}
 		if(dateCreated == null)
 			out.writeInt(0);
@@ -183,7 +170,7 @@ public class MenuItem implements Model {
 		else
 			availability = false;
 		if(parcel.readInt() == 1)
-			pictureURL = parcel.readString();
+			pictureUrl = parcel.readString();
 		if(parcel.readInt() == 1)
 			dateCreated = Timestamp.valueOf(parcel.readString());
 		if(parcel.readInt() == 1)
@@ -209,13 +196,13 @@ public class MenuItem implements Model {
 	public void parseJson(JSONObject json) {
 		try {
 			id = json.getInt("id");
+			vendorId = json.getInt("vendor_id");
 			name = json.getString("name");
 			category = json.getString("category");
 			price = json.getDouble("price");
 			description = json.getString("description");
 			availability = json.getBoolean("available");
-			pictureURL = json.getString("picture_url");
-			vendorID = json.getInt("vendor_id");
+			pictureUrl = json.getString("picture_url");
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to Vendor object.");
 			e.printStackTrace();
@@ -227,8 +214,18 @@ public class MenuItem implements Model {
 	}
 	@Override
 	public HashMap<String, String> getPostData() {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<String, String> postData = new HashMap<String, String>();
+		
+		if(id != -1) postData.put("id", String.valueOf(id));
+		if(vendorId != -1) postData.put("vendor_id", String.valueOf(vendorId));
+		if(name != null) postData.put("name", name);
+		if(category != null) postData.put("category", category);
+		if(name != null) postData.put("price", String.valueOf(price));
+		if(description!= null) postData.put("description", description);
+		postData.put("availability", availability ? "true" : "false");
+		if(pictureUrl != null) postData.put("picture_url", pictureUrl);
+		
+		return postData;
 	}
 	
 	
