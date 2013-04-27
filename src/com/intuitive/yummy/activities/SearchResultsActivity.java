@@ -51,7 +51,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         mReceiver.setReceiver(this);
         
         // test read all
-        Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
+        final Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
           
         // test read single
         //Intent intent = RestService.getReadByIdIntent(25, Vendor.class, this, mReceiver);

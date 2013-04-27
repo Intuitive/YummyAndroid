@@ -100,6 +100,13 @@ public class RestService extends IntentService {
 		return url.toString();
 	}
 	
+	/**
+	 * Creates an intent for the RestService to create a Model object
+	 * @param modelObj The object to persist
+	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
+	 * @return An intent with the proper extras attached
+	 */
 	public static Intent getCreateIntent(Model modelObj, Activity activity, RestResponseReceiver receiver){
 		
 		if(modelObj.getId() > 0){
@@ -123,7 +130,9 @@ public class RestService extends IntentService {
 	/**
 	 * Creates an intent for the RestService to read a single Model object
 	 * @param modelId The Id of the Model object to read
+	 * @param modelClass The class of Model objects to read.
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getReadByIdIntent(int modelId, Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
@@ -149,6 +158,7 @@ public class RestService extends IntentService {
 	 * Creates an intent for the RestService to read multiple Model objects
 	 * @param modelClass The class of Model objects to read.
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getReadManyIntent(Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
@@ -168,8 +178,9 @@ public class RestService extends IntentService {
 	
 	/**
 	 * Creates an intent for the RestService to persist an existing Model.
-	 * @param modelObj The model object to persist.
+	 * @param modelObj The object to persist
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getUpdateIntent(Model modelObj, Activity activity, RestResponseReceiver receiver){
@@ -193,7 +204,9 @@ public class RestService extends IntentService {
 	/**
 	 * Creates an intent for the RestService when deleting a Model  
 	 * @param modelId The id of the Model to delete
+	 * @param modelClass The class of Model objects to read.
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getDeleteIntent(int modelId, Class<?> modelClass, Activity activity, RestResponseReceiver receiver){

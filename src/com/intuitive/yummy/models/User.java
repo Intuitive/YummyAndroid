@@ -18,8 +18,8 @@ public class User implements Model{
 	// what the model is referred to on the backend
 	private static final String modelName = "User";
 
-	private int id = -1;
-	private int vendorId = -1;
+	private Integer id;
+	private Integer vendorId;
 	private String username;
 	private String firstName;
 	private String lastName;
@@ -63,16 +63,16 @@ public class User implements Model{
 		this.email = email;
 	}
 	@Override
-	public int getId(){
+	public Integer getId(){
 		return id;
 	}
-	public void setId(int id){
+	public void setId(Integer id){
 		this.id = id;
 	}
-	public int getVendorId() {
+	public Integer getVendorId() {
 		return vendorId;
 	}
-	public void setVendorId(int vendorId) {
+	public void setVendorId(Integer vendorId) {
 		this.vendorId = vendorId;
 	}
 	public String getUsername() {
@@ -130,14 +130,118 @@ public class User implements Model{
 		return 0;
 	}
 	@Override
-	public void writeToParcel(Parcel arg0, int arg1) {
-		// TODO Auto-generated method stub
+	public void writeToParcel(Parcel out, int flags) {
+		
+		if (id == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(id);
+		}
+		
+		if (vendorId == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(vendorId);
+		}
+		
+		if (username == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(username);
+		}
+		
+		if (firstName == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(firstName);
+		}
+		
+		if (firstName == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(firstName);
+		}
+		
+		if (lastName == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(lastName);
+		}
+		
+		if (email == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(email);
+		}
+		
+		if (email == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(email);
+		}
+		
+		if (accountType == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(accountType.getValue());
+		}
+		
+		if (dateCreated == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(dateCreated.toString());
+		}
+		
+		if (dateLastModified == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(dateLastModified.toString());
+		}
+		
+		if (isDeleted == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(isDeleted ? 1 : 0);
+		}
 		
 	}
 	@Override
-	public Model createFromParcel(Parcel arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Model createFromParcel(Parcel parcel) {
+		return new User(parcel);
+	}
+	private User(Parcel parcel) {
+		if (parcel.readInt() == 1)
+			id = parcel.readInt();
+		if (parcel.readInt() == 1)
+			vendorId = parcel.readInt();
+		if (parcel.readInt() == 1)
+			username = parcel.readString();
+		if (parcel.readInt() == 1)
+			firstName = parcel.readString();
+		if (parcel.readInt() == 1)
+			lastName = parcel.readString();
+		if (parcel.readInt() == 1)
+			email = parcel.readString();
+		if (parcel.readInt() == 1)
+			accountType = UserAccountType.parseInt(parcel.readInt());
+		if (parcel.readInt() == 1)
+			dateCreated = Timestamp.valueOf(parcel.readString());
+		if (parcel.readInt() == 1)
+			dateLastModified= Timestamp.valueOf(parcel.readString());
+		if (parcel.readInt() == 1)
+			isDeleted = parcel.readInt() == 1 ? true : false;
 	}
 	@Override
 	public Model[] newArray(int arg0) {
@@ -170,8 +274,8 @@ public class User implements Model{
 	public HashMap<String, String> getPostData() {
 		HashMap<String, String> postData = new HashMap<String, String>();
 
-		if(id != -1) postData.put("id", String.valueOf(id));
-		if(vendorId != -1) postData.put("id", String.valueOf(vendorId));
+		if(id != null) postData.put("id", String.valueOf(id));
+		if(vendorId != null) postData.put("id", String.valueOf(vendorId));
 		if(firstName != null) postData.put("first_name", firstName);
 		if(lastName != null) postData.put("last_name", lastName);
 		if(email != null) postData.put("email", email);

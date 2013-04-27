@@ -1,7 +1,6 @@
 package com.intuitive.yummy.models;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -19,8 +18,8 @@ public class MenuItem implements Model {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String modelName = "MenuItem";
-	private int id = -1;
-	private int vendorId;
+	private Integer id;
+	private Integer vendorId;
 	private String name;
 	private double price;
 	private String category;
@@ -31,10 +30,10 @@ public class MenuItem implements Model {
 	private Timestamp dateLastModified;
 	private Boolean isDeleted;
 	
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	public void setVendorID(int vendorID) {
+	public void setVendorID(Integer vendorID) {
 		this.vendorId = vendorID;
 	}
 	public void setName(String name) {
@@ -56,10 +55,10 @@ public class MenuItem implements Model {
 		this.pictureUrl = pictureURL;
 	}
 	@Override
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public int getVendorID() {
+	public Integer getVendorID() {
 		return vendorId;
 	}
 	public String getName() {
@@ -82,7 +81,7 @@ public class MenuItem implements Model {
 	}
 	
 	public MenuItem() {};
-	public MenuItem(int id, int vendorId, String name, double price, String category, String description, boolean availability, String pictureURL) {
+	public MenuItem(Integer id, Integer vendorId, String name, double price, String category, String description, boolean availability, String pictureURL) {
 		this.id = id;
 		this.vendorId = vendorId;
 		this.name = name;
@@ -216,8 +215,8 @@ public class MenuItem implements Model {
 	public HashMap<String, String> getPostData() {
 		HashMap<String, String> postData = new HashMap<String, String>();
 		
-		if(id != -1) postData.put("id", String.valueOf(id));
-		if(vendorId != -1) postData.put("vendor_id", String.valueOf(vendorId));
+		if(id != null) postData.put("id", String.valueOf(id));
+		if(vendorId != null) postData.put("vendor_id", String.valueOf(vendorId));
 		if(name != null) postData.put("name", name);
 		if(category != null) postData.put("category", category);
 		if(name != null) postData.put("price", String.valueOf(price));

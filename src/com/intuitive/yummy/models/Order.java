@@ -17,12 +17,12 @@ public class Order implements Model {
 	private static final long serialVersionUID = 1L;
 	private static final String modelName = "Order";
 	
-	private int id = -1;
-	private int userId = -1;
-	private int vendorId = -1; 	
-	private int waitTime = -1;
-	private double totalPrice = -1;
-	private int paymentMethod = -1;
+	private Integer id;
+	private Integer userId;
+	private Integer vendorId; 	
+	private Integer waitTime;
+	private Double totalPrice;
+	private Integer paymentMethod;
 	private OrderStatus status = OrderStatus.IN_PROGRESS;
 	
 	public enum OrderStatus { 
@@ -37,7 +37,7 @@ public class Order implements Model {
 	    }
 	};
 
-	Order(int id, int duration, OrderStatus status, int waitTime){
+	Order(Integer id, Integer duration, OrderStatus status, Integer waitTime){
 		this.id = id;
 		this.waitTime = waitTime;
 		this.status = status;
@@ -57,22 +57,22 @@ public class Order implements Model {
 	}
 
 	@Override
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public int getWaitTime() {
+	public Integer getWaitTime() {
 		return waitTime;
 	}
-	public void setWaitTime(int waitTime) {
+	public void setWaitTime(Integer waitTime) {
 		this.waitTime = waitTime;
 	}
 	public double getTotalPrice() {
@@ -81,16 +81,16 @@ public class Order implements Model {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	public int getPaymentMethod() {
+	public Integer getPaymentMethod() {
 		return paymentMethod;
 	}
-	public void setPaymentMethod(int paymentMethod) {
+	public void setPaymentMethod(Integer paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	public int getVendorId() {
+	public Integer getVendorId() {
 		return vendorId;
 	}
-	public void setVendorId(int vendorId) {
+	public void setVendorId(Integer vendorId) {
 		this.vendorId = vendorId;
 	}
 	public OrderStatus getStatus() {
@@ -156,12 +156,12 @@ public class Order implements Model {
 	public HashMap<String, String> getPostData() {
 		HashMap<String, String> postData = new HashMap<String, String>();
 		
-		if(id != -1) postData.put("id", String.valueOf(id));
-		if(userId != -1) postData.put("user_id", String.valueOf(userId));
-		if(vendorId != -1) postData.put("vendor_id", String.valueOf(vendorId));
-		if(waitTime != -1) postData.put("wait_time", String.valueOf(waitTime));
-		if(totalPrice != -1) postData.put("total_price", String.valueOf(totalPrice));
-		if(paymentMethod != -1) postData.put("payment_method", String.valueOf(paymentMethod));
+		if(id != null) postData.put("id", String.valueOf(id));
+		if(userId != null) postData.put("user_id", String.valueOf(userId));
+		if(vendorId != null) postData.put("vendor_id", String.valueOf(vendorId));
+		if(waitTime != null) postData.put("wait_time", String.valueOf(waitTime));
+		if(totalPrice != null) postData.put("total_price", String.valueOf(totalPrice));
+		if(paymentMethod != null) postData.put("payment_method", String.valueOf(paymentMethod));
 		
 		String s_status = status == OrderStatus.IN_PROGRESS ? "0" : "1";
 		postData.put("status", s_status);
