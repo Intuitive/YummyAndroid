@@ -37,7 +37,8 @@ public class Order implements Model {
 	    }
 	};
 
-	Order(Integer id, Integer duration, OrderStatus status, Integer waitTime){
+	public Order(){}
+	public Order(Integer id, Integer duration, OrderStatus status, Integer waitTime){
 		this.id = id;
 		this.waitTime = waitTime;
 		this.status = status;
@@ -45,15 +46,21 @@ public class Order implements Model {
 	
 	public Order(Parcel parcel) {
 		// properties must be read in the same order they're written out in writeToParcel
-		id = parcel.readInt();
-		userId = parcel.readInt();
-		vendorId = parcel.readInt();
-		waitTime = parcel.readInt();
-		totalPrice = parcel.readDouble();
-		paymentMethod = parcel.readInt();
+		if (parcel.readInt() == 1)
+			id = parcel.readInt();
+		if (parcel.readInt() == 1)
+			userId = parcel.readInt();
+		if (parcel.readInt() == 1)
+			vendorId = parcel.readInt();
+		if (parcel.readInt() == 1)
+			waitTime = parcel.readInt();
+		if (parcel.readInt() == 1)
+			totalPrice = parcel.readDouble();
+		if (parcel.readInt() == 1)
+			paymentMethod = parcel.readInt();
+		if (parcel.readInt() == 1)
+			status = parcel.readInt() == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULLFILLED;
 		
-		// status done this way for performance reasons
-		status = parcel.readInt() == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULLFILLED;
 	}
 
 	@Override
@@ -108,13 +115,48 @@ public class Order implements Model {
 	
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeInt(id);
-		out.writeInt(userId);
-		out.writeInt(vendorId);
-		out.writeInt(waitTime);
-		out.writeDouble(totalPrice);
-		out.writeInt(paymentMethod);
-		out.writeInt(status == OrderStatus.IN_PROGRESS ? 0 : 1);
+		if (id == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(id);
+		}
+		if (userId == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(userId);
+		}
+		if (vendorId == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(vendorId);
+		}
+		if (waitTime == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(waitTime);
+		}
+		if (totalPrice == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeDouble(totalPrice);
+		}
+		if (paymentMethod == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(paymentMethod);
+		}
+		if (status == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(status == OrderStatus.IN_PROGRESS ? 0 : 1);
+		}
 	}
 	
 	@Override

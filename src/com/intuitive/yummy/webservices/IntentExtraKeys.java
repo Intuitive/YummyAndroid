@@ -14,10 +14,6 @@ public class IntentExtraKeys {
 	public static final String MODEL_ID = "MODEL_ID";
 	public static final String SUCCESS = "SUCCESS";
 	public static final String MODEL = "MODEL";
-	
-	public static final String PARAMETER(int i){
-		// TODO test this
-		return "PARAMETER".concat(String.valueOf(i));
-	}
+	public static final String PARAMETER = "PARAMETER";
 }
 

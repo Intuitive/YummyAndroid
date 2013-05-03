@@ -55,7 +55,8 @@ public class User implements Model{
 	    }
 	};
 	
-	//Constructor
+	public User(){}
+	
 	public User (String username, String firstName, String lastName, String email) {
 		this.username = username;
 		this.firstName = firstName;
@@ -236,12 +237,25 @@ public class User implements Model{
 			email = parcel.readString();
 		if (parcel.readInt() == 1)
 			accountType = UserAccountType.parseInt(parcel.readInt());
+		
+		if (parcel.readInt() == 1){
+			try{
+				dateCreated = Timestamp.valueOf(parcel.readString());
+			}catch(IllegalArgumentException e){
+				dateCreated = null;
+			}
+		}
+		
+		if (parcel.readInt() == 1){
+			try{
+				dateLastModified= Timestamp.valueOf(parcel.readString());
+			}catch(IllegalArgumentException e){
+				dateLastModified = null;
+			}
+		}
+		
 		if (parcel.readInt() == 1)
-			dateCreated = Timestamp.valueOf(parcel.readString());
-		if (parcel.readInt() == 1)
-			dateLastModified= Timestamp.valueOf(parcel.readString());
-		if (parcel.readInt() == 1)
-			isDeleted = parcel.readInt() == 1 ? true : false;
+			isDeleted = parcel.readInt() == 1;
 	}
 	@Override
 	public Model[] newArray(int arg0) {
@@ -251,15 +265,15 @@ public class User implements Model{
 	@Override
 	public void parseJson(JSONObject json) {		
 		try {
-			id = json.getInt("id");
-			vendorId = json.getInt("vendor_id");
+			id = json.isNull("id") ? null : json.getInt("id");
+			vendorId =  json.isNull("vendor_id") ? null : json.getInt("vendor_id");
 			username = json.getString("username");
 			firstName = json.getString("first_name");
 			lastName = json.getString("last_name");
 			email = json.getString("email");
 			accountType = UserAccountType.parseInt(json.getInt("account_type"));
 			dateCreated = Timestamp.valueOf(json.getString("date_created"));
-			dateLastModified = Timestamp.valueOf(json.getString("date_last_modified "));
+			dateLastModified = Timestamp.valueOf(json.getString("date_last_modified"));
 			isDeleted = json.getBoolean("deleted");
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to User object.");
@@ -280,8 +294,6 @@ public class User implements Model{
 		if(lastName != null) postData.put("last_name", lastName);
 		if(email != null) postData.put("email", email);
 		postData.put("account_type", String.valueOf(accountType.getValue()));
-		
-		// TODO test these timestamps compatibility with CakePHP backend
 		if(dateCreated != null) postData.put("date_created", dateCreated.toString());
 		if(dateLastModified != null) postData.put("date_last_modified", dateLastModified.toString());
 		if(isDeleted != null) postData.put("deleted", isDeleted ? "true" : "false");

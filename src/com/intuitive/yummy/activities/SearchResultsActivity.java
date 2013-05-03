@@ -15,8 +15,7 @@ import android.widget.ListView;
 
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.models.MenuItem;
-import com.intuitive.yummy.models.Vendor;
+import com.intuitive.yummy.models.*;
 
 import com.intuitive.yummy.webservices.*;
 
@@ -54,15 +53,24 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         final Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
           
         // test read single
-        //Intent intent = RestService.getReadByIdIntent(25, Vendor.class, this, mReceiver);
+        //Intent intent = RestService.getReadByIdIntent(1, MenuItem.class, this, mReceiver);
           
-     
         // test create
-        //Vendor v = new Vendor("Cheesteaks & Cheesecakes", "The best of both worlds!", VendorStatus.OPEN, "");
-        //Intent intent = RestService.getCreateIntent(v, this, mReceiver);
-                
+        
+        
+//        Order order = new Order();
+//        order.setId(2);
+//        order.setPaymentMethod(0);
+//        order.setTotalPrice(2.0);
+//        order.setWaitTime(10);
+//        order.setStatus(OrderStatus.IN_PROGRESS);
+//        order.setUserId(1);
+//        order.setVendorId(25);
+//        
+//        Intent intent = RestService.getCreateIntent(order, this, mReceiver);
+//             
         // test delete
-        //Intent intent = RestService.getDeleteIntent(36, Vendor.class, this, mReceiver);
+        //Intent intent = RestService.getUpdateIntent(order, this, mReceiver);
         
         startService(intent);
         Log.d("yummy", "Starting up REST service...");
@@ -83,7 +91,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     
     
     public void onReceiveResult(int resultCode, Bundle objectData) {
-    	final int  running = 0;
+    	final int running = 0;
     	final int finished = 1;
     	final int error = 2;
     	
@@ -97,15 +105,16 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		    
 		    	// to test reads
 		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
+		    	ArrayList<Order> orders = objectData.getParcelableArrayList(RestService.BundleObjectKey);
 		    	
 		    	// to test others
-/*
-		    	String success = objectData.getBoolean(IntentExtraKeys.SUCCESS) ? "true" : "false";
-		    	Vendor v = new Vendor();
-		    	v.setName(success);
-		    	vendors = new ArrayList<Vendor>();
-		    	vendors.add(v);
-*/
+
+//		    	String success = objectData.getBoolean(IntentExtraKeys.SUCCESS) ? "true" : "false";
+//		    	Vendor v = new Vendor();
+//		    	v.setName(success);
+//		    	ArrayList<Vendor> vendors = new ArrayList<Vendor>();
+//		    	vendors.add(v);
+
 		    	// update UI
 		    	ArrayAdapter<Vendor> adapter = new ArrayAdapter<Vendor>(this,
 		    			android.R.layout.simple_list_item_1, vendors);
