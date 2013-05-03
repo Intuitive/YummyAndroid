@@ -1,6 +1,8 @@
 package com.intuitive.yummy.models;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,8 +32,8 @@ public class Vendor implements Model {
 	private VendorStatus status;
 	private String pictureUrl;
 	private Menu menu;
-	private Date dateCreated;
-	private Date dateLastModified;
+	private Timestamp dateCreated;
+	private Timestamp dateLastModified;
 	private Boolean isDeleted; // TODO consider renaming to isActive
 	
 	// used to make open and closed status' clearer
@@ -99,6 +101,8 @@ public class Vendor implements Model {
 			Boolean isOpen = json.getBoolean("status");
 			status = isOpen ? VendorStatus.OPEN : VendorStatus.CLOSED;
 			pictureUrl = json.getString("picture_url");
+			dateCreated = Timestamp.valueOf(json.getString("date_created"));
+			dateLastModified = Timestamp.valueOf(json.getString("date_last_modified"));
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to Vendor object.");
 			e.printStackTrace();
@@ -122,10 +126,10 @@ public class Vendor implements Model {
 	public void setHours(int[][] hours) {
 		this.hours = hours;
 	}
-	public void setDateLastModified(Date dateLastModified) {
+	public void setDateLastModified(Timestamp dateLastModified) {
 		this.dateLastModified = dateLastModified;
 	}
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(Timestamp dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 	public void setIsDeleted(Boolean isDeleted) {
@@ -166,10 +170,10 @@ public class Vendor implements Model {
 	public Menu getMenu() {
 		return menu;
 	}
-	public Date getDateCreated() {
+	public Timestamp getDateCreated() {
 		return dateCreated;
 	}
-	public Date getDateLastModified() {
+	public Timestamp getDateLastModified() {
 		return dateLastModified;
 	}
 	public Boolean getIsDeleted() {
@@ -273,7 +277,8 @@ public class Vendor implements Model {
 	
 	public Vendor(Parcel parcel){
 		
-		id = parcel.readInt();
+		if(parcel.readInt() == 1)
+			id = parcel.readInt();
 		
 		if(parcel.readInt() == 1)
 			name = parcel.readString();
@@ -292,11 +297,21 @@ public class Vendor implements Model {
 			pictureUrl = parcel.readString();
 		}
 		
-		if(parcel.readInt() == 1)
-			dateCreated = Date.valueOf(parcel.readString());
+		if(parcel.readInt() == 1){
+			try{
+				dateCreated = Timestamp.valueOf(parcel.readString());
+			}catch(IllegalArgumentException e){
+				dateCreated = null;
+			}
+		}
 
-		if(parcel.readInt() == 1)
-			dateLastModified = Date.valueOf(parcel.readString());
+		if(parcel.readInt() == 1){
+			try{
+				dateLastModified = Timestamp.valueOf(parcel.readString());
+			}catch(IllegalArgumentException e){
+				dateLastModified = null;
+			}
+		}
 
 		if(parcel.readInt() == 1)
 			isDeleted = parcel.readInt() == 1;

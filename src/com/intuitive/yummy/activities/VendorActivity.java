@@ -27,7 +27,7 @@ public class VendorActivity extends Activity {
         setContentView(R.layout.activity_vendor);
         //Get the data that is being passed by the parent activity, in this case, vendor
         Intent intent = getIntent();
-        vendor = (Vendor)intent.getSerializableExtra("Vendor");
+        vendor = (Vendor) intent.getParcelableExtra("Vendor");
         
         String name = vendor.getName();
         String description = vendor.getDescription();

@@ -15,5 +15,6 @@ public class IntentExtraKeys {
 	public static final String SUCCESS = "SUCCESS";
 	public static final String MODEL = "MODEL";
 	public static final String PARAMETER = "PARAMETER";
+	public static final String COUNT = "COUNT";
 }
 

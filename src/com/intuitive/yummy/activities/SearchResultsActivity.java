@@ -105,7 +105,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		    
 		    	// to test reads
 		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
-		    	ArrayList<Order> orders = objectData.getParcelableArrayList(RestService.BundleObjectKey);
+		    	//ArrayList<Order> orders = objectData.getParcelableArrayList(RestService.BundleObjectKey);
 		    	
 		    	// to test others
 

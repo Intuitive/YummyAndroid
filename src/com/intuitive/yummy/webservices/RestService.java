@@ -300,6 +300,7 @@ public class RestService extends IntentService {
         		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
         	}        	
         	
+        	
         	// log URL and post data
         	// TODO take this out for production? or use debug var to check
         	Log.v("yummy", "Making HTTP request to URL: " + requestUrl);
@@ -313,6 +314,7 @@ public class RestService extends IntentService {
         		Log.d("yummy", postData_logMsg.toString());
         	}
         	
+        	
         	// fire HTTP request and handle response
         	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams);
         	Log.d("yummy", "JSON response: ".concat(json.toString()));
@@ -320,7 +322,8 @@ public class RestService extends IntentService {
         	try {
         		// only continue on success
         		String success = json.getString("success");
-        		        			
+        		b.putBoolean(IntentExtraKeys.SUCCESS, success.equals("true"));
+        		
         		if(action == Action.READALL || action == Action.READSINGLE){
 	        			if (success.equals("false"))
 	            			throw new Exception();
@@ -332,8 +335,8 @@ public class RestService extends IntentService {
 			        			
 	        			// create list to return via bundle
 		        		ArrayList<Model> objectList = new ArrayList<Model>();
-		        		
-		        		if(json.getInt("count") == 1){
+		        		int count = json.getInt("count");
+		        		if(count == 1){
 		        			// TODO problem here
 		        			JSONObject obj_json = json.getJSONObject("data");
 		
@@ -342,7 +345,7 @@ public class RestService extends IntentService {
 		        			object.parseJson(jsonObject);
 		
 		        			objectList.add(object);
-		        		}else if(json.getInt("count") > 1){
+		        		}else if(count > 1){
 			        		JSONArray objects_json = json.optJSONArray("data"); 
 		        			
 			        		// convert JSONArray items to model objects
@@ -356,9 +359,6 @@ public class RestService extends IntentService {
 		        			}
 		        		}
 		        		b.putParcelableArrayList(BundleObjectKey, objectList);
-		        		
-	        		}else{
-	        			b.putBoolean(IntentExtraKeys.SUCCESS, success.equals("true"));
 	        		}
         		
         		receiver.send(RestResultCode.FINISHED.getValue(), b);
