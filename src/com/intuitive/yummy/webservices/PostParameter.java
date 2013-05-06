@@ -11,7 +11,7 @@ public class PostParameter implements NameValuePair, Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 	private String name;
 	private String value;
 	

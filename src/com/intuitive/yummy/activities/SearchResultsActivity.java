@@ -15,9 +15,7 @@ import android.widget.ListView;
 
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.models.MenuItem;
-import com.intuitive.yummy.models.Vendor;
-import com.intuitive.yummy.models.Vendor.VendorStatus;
+import com.intuitive.yummy.models.*;
 
 import com.intuitive.yummy.webservices.*;
 
@@ -33,17 +31,18 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     	// Get the list of vendor and create a array of vendors by name only
     	// then pass it to the list adapter to display it as a list in the app
     	
-    	menu.addMenuItem(new MenuItem(1, "16 inch Cheese Pizza", 10, "Pizza", "Plain Cheese Pizza", true, null, null));
-    	menu.addMenuItem(new MenuItem(2, "16 inch Pepperoni Pizza", 11, "Pizza", "Pizza with Pepperoni Topping", true, null, null));
-    	menu.addMenuItem(new MenuItem(3, "16 inch Sausage Pizza", 12, "Pizza", "Pizza with Sausage", true, null, null));
-    	menu.addMenuItem(new MenuItem(4, "Cheese Pizza Slice", 1.5, "Pizza", "Plain Cheese Pizza (slice)", true, null, null));
-    	menu.addMenuItem(new MenuItem(5, "Pepperoni Pizza Slice", 1.65, "Pizza", "Pizza with Pepperoni Topping (slice)", true, null, null));
-    	menu.addMenuItem(new MenuItem(6, "Sausage Pizza Slice", 1.75, "Pizza", "Pizza with Sausage (slice)", true, null, null));
-    	menu.addMenuItem(new MenuItem(7, "Pizza Cheesesteak", 5, "Cheesesteak", "Cheesesteak filled with pizza topping", true, null, null));
-    	menu.addMenuItem(new MenuItem(8, "Chicken Cheesesteak", 6, "Cheesesteak", "Cheesesteak filled with chicken", true, null, null));
-    	menu.addMenuItem(new MenuItem(9, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null, null));
-    	menu.addMenuItem(new MenuItem(10, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null, null));
-    		
+    	/*
+    	menu.addMenuItem(new MenuItem(1, 1, "16 inch Cheese Pizza", 10, "Pizza", "Plain Cheese Pizza", true, null));
+    	menu.addMenuItem(new MenuItem(2, 1, "16 inch Pepperoni Pizza", 11, "Pizza", "Pizza with Pepperoni Topping", true, null));
+    	menu.addMenuItem(new MenuItem(3, 1, "16 inch Sausage Pizza", 12, "Pizza", "Pizza with Sausage", true, null));
+    	menu.addMenuItem(new MenuItem(4, 1, "Cheese Pizza Slice", 1.5, "Pizza", "Plain Cheese Pizza (slice)", true, null));
+    	menu.addMenuItem(new MenuItem(5, 1, "Pepperoni Pizza Slice", 1.65, "Pizza", "Pizza with Pepperoni Topping (slice)", true, null));
+    	menu.addMenuItem(new MenuItem(6, 1, "Sausage Pizza Slice", 1.75, "Pizza", "Pizza with Sausage (slice)", true, null));
+    	menu.addMenuItem(new MenuItem(7, 1, "Pizza Cheesesteak", 5, "Cheesesteak", "Cheesesteak filled with pizza topping", true, null));
+    	menu.addMenuItem(new MenuItem(8, 1, "Chicken Cheesesteak", 6, "Cheesesteak", "Cheesesteak filled with chicken", true, null));
+    	menu.addMenuItem(new MenuItem(9, 1, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null));
+    	menu.addMenuItem(new MenuItem(10, 1, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null));
+    	*/	
         
     	super.onCreate(savedInstanceState);
 
@@ -51,18 +50,27 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         mReceiver.setReceiver(this);
         
         // test read all
-        Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
+        final Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
           
         // test read single
-        //Intent intent = RestService.getReadByIdIntent(25, Vendor.class, this, mReceiver);
+        //Intent intent = RestService.getReadByIdIntent(1, MenuItem.class, this, mReceiver);
           
-     
         // test create
-        //Vendor v = new Vendor("Cheesteaks & Cheesecakes", "The best of both worlds!", VendorStatus.OPEN, "");
-        //Intent intent = RestService.getCreateIntent(v, this, mReceiver);
-                
+        
+        
+//        Order order = new Order();
+//        order.setId(2);
+//        order.setPaymentMethod(0);
+//        order.setTotalPrice(2.0);
+//        order.setWaitTime(10);
+//        order.setStatus(OrderStatus.IN_PROGRESS);
+//        order.setUserId(1);
+//        order.setVendorId(25);
+//        
+//        Intent intent = RestService.getCreateIntent(order, this, mReceiver);
+//             
         // test delete
-        //Intent intent = RestService.getDeleteIntent(36, Vendor.class, this, mReceiver);
+        //Intent intent = RestService.getUpdateIntent(order, this, mReceiver);
         
         startService(intent);
         Log.d("yummy", "Starting up REST service...");
@@ -83,7 +91,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     
     
     public void onReceiveResult(int resultCode, Bundle objectData) {
-    	final int  running = 0;
+    	final int running = 0;
     	final int finished = 1;
     	final int error = 2;
     	
@@ -97,15 +105,16 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		    
 		    	// to test reads
 		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
+		    	//ArrayList<Order> orders = objectData.getParcelableArrayList(RestService.BundleObjectKey);
 		    	
 		    	// to test others
-/*
-		    	String success = objectData.getBoolean(IntentExtraKeys.SUCCESS) ? "true" : "false";
-		    	Vendor v = new Vendor();
-		    	v.setName(success);
-		    	vendors = new ArrayList<Vendor>();
-		    	vendors.add(v);
-*/
+
+//		    	String success = objectData.getBoolean(IntentExtraKeys.SUCCESS) ? "true" : "false";
+//		    	Vendor v = new Vendor();
+//		    	v.setName(success);
+//		    	ArrayList<Vendor> vendors = new ArrayList<Vendor>();
+//		    	vendors.add(v);
+
 		    	// update UI
 		    	ArrayAdapter<Vendor> adapter = new ArrayAdapter<Vendor>(this,
 		    			android.R.layout.simple_list_item_1, vendors);

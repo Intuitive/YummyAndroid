@@ -12,16 +12,16 @@ public class Menu implements Model {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 
 	private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
 
 	private int id;
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	

@@ -24,26 +24,27 @@ public class VendorEditMenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        final int vendorID = (Integer) intent.getSerializableExtra("VendorID");
-        // Connect to the server and get the list of menuitem using the vendorID
-    	menu.addMenuItem(new MenuItem(1, "16 inch Cheese Pizza", 10, "Pizza", "Plain Cheese Pizza", true, null, null));
-    	menu.addMenuItem(new MenuItem(2, "16 inch Pepperoni Pizza", 11, "Pizza", "Pizza with Pepperoni Topping", true, null, null));
-    	menu.addMenuItem(new MenuItem(3, "16 inch Sausage Pizza", 12, "Pizza", "Pizza with Sausage", true, null, null));
-    	menu.addMenuItem(new MenuItem(4, "Cheese Pizza Slice", 1.5, "Pizza", "Plain Cheese Pizza (slice)", true, null, null));
-    	menu.addMenuItem(new MenuItem(5, "Pepperoni Pizza Slice", 1.65, "Pizza", "Pizza with Pepperoni Topping (slice)", true, null, null));
-    	menu.addMenuItem(new MenuItem(6, "Sausage Pizza Slice", 1.75, "Pizza", "Pizza with Sausage (slice)", true, null, null));
-    	menu.addMenuItem(new MenuItem(7, "Pizza Cheesesteak", 5, "Cheesesteak", "Cheesesteak filled with pizza topping", true, null, null));
-    	menu.addMenuItem(new MenuItem(8, "Chicken Cheesesteak", 6, "Cheesesteak", "Cheesesteak filled with chicken", true, null, null));
-    	menu.addMenuItem(new MenuItem(9, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null, null));
-    	menu.addMenuItem(new MenuItem(10, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null, null));
+        final int vendorId = (Integer) intent.getSerializableExtra("VendorID");
 
+        // TODO Connect to the server and get the list of menuitem using the vendorID
+        menu.addMenuItem(new MenuItem(1, 1, "16 inch Cheese Pizza", 10.0, "Pizza", "Plain Cheese Pizza", true, null));
+    	menu.addMenuItem(new MenuItem(2, 1, "16 inch Pepperoni Pizza", 11.0, "Pizza", "Pizza with Pepperoni Topping", true, null));
+    	menu.addMenuItem(new MenuItem(3, 1, "16 inch Sausage Pizza", 12.0, "Pizza", "Pizza with Sausage", true, null));
+    	menu.addMenuItem(new MenuItem(4, 1, "Cheese Pizza Slice", 1.5, "Pizza", "Plain Cheese Pizza (slice)", true, null));
+    	menu.addMenuItem(new MenuItem(5, 1, "Pepperoni Pizza Slice", 1.65, "Pizza", "Pizza with Pepperoni Topping (slice)", true, null));
+    	menu.addMenuItem(new MenuItem(6, 1, "Sausage Pizza Slice", 1.75, "Pizza", "Pizza with Sausage (slice)", true, null));
+    	menu.addMenuItem(new MenuItem(7, 1, "Pizza Cheesesteak", 5.0, "Cheesesteak", "Cheesesteak filled with pizza topping", true, null));
+    	menu.addMenuItem(new MenuItem(8, 1, "Chicken Cheesesteak", 6.0, "Cheesesteak", "Cheesesteak filled with chicken", true, null));
+    	menu.addMenuItem(new MenuItem(9, 1, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null));
+    	menu.addMenuItem(new MenuItem(10, 1, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null));
+    	
     	super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vendor_edit_menu);
 
 		addNewItem = (Button)findViewById(R.id.add_item);
 		addNewItem.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		MenuItem newItem = new MenuItem(vendorID, "", 0, "", "", true, null, null);
+        		MenuItem newItem = new MenuItem(null, vendorId, "", 0.0, "", "", true, null);
         		// add the new item to the database
         		menu.addMenuItem(newItem);
         		startEditMenuItemActivity(v, newItem);

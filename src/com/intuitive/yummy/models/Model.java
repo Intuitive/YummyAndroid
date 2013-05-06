@@ -12,5 +12,5 @@ public interface Model extends Parcelable, Serializable, Parcelable.Creator<Mode
 	public void parseJson(JSONObject json);
 	public String getModelName();
 	public HashMap<String, String> getPostData();
-	public int getId();
+	public Integer getId();
 }

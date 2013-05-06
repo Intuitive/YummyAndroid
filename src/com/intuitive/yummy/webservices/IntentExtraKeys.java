@@ -11,13 +11,10 @@ public class IntentExtraKeys {
 	public static final String ACTION = "ACTION";
 	public static final String POST_DATA= "POST_DATA";
 	public static final String ERROR = "ERROR";
-	public static final String MODEL_ID = "MODEL_ID";
+	public static final String MODEL_Id = "MODEL_Id";
 	public static final String SUCCESS = "SUCCESS";
 	public static final String MODEL = "MODEL";
-	
-	public static final String PARAMETER(int i){
-		// TODO test this
-		return "PARAMETER".concat(String.valueOf(i));
-	}
+	public static final String PARAMETER = "PARAMETER";
+	public static final String COUNT = "COUNT";
 }
 
