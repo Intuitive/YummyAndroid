@@ -64,10 +64,10 @@ public class VendorEditMenuItemActivity extends Activity {
 		setContentView(R.layout.activity_vendor_edit_menu_item);
 		init();
         Intent intent = getIntent();
-        int MenuItemID = (Integer)intent.getSerializableExtra("MenuItemID");
+        int MenuItemId = (Integer)intent.getSerializableExtra("MenuItemId");
         // Connect to the database to get the menu item information
         MenuItem item = (MenuItem)intent.getSerializableExtra("MenuItem");
-    	//System.out.println("MenuItemID: " + item.getID() + ", MenuItemName: " + item.getName());
+    	//System.out.println("MenuItemId: " + item.getId() + ", MenuItemName: " + item.getName());
         name.setText(item.getName());
         price.setText(Double.toString(item.getPrice()));
         description.setText(item.getDescription());

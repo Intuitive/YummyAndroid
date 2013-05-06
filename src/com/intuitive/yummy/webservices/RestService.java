@@ -8,7 +8,10 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 import com.intuitive.yummy.models.Model;
+import com.intuitive.yummy.models.Order;
+import com.intuitive.yummy.models.User;
 import com.intuitive.yummy.models.Vendor;
+import com.intuitive.yummy.models.MenuItem;
 
 import android.app.Activity;
 import android.app.IntentService;
@@ -49,16 +52,18 @@ public class RestService extends IntentService {
 	public final static String BundleObjectKey = "objects";
 	
 	private final static HashMap<Class<?>,String> controllerNames = new HashMap<Class<?>, String>() {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUId = 1L;
 	{
 		put(Vendor.class, "vendors");
-		// TODO add other classes and their controllers
+		put(User.class, "users");
+		put(MenuItem.class, "menuItems");
+		put(Order.class, "orders");
 	}};
 	
 	
 	// for now, all controllers will have the same action name uri's
 	private final static HashMap<Action,String> actionNames = new HashMap<Action, String>() {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUId = 1L;
 	{
 		put(Action.CREATE, "add");
 		put(Action.READSINGLE, "view");
@@ -68,7 +73,7 @@ public class RestService extends IntentService {
 	}};
 	
 	private final static HashMap<Action,String> actionMethodMapping = new HashMap<Action, String>() {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUId = 1L;
 	{
 		put(Action.CREATE, "POST");
 		put(Action.READSINGLE, "GET");
@@ -79,6 +84,9 @@ public class RestService extends IntentService {
 	
 	/**
 	 * Builds the request URL based on the model type and action
+	 * URL format is : [base url]/[controller name]/[action name]/[optional parameters]
+	 * examples: http://www.example.com/people/view/1
+	 * http://www.example.com/people/index
 	 * @param modelType - the class of the resource to request
 	 * @param action - the action the URL will be used to perform
 	 * @return entire request URL
@@ -86,23 +94,43 @@ public class RestService extends IntentService {
 	private final static String buildUrl(Class<?> modelType, Action action, Intent intent){
 		
 		StringBuilder url = new StringBuilder(baseUrl);
-		url.append("/".concat(controllerNames.get(modelType)));
+		String controllerName = controllerNames.get(modelType);
+		
+		if(controllerName == null)
+			throw new IllegalArgumentException("No controller name mapped for the class " + modelType.toString());
+		
+		// add controller and action to url
+		url.append("/".concat(controllerName));
 		url.append("/".concat(actionNames.get(action)));
 		
 		// add parameters
 		if(action == Action.READALL){
 			// TODO add support for option params i.e., paging, limit, etc
-			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
+			if(intent.hasExtra(IntentExtraKeys.MODEL_Id))
+				url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
+			if(intent.hasExtra(IntentExtraKeys.PARAMETER)){
+				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER)));
+			}
+		}
+		else if(action == Action.UPDATE){
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
 		}
 		else if(action != Action.CREATE)
-			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
 		
 		return url.toString();
 	}
 	
+	/**
+	 * Creates an intent for the RestService to create a Model object
+	 * @param modelObj The object to persist
+	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
+	 * @return An intent with the proper extras attached
+	 */
 	public static Intent getCreateIntent(Model modelObj, Activity activity, RestResponseReceiver receiver){
 		
-		if(modelObj.getId() > 0){
+		if(modelObj.getId() != null && modelObj.getId() > 0){
 			throw new IllegalArgumentException("Models can only be created with Id < 1. For updates/edits, use RestService.getUpdateIntent().");
 		}
 		
@@ -123,7 +151,9 @@ public class RestService extends IntentService {
 	/**
 	 * Creates an intent for the RestService to read a single Model object
 	 * @param modelId The Id of the Model object to read
+	 * @param modelClass The class of Model objects to read.
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getReadByIdIntent(int modelId, Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
@@ -139,7 +169,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.ACTION, Action.READSINGLE);
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 	
-		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_Id, modelId);
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
 		
 		return intent;
@@ -149,6 +179,7 @@ public class RestService extends IntentService {
 	 * Creates an intent for the RestService to read multiple Model objects
 	 * @param modelClass The class of Model objects to read.
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getReadManyIntent(Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
@@ -161,20 +192,44 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 		intent.putExtra(IntentExtraKeys.ACTION, Action.READALL);
 		
-		intent.putExtra(IntentExtraKeys.MODEL_CLASS, Vendor.class);
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
+		
+		return intent;
+	}
+	
+	/**
+	 * Creates an intent for the RestService to read all Model objects that meet parameter
+	 * @param modelClass The class of Model objects to read.
+	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
+	 * @return An intent with the proper extras attached
+	 */
+	public static Intent getReadManyByParamIntent(Class<?> modelClass, String parameter, Activity activity, RestResponseReceiver receiver){
+		
+		if(!Model.class.isAssignableFrom(modelClass)){
+			throw new IllegalArgumentException("model class must implement Model interface");
+		}		
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.READALL);
+		
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
+		intent.putExtra(IntentExtraKeys.PARAMETER, parameter);
 		
 		return intent;
 	}
 	
 	/**
 	 * Creates an intent for the RestService to persist an existing Model.
-	 * @param modelObj The model object to persist.
+	 * @param modelObj The object to persist
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getUpdateIntent(Model modelObj, Activity activity, RestResponseReceiver receiver){
 		
-		if(modelObj.getId() > 0){
+		if(modelObj.getId() <= 0){
 			throw new IllegalArgumentException("Model Id must be > 0 in order to update object.");
 		}
 		
@@ -184,6 +239,7 @@ public class RestService extends IntentService {
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelObj.getClass());
 		intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) modelObj);
+		intent.putExtra(IntentExtraKeys.MODEL_Id, modelObj.getId());
 		
 		
 		
@@ -193,7 +249,9 @@ public class RestService extends IntentService {
 	/**
 	 * Creates an intent for the RestService when deleting a Model  
 	 * @param modelId The id of the Model to delete
+	 * @param modelClass The class of Model objects to read.
 	 * @param activity An instance of the calling activity
+	 * @param receiver The receiver to send the result data to
 	 * @return An intent with the proper extras attached
 	 */
 	public static Intent getDeleteIntent(int modelId, Class<?> modelClass, Activity activity, RestResponseReceiver receiver){
@@ -207,7 +265,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
-		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_Id, modelId);
 		
 		return intent;
 	}
@@ -220,12 +278,6 @@ public class RestService extends IntentService {
 		@SuppressWarnings("unchecked")
 		Class<Model> modelType = (Class<Model>) intent.getSerializableExtra(IntentExtraKeys.MODEL_CLASS);
 		Action action = (Action) intent.getSerializableExtra(IntentExtraKeys.ACTION);
-		ArrayList<String> parameters = new ArrayList<String>();
-		
-		// get parameters
-		for(int i=0; intent.hasExtra(IntentExtraKeys.PARAMETER(i)); i++){
-			parameters.add(intent.getStringExtra(IntentExtraKeys.PARAMETER(i)));
-		}
 
 		// build URL
 		String requestUrl = buildUrl(modelType, action, intent);
@@ -240,13 +292,14 @@ public class RestService extends IntentService {
         
         try {
         	
-        	// get postData is action is a POST action
+        	// get postData if action is a POST action
         	ArrayList<PostParameter> postParams = null;
         	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE)
         	{
         		Model modelObject = intent.getParcelableExtra(IntentExtraKeys.MODEL);
         		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
         	}        	
+        	
         	
         	// log URL and post data
         	// TODO take this out for production? or use debug var to check
@@ -256,10 +309,11 @@ public class RestService extends IntentService {
         		StringBuilder postData_logMsg = new StringBuilder();
         		postData_logMsg.append("POST data:\n");
         		for(PostParameter param : postParams){
-        			postData_logMsg.append("key: " + param.getName() + ", value: " + param.getValue());
+        			postData_logMsg.append(param.getName() + ": " + param.getValue() + "\n");
         		}
         		Log.d("yummy", postData_logMsg.toString());
         	}
+        	
         	
         	// fire HTTP request and handle response
         	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams);
@@ -268,7 +322,8 @@ public class RestService extends IntentService {
         	try {
         		// only continue on success
         		String success = json.getString("success");
-        		        			
+        		b.putBoolean(IntentExtraKeys.SUCCESS, success.equals("true"));
+        		
         		if(action == Action.READALL || action == Action.READSINGLE){
 	        			if (success.equals("false"))
 	            			throw new Exception();
@@ -280,8 +335,9 @@ public class RestService extends IntentService {
 			        			
 	        			// create list to return via bundle
 		        		ArrayList<Model> objectList = new ArrayList<Model>();
-		        		
-		        		if(json.getInt("count") == 1){
+		        		int count = json.getInt("count");
+		        		if(count == 1){
+		        			// TODO problem here
 		        			JSONObject obj_json = json.getJSONObject("data");
 		
 		        			Model object = (Model) modelType.newInstance();
@@ -289,7 +345,7 @@ public class RestService extends IntentService {
 		        			object.parseJson(jsonObject);
 		
 		        			objectList.add(object);
-		        		}else if(json.getInt("count") > 1){
+		        		}else if(count > 1){
 			        		JSONArray objects_json = json.optJSONArray("data"); 
 		        			
 			        		// convert JSONArray items to model objects
@@ -303,9 +359,6 @@ public class RestService extends IntentService {
 		        			}
 		        		}
 		        		b.putParcelableArrayList(BundleObjectKey, objectList);
-		        		
-	        		}else{
-	        			b.putBoolean(IntentExtraKeys.SUCCESS, success.equals("true"));
 	        		}
         		
         		receiver.send(RestResultCode.FINISHED.getValue(), b);

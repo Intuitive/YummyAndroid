@@ -5,9 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.id;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.Vendor.VendorStatus;
 
@@ -41,7 +38,7 @@ public class VendorEditActivity extends Activity {
         Intent intent = getIntent();
         vendor = (Vendor)intent.getSerializableExtra("Vendor");
         // Get the vendor info from server using vendor id
-        int vendorID = (Integer)intent.getSerializableExtra("VendorID");
+        
 		name = (EditText)findViewById(R.id.name_field);
 		name.setText(vendor.getName());
 		description = (EditText)findViewById(R.id.description_field);

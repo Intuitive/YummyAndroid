@@ -1,6 +1,6 @@
 package com.intuitive.yummy.models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -15,52 +15,52 @@ public class VendorReview implements Model {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 	private static final String modelName = "VendorReview";
-	private int id;
-	private int userID;
+	private Integer id;
+	private Integer userId;
+	private Integer vendorId;
 	private String title;
 	private String description;
-	private int rating;
-	private Date dateCreated;
-	private int vendorID;
+	private Integer rating;
+	private Timestamp dateCreated;
 	private Boolean isDeleted;
 	
 	public VendorReview() {}
 
-	public VendorReview(String title, String description, int rating)
+	public VendorReview(String title, String description, Integer rating)
 	{
 		this.title = title;
 		this.description = description;
 		this.rating = rating;
 	}
 	
-	public VendorReview(int ID, int userID, String title, int vendorID, String description, int rating)
+	public VendorReview(Integer id, Integer userId, String title, Integer vendorId, String description, Integer rating)
 	{
-		this.id = ID;
-		this.userID = userID;
+		this.id = id;
+		this.userId = userId;
 		this.title = title;
-		this.vendorID = vendorID;
+		this.vendorId = vendorId;
 		this.description = description;
 		this.rating = rating;
 	}
 	
-	public void setId(int id)
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}
 	@Override
-	public int getId() 
+	public Integer getId() 
 	{
 		return id;
 	}
-	public void setUserID(int userID)
+	public void setUserId(Integer userId)
 	{
-		this.userID = userID;
+		this.userId = userId;
 	}
-	public int getUserID()
+	public Integer getUserId()
 	{
-		return userID;
+		return userId;
 	}
 	public void setTitle(String title)
 	{
@@ -70,13 +70,13 @@ public class VendorReview implements Model {
 	{
 		return title;
 	}
-	public void setVendorID(int vendorID)
+	public void setVendorId(Integer vendorId)
 	{
-		this.vendorID = vendorID;
+		this.vendorId = vendorId;
 	}
-	public int getVendorID()
+	public Integer getVendorId()
 	{
-		return vendorID;
+		return vendorId;
 	}
 	public void setComment(String description)
 	{
@@ -86,11 +86,11 @@ public class VendorReview implements Model {
 	{
 		return description;
 	}
-	public void setStar(int rating)
+	public void setStar(Integer rating)
 	{
 		this.rating = rating;
 	}
-	public int getStar()
+	public Integer getStar()
 	{
 		return rating;
 	}
@@ -101,31 +101,56 @@ public class VendorReview implements Model {
 	}
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeInt(id);
-		out.writeInt(userID);
+		if (id == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(id);
+		}
+		
+		if (userId == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(userId);
+		}
+		
+		if(vendorId == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(vendorId);
+		}
+		
 		if (title == null)
 			out.writeInt(0);
-		else
-		{
+		else{
 			out.writeInt(1);
 			out.writeString(title);
 		}
+		
 		if (description == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(description);
+		}
+		
+		if (rating == null)
 			out.writeInt(0);
 		else
 		{
 			out.writeInt(1);
-			out.writeString(description);
+			out.writeInt(rating);
 		}
-		out.writeInt(1);
-		out.writeInt(rating);
+		
 		if(dateCreated == null)
 			out.writeInt(0);
 		else{
 			out.writeInt(1);
 			out.writeString(dateCreated.toString());
 		}
-		out.writeInt(vendorID);
+		
 		if(isDeleted == null)
 			out.writeInt(0);
 		else{
@@ -138,14 +163,17 @@ public class VendorReview implements Model {
 	}
 	@Override
 	public Model createFromParcel(Parcel parcel) {
-		// TODO Auto-generated method stub
 		return new VendorReview(parcel);
 	}
 	
 	public VendorReview(Parcel parcel)
 	{
-		id = parcel.readInt();
-		userID = parcel.readInt();
+		if (parcel.readInt() == 1)
+			id = parcel.readInt();
+		if (parcel.readInt() == 1)
+			userId = parcel.readInt();
+		if (parcel.readInt() == 1)
+			vendorId = parcel.readInt();
 		if (parcel.readInt() == 1)
 			title = parcel.readString();
 		if (parcel.readInt() == 1)
@@ -153,8 +181,7 @@ public class VendorReview implements Model {
 		if (parcel.readInt() == 1)
 			rating = parcel.readInt();
 		if (parcel.readInt() == 1)
-			dateCreated = Date.valueOf(parcel.readString());
-		vendorID = parcel.readInt();
+			dateCreated = Timestamp.valueOf(parcel.readString());
 		if (parcel.readInt() == 1)
 			isDeleted = parcel.readInt() == 1;
 	}
@@ -168,7 +195,6 @@ public class VendorReview implements Model {
 	    public VendorReview[] newArray(int size) {
 	        return new VendorReview[size];
 	    }
-
 	};
 
 	@Override
@@ -179,10 +205,13 @@ public class VendorReview implements Model {
 	public void parseJson(JSONObject json) {
 		try {
 			id = json.getInt("id");
+			vendorId = json.getInt("vendor_id");
+			userId = json.getInt("user_id");
 			title = json.getString("title");
-			vendorID = json.getInt("vendor_id");
 			description = json.getString("description");
 			rating = json.getInt("rating");
+			dateCreated = Timestamp.valueOf(json.getString("date_created"));
+			isDeleted = json.getBoolean("deleted");
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to Vendor object.");
 			e.printStackTrace();
@@ -196,7 +225,17 @@ public class VendorReview implements Model {
 
 	@Override
 	public HashMap<String, String> getPostData() {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<String, String> postData = new HashMap<String, String>();
+
+		if(id != null) postData.put("id", String.valueOf(id));
+		if(vendorId != null) postData.put("vendor_id", String.valueOf(vendorId));
+		if(userId != null) postData.put("user_id", String.valueOf(userId));
+		if(title != null) postData.put("title", title);
+		if(description != null) postData.put("description", description);
+		if(rating != null) postData.put("rating", String.valueOf(rating));
+		if(dateCreated != null) postData.put("date_created", dateCreated.toString());
+		if(isDeleted != null) postData.put("deleted", isDeleted ? "true" : "false");
+		
+		return postData;
 	}
 }
