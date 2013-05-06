@@ -12,7 +12,7 @@ public class Menu implements Model {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 
 	private ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
 

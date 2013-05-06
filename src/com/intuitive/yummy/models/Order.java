@@ -12,9 +12,9 @@ import android.util.Log;
 public class Order implements Model {
 	
 	/**
-	 * TODO this is default UID
+	 * TODO this is default UId
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 	private static final String modelName = "Order";
 	
 	private Integer id;

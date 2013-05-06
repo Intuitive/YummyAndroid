@@ -13,7 +13,7 @@ public class User implements Model{
 	/**
 	 * TODO this is default
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 	
 	// what the model is referred to on the backend
 	private static final String modelName = "User";

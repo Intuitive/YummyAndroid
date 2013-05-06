@@ -52,7 +52,7 @@ public class RestService extends IntentService {
 	public final static String BundleObjectKey = "objects";
 	
 	private final static HashMap<Class<?>,String> controllerNames = new HashMap<Class<?>, String>() {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUId = 1L;
 	{
 		put(Vendor.class, "vendors");
 		put(User.class, "users");
@@ -63,7 +63,7 @@ public class RestService extends IntentService {
 	
 	// for now, all controllers will have the same action name uri's
 	private final static HashMap<Action,String> actionNames = new HashMap<Action, String>() {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUId = 1L;
 	{
 		put(Action.CREATE, "add");
 		put(Action.READSINGLE, "view");
@@ -73,7 +73,7 @@ public class RestService extends IntentService {
 	}};
 	
 	private final static HashMap<Action,String> actionMethodMapping = new HashMap<Action, String>() {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUId = 1L;
 	{
 		put(Action.CREATE, "POST");
 		put(Action.READSINGLE, "GET");
@@ -106,17 +106,17 @@ public class RestService extends IntentService {
 		// add parameters
 		if(action == Action.READALL){
 			// TODO add support for option params i.e., paging, limit, etc
-			if(intent.hasExtra(IntentExtraKeys.MODEL_ID))
-				url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
+			if(intent.hasExtra(IntentExtraKeys.MODEL_Id))
+				url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
 			if(intent.hasExtra(IntentExtraKeys.PARAMETER)){
 				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER)));
 			}
 		}
 		else if(action == Action.UPDATE){
-			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
 		}
 		else if(action != Action.CREATE)
-			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
 		
 		return url.toString();
 	}
@@ -169,7 +169,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.ACTION, Action.READSINGLE);
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 	
-		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_Id, modelId);
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
 		
 		return intent;
@@ -239,7 +239,7 @@ public class RestService extends IntentService {
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelObj.getClass());
 		intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) modelObj);
-		intent.putExtra(IntentExtraKeys.MODEL_ID, modelObj.getId());
+		intent.putExtra(IntentExtraKeys.MODEL_Id, modelObj.getId());
 		
 		
 		
@@ -265,7 +265,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
-		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_Id, modelId);
 		
 		return intent;
 	}

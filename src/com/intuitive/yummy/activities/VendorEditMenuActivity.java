@@ -24,7 +24,7 @@ public class VendorEditMenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        final int vendorID = (Integer) intent.getSerializableExtra("VendorID");
+        final int vendorId = (Integer) intent.getSerializableExtra("VendorID");
 
         // TODO Connect to the server and get the list of menuitem using the vendorID
         menu.addMenuItem(new MenuItem(1, 1, "16 inch Cheese Pizza", 10.0, "Pizza", "Plain Cheese Pizza", true, null));
@@ -44,7 +44,7 @@ public class VendorEditMenuActivity extends Activity {
 		addNewItem = (Button)findViewById(R.id.add_item);
 		addNewItem.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		MenuItem newItem = new MenuItem(null, vendorID, "", 0.0, "", "", true, null);
+        		MenuItem newItem = new MenuItem(null, vendorId, "", 0.0, "", "", true, null);
         		// add the new item to the database
         		menu.addMenuItem(newItem);
         		startEditMenuItemActivity(v, newItem);

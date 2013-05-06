@@ -16,7 +16,7 @@ public class MenuItem implements Model {
 	/**
 	 * \
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 	
 	private static final String modelName = "MenuItem";
 	private Integer id;
@@ -34,8 +34,8 @@ public class MenuItem implements Model {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public void setVendorID(Integer vendorID) {
-		this.vendorId = vendorID;
+	public void setVendorId(Integer vendorId) {
+		this.vendorId = vendorId;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -59,7 +59,7 @@ public class MenuItem implements Model {
 	public Integer getId() {
 		return id;
 	}
-	public Integer getVendorID() {
+	public Integer getVendorId() {
 		return vendorId;
 	}
 	public String getName() {

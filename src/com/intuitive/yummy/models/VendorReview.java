@@ -15,7 +15,7 @@ public class VendorReview implements Model {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUId = 1L;
 	private static final String modelName = "VendorReview";
 	private Integer id;
 	private Integer userId;
@@ -35,12 +35,12 @@ public class VendorReview implements Model {
 		this.rating = rating;
 	}
 	
-	public VendorReview(Integer id, Integer userId, String title, Integer vendorID, String description, Integer rating)
+	public VendorReview(Integer id, Integer userId, String title, Integer vendorId, String description, Integer rating)
 	{
 		this.id = id;
 		this.userId = userId;
 		this.title = title;
-		this.vendorId = vendorID;
+		this.vendorId = vendorId;
 		this.description = description;
 		this.rating = rating;
 	}
@@ -54,11 +54,11 @@ public class VendorReview implements Model {
 	{
 		return id;
 	}
-	public void setUserID(Integer userID)
+	public void setUserId(Integer userId)
 	{
-		this.userId = userID;
+		this.userId = userId;
 	}
-	public Integer getUserID()
+	public Integer getUserId()
 	{
 		return userId;
 	}
@@ -70,11 +70,11 @@ public class VendorReview implements Model {
 	{
 		return title;
 	}
-	public void setVendorID(Integer vendorID)
+	public void setVendorId(Integer vendorId)
 	{
-		this.vendorId = vendorID;
+		this.vendorId = vendorId;
 	}
-	public Integer getVendorID()
+	public Integer getVendorId()
 	{
 		return vendorId;
 	}
