@@ -79,11 +79,11 @@
             android:enabled="true" />
 
         <activity
-            android:name="com.intuitive.yummy.VendorEditMenuItemActivity"
+            android:name="com.intuitive.yummy.activities.VendorEditMenuItemActivity"
             android:label="@string/title_activity_vendor_edit_menu_item" >
         </activity>
         <activity
-            android:name="com.intuitive.yummy.VendorEditMenuActivity"
+            android:name="com.intuitive.yummy.activities.VendorEditMenuActivity"
             android:label="@string/title_activity_vendor_edit_menu" >
         </activity>
     </application>

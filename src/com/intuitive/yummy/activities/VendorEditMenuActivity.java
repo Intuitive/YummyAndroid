@@ -1,7 +1,10 @@
 package com.intuitive.yummy.activities;
 
+import java.util.ArrayList;
+
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.*;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,52 +22,51 @@ public class VendorEditMenuActivity extends Activity {
 
 	private com.intuitive.yummy.models.Menu menu = new com.intuitive.yummy.models.Menu();
 	private ListView listView;
-	Button addNewItem;
+	Button addNewItemBtn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         final int vendorId = (Integer) intent.getSerializableExtra("VendorID");
-
+        ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
+        
         // TODO Connect to the server and get the list of menuitem using the vendorID
-        menu.addMenuItem(new MenuItem(1, 1, "16 inch Cheese Pizza", 10.0, "Pizza", "Plain Cheese Pizza", true, null));
-    	menu.addMenuItem(new MenuItem(2, 1, "16 inch Pepperoni Pizza", 11.0, "Pizza", "Pizza with Pepperoni Topping", true, null));
-    	menu.addMenuItem(new MenuItem(3, 1, "16 inch Sausage Pizza", 12.0, "Pizza", "Pizza with Sausage", true, null));
-    	menu.addMenuItem(new MenuItem(4, 1, "Cheese Pizza Slice", 1.5, "Pizza", "Plain Cheese Pizza (slice)", true, null));
-    	menu.addMenuItem(new MenuItem(5, 1, "Pepperoni Pizza Slice", 1.65, "Pizza", "Pizza with Pepperoni Topping (slice)", true, null));
-    	menu.addMenuItem(new MenuItem(6, 1, "Sausage Pizza Slice", 1.75, "Pizza", "Pizza with Sausage (slice)", true, null));
-    	menu.addMenuItem(new MenuItem(7, 1, "Pizza Cheesesteak", 5.0, "Cheesesteak", "Cheesesteak filled with pizza topping", true, null));
-    	menu.addMenuItem(new MenuItem(8, 1, "Chicken Cheesesteak", 6.0, "Cheesesteak", "Cheesesteak filled with chicken", true, null));
-    	menu.addMenuItem(new MenuItem(9, 1, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null));
-    	menu.addMenuItem(new MenuItem(10, 1, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null));
+        menu.add(new MenuItem(1, 1, "16 inch Cheese Pizza", 10.0, "Pizza", "Plain Cheese Pizza", true, null));
+    	menu.add(new MenuItem(2, 1, "16 inch Pepperoni Pizza", 11.0, "Pizza", "Pizza with Pepperoni Topping", true, null));
+    	menu.add(new MenuItem(3, 1, "16 inch Sausage Pizza", 12.0, "Pizza", "Pizza with Sausage", true, null));
+    	menu.add(new MenuItem(4, 1, "Cheese Pizza Slice", 1.5, "Pizza", "Plain Cheese Pizza (slice)", true, null));
+    	menu.add(new MenuItem(5, 1, "Pepperoni Pizza Slice", 1.65, "Pizza", "Pizza with Pepperoni Topping (slice)", true, null));
+    	menu.add(new MenuItem(6, 1, "Sausage Pizza Slice", 1.75, "Pizza", "Pizza with Sausage (slice)", true, null));
+    	menu.add(new MenuItem(7, 1, "Pizza Cheesesteak", 5.0, "Cheesesteak", "Cheesesteak filled with pizza topping", true, null));
+    	menu.add(new MenuItem(8, 1, "Chicken Cheesesteak", 6.0, "Cheesesteak", "Cheesesteak filled with chicken", true, null));
+    	menu.add(new MenuItem(9, 1, "Pepsi 2 Liter", 2.5, "Drink", "2 Liter Pepsi", true, null));
+    	menu.add(new MenuItem(10, 1, "Coca-Cola 2 Liter", 2.5, "Drink", "2 Liter Coca-Cola", true, null));
     	
     	super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vendor_edit_menu);
-
-		addNewItem = (Button)findViewById(R.id.add_item);
-		addNewItem.setOnClickListener(new OnClickListener() {
+		
+		// setup add new button
+		addNewItemBtn = (Button)findViewById(R.id.add_item);
+		addNewItemBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
-        		MenuItem newItem = new MenuItem(null, vendorId, "", 0.0, "", "", true, null);
-        		// add the new item to the database
-        		menu.addMenuItem(newItem);
-        		startEditMenuItemActivity(v, newItem);
+        		startEditMenuItemActivity(v, new MenuItem());
         	}
         });
-
-        MenuItem[] itemsArray = new MenuItem[menu.getMenuItems().size()];
-        menu.getMenuItems().toArray(itemsArray);
-
-		System.out.println("creating adapter");
-		MenuItemAdapter adapter = new MenuItemAdapter(this, R.layout.list_menuitem, itemsArray);
+		
+		// setup list
+		MenuItemAdapter adapter = new MenuItemAdapter(this, R.layout.list_menuitem, menu);
 		listView = (ListView) findViewById(R.id.editMenuItemList);
+		
+		// setup listener for clicks on MenuItems
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> av, View v, int position,
 					long id) {
-		    	MenuItem menuItem = menu.get(position);
+		    	MenuItem menuItem = (MenuItem) listView.getItemAtPosition(position);
 		    	startEditMenuItemActivity(v, menuItem);
 			}			
 		});
+		
 		listView.setAdapter(adapter);
 	}
 
@@ -75,12 +77,16 @@ public class VendorEditMenuActivity extends Activity {
 		return true;
 	}
 
+	/**
+	 * Will pass a MenuItem id to the VendorEditMenuItemActivity. If the id is > 0, the
+	 * existing MenuItem will be edited. If the id is equal to 0, a new MenuItem will be created.
+	 * @param v
+	 * @param menuItemId
+	 */
     private void startEditMenuItemActivity(View v, MenuItem menuItem) {
     	Intent intent = new Intent(this, VendorEditMenuItemActivity.class);
-    	intent.putExtra("MenuItemID", menuItem.getId());
-    	intent.putExtra("MenuItem", (Parcelable)menuItem);
-    	System.out.println("MenuItemID: " + menuItem.getId() + ", MenuItemName: " + menuItem.getName());
-    	startActivity(intent);    	
-
+    	intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) menuItem);
+    	
+    	startActivity(intent);
     }
 }

@@ -49,7 +49,7 @@ public class RestService extends IntentService {
 		DELETE
 	}
 	
-	public final static String BundleObjectKey = "objects";
+	public final static String BundleObjectKey = "OBJECTS";
 	
 	private final static HashMap<Class<?>,String> controllerNames = new HashMap<Class<?>, String>() {
 		private static final long serialVersionUId = 1L;
@@ -106,17 +106,17 @@ public class RestService extends IntentService {
 		// add parameters
 		if(action == Action.READALL){
 			// TODO add support for option params i.e., paging, limit, etc
-			if(intent.hasExtra(IntentExtraKeys.MODEL_Id))
-				url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
+			if(intent.hasExtra(IntentExtraKeys.MODEL_ID))
+				url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
 			if(intent.hasExtra(IntentExtraKeys.PARAMETER)){
 				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER)));
 			}
 		}
 		else if(action == Action.UPDATE){
-			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
 		}
 		else if(action != Action.CREATE)
-			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_Id, 0))));
+			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
 		
 		return url.toString();
 	}
@@ -169,7 +169,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.ACTION, Action.READSINGLE);
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 	
-		intent.putExtra(IntentExtraKeys.MODEL_Id, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
 		
 		return intent;
@@ -239,7 +239,7 @@ public class RestService extends IntentService {
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelObj.getClass());
 		intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) modelObj);
-		intent.putExtra(IntentExtraKeys.MODEL_Id, modelObj.getId());
+		intent.putExtra(IntentExtraKeys.MODEL_ID, modelObj.getId());
 		
 		
 		
@@ -265,7 +265,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
-		intent.putExtra(IntentExtraKeys.MODEL_Id, modelId);
+		intent.putExtra(IntentExtraKeys.MODEL_ID, modelId);
 		
 		return intent;
 	}
@@ -284,7 +284,7 @@ public class RestService extends IntentService {
 		
 		// create receiver and alert to progress
 		final ResultReceiver receiver = intent.getParcelableExtra(IntentExtraKeys.RECEIVER);
-        receiver.send(RestResultCode.RUNNING.getValue(), Bundle.EMPTY);
+        receiver.send(RestResultCode.RUNNING, Bundle.EMPTY);
         
         // initialize bundle to pass back to caller
         Bundle b = new Bundle();
@@ -361,17 +361,17 @@ public class RestService extends IntentService {
 		        		b.putParcelableArrayList(BundleObjectKey, objectList);
 	        		}
         		
-        		receiver.send(RestResultCode.FINISHED.getValue(), b);
+        		receiver.send(RestResultCode.FINISHED, b);
         		
         	} catch (JSONException e) {
         		e.printStackTrace();
-        		receiver.send(RestResultCode.ERROR.getValue(), b);
+        		receiver.send(RestResultCode.ERROR, b);
         	}
 
         } catch(Exception e) {
         	Log.e("yummy", e.toString());
         	b.putString(IntentExtraKeys.ERROR, e.getMessage());
-        	receiver.send(RestResultCode.ERROR.getValue(), b);
+        	receiver.send(RestResultCode.ERROR, b);
         }    
 	}
 

@@ -1,16 +1,10 @@
 package com.intuitive.yummy.webservices;
 
-public enum RestResultCode {
-    	RUNNING(0),
-    	FINISHED(1),
-    	ERROR(2);
+public final class RestResultCode {
+    	public final static int RUNNING = 0;
+    	public final static int FINISHED = 1;
+    	public final static int ERROR = 2;
     	
-    	private final int value;
-        private RestResultCode(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
+    	
+        
 }
