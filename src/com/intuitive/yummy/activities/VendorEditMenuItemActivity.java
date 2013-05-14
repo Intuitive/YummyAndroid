@@ -1,9 +1,8 @@
 package com.intuitive.yummy.activities;
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
 import com.intuitive.yummy.models.MenuItem;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +29,7 @@ public class VendorEditMenuItemActivity extends Activity {
 	final String PRICE_PATTERN = "^[0-9]*(\\.[0-9]{0,1})[0-9]$";
 
 	private void init() {
+		setContentView(R.layout.activity_vendor_edit_menu_item);
 		required1 = (TextView)findViewById(R.id.required1_editmenu);
 		required1.setTextColor(Color.parseColor("#FF0000"));
 		required1.setVisibility(TextView.INVISIBLE);
@@ -61,16 +61,18 @@ public class VendorEditMenuItemActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_vendor_edit_menu_item);
+		
+		// setup UI elements
 		init();
+		
         Intent intent = getIntent();
-        int MenuItemId = (Integer)intent.getSerializableExtra("MenuItemId");
-        // Connect to the database to get the menu item information
-        MenuItem item = (MenuItem)intent.getSerializableExtra("MenuItem");
-    	//System.out.println("MenuItemId: " + item.getId() + ", MenuItemName: " + item.getName());
-        name.setText(item.getName());
-        price.setText(Double.toString(item.getPrice()));
-        description.setText(item.getDescription());
+        MenuItem item = (MenuItem) intent.getParcelableExtra(IntentExtraKeys.MODEL);
+
+        name.setText(item.getName() == null ? "" : item.getName());
+        description.setText(item.getDescription() == null ? "" : item.getDescription());
+        String price_string = String.valueOf((item.getPrice()));
+        price.setText(price_string);
+        
 	}
 
 	@Override

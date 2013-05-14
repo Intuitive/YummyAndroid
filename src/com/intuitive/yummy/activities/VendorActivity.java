@@ -6,6 +6,7 @@ import com.intuitive.yummy.R.layout;
 import com.intuitive.yummy.R.menu;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.Vendor.VendorStatus;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -123,15 +124,9 @@ public class VendorActivity extends Activity {
         vendorStatus.setText(status);
         
         Button menuButton = (Button) findViewById(R.id.button_menu);
-        
-        try{
-        	if (vendor.getMenu().getMenuItems().size() != 0)
-            	menuButton.setEnabled(true);
-            else
-            	menuButton.setEnabled(false);	
-        }catch(NullPointerException e){
-        	menuButton.setEnabled(false);
-        }
+
+        // we'll catch empty menus on the MenuActivity screen
+        menuButton.setEnabled(true);
         
     }
 
@@ -143,9 +138,8 @@ public class VendorActivity extends Activity {
     
     public void viewMenu(View v){
     	Intent intent = new Intent(this, MenuActivity.class);
-    	intent.putExtra("Menu", (Parcelable) vendor.getMenu());
-    	intent.putExtra("Activity", "Vendor");
-    	startActivity(intent);
+    	intent.putExtra(IntentExtraKeys.VENDOR, (Parcelable) vendor);
+   	startActivity(intent);
    }
     public void viewReviews(View v){
     	Intent intent = new Intent(this, ReadReviewActivity.class);

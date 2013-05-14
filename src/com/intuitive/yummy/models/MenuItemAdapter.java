@@ -1,6 +1,7 @@
 package com.intuitive.yummy.models;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 import com.intuitive.yummy.R;
 
@@ -15,13 +16,13 @@ import android.widget.TextView;
 public class MenuItemAdapter extends ArrayAdapter<MenuItem> {
 	Context context;
 	int layoutResourceId;
-	MenuItem data[] = null;
+	ArrayList<MenuItem> menuItems = null;
 	
-	public MenuItemAdapter (Context context, int layoutResourceId, MenuItem[] data) {
+	public MenuItemAdapter (Context context, int layoutResourceId, ArrayList<MenuItem> data) {
 		super(context, layoutResourceId, data);
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
-		this.data = data;
+		this.menuItems = data;
 	}
 	
 	@Override
@@ -41,7 +42,7 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> {
 			System.out.println("Row != null");
 			holder = (ItemHolder)row.getTag();
 		}
-		MenuItem item = data[position];
+		MenuItem item = menuItems.get(position);
 		holder.name.setText(item.getName());
 		NumberFormat defaultFormat = NumberFormat.getCurrencyInstance();
 		holder.price.setText(defaultFormat.format(item.getPrice()));

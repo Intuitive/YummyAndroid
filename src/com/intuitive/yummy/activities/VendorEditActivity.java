@@ -119,24 +119,25 @@ public class VendorEditActivity extends Activity {
 		temp.add(sunCloseMinute);
 		arrayEditText.add(temp);
 		
-		for (int i = 0; i < 7; i++) {
-    		int temp1 = vendor.getHours()[i][0];
-    		int openHour = (int)Math.floor(temp1/100);
-    		int openMinute = temp1%100;
-    		int temp2 = vendor.getHours()[i][1];
-    		int closeHour = (int)Math.floor(temp2/100);
-    		int closeMinute = temp2%100;
-			arrayEditText.get(i).get(0).setText(Integer.toString(openHour));
-			if (openMinute == 0)
-				arrayEditText.get(i).get(1).setText("00");
-			else
-				arrayEditText.get(i).get(1).setText(Integer.toString(openMinute));
-			arrayEditText.get(i).get(2).setText(Integer.toString(closeHour));
-			if (closeMinute == 0)
-				arrayEditText.get(i).get(3).setText("00");
-			else
-				arrayEditText.get(i).get(3).setText(Integer.toString(closeMinute));
-		}
+		if(vendor.getHours() != null)
+			for (int i = 0; i < 7; i++) {
+	    		int temp1 = vendor.getHours()[i][0];
+	    		int openHour = (int)Math.floor(temp1/100);
+	    		int openMinute = temp1%100;
+	    		int temp2 = vendor.getHours()[i][1];
+	    		int closeHour = (int)Math.floor(temp2/100);
+	    		int closeMinute = temp2%100;
+				arrayEditText.get(i).get(0).setText(Integer.toString(openHour));
+				if (openMinute == 0)
+					arrayEditText.get(i).get(1).setText("00");
+				else
+					arrayEditText.get(i).get(1).setText(Integer.toString(openMinute));
+				arrayEditText.get(i).get(2).setText(Integer.toString(closeHour));
+				if (closeMinute == 0)
+					arrayEditText.get(i).get(3).setText("00");
+				else
+					arrayEditText.get(i).get(3).setText(Integer.toString(closeMinute));
+			}
 	}
 
 	@Override

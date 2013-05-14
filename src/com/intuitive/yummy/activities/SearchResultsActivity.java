@@ -21,7 +21,7 @@ import com.intuitive.yummy.webservices.*;
 
 public class SearchResultsActivity extends ListActivity implements RestResponseReceiver.Receiver{
 
-	public RestResponseReceiver mReceiver;
+	public RestResponseReceiver responseReceiver;
 	ArrayList<Vendor> vendors;
 	// dummy data for vendors
 	private com.intuitive.yummy.models.Menu menu = new com.intuitive.yummy.models.Menu();
@@ -46,11 +46,11 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
         
     	super.onCreate(savedInstanceState);
 
-        mReceiver = new RestResponseReceiver(new Handler());
-        mReceiver.setReceiver(this);
+        responseReceiver = new RestResponseReceiver(new Handler());
+        responseReceiver.setReceiver(this);
         
         // test read all
-        final Intent intent = RestService.getReadManyIntent(Vendor.class, this, mReceiver);
+        final Intent intent = RestService.getReadManyIntent(Vendor.class, this, responseReceiver);
           
         // test read single
         //Intent intent = RestService.getReadByIdIntent(1, MenuItem.class, this, mReceiver);
@@ -79,29 +79,26 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     
     @Override
     public void onResume() {
-    	mReceiver.setReceiver(this);
+    	responseReceiver.setReceiver(this);
     	super.onResume();
     }
     
     @Override
     public void onPause() {
-        mReceiver.setReceiver(null); // clear receiver so no leaks.
+        responseReceiver.setReceiver(null); // clear receiver so no leaks.
         super.onPause();
     }
     
     
     public void onReceiveResult(int resultCode, Bundle objectData) {
-    	final int running = 0;
-    	final int finished = 1;
-    	final int error = 2;
     	
     	switch (resultCode) {
 		    
-			case running:
+			case RestResultCode.RUNNING:
 		        // TODO show progress
 		        break;
 		        
-		    case finished:
+		    case RestResultCode.FINISHED:
 		    
 		    	// to test reads
 		    	vendors = objectData.getParcelableArrayList(RestService.BundleObjectKey);
@@ -123,7 +120,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 		        
 		        // TODO hide progress
 		        break;
-		    case error:
+		    case RestResultCode.ERROR:
 		        	//RestResultCode.ERROR.getValue()
 		        break;
 		}
