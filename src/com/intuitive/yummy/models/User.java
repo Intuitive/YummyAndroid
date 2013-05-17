@@ -54,6 +54,12 @@ public class User implements Model{
 	        }
 	    }
 	};
+
+	public enum UserType{			
+		CUSTOMER,
+		EMPLOYEE,
+		ADMIN;
+	}
 	
 	public User(){}
 	

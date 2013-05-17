@@ -145,7 +145,7 @@ public class VendorActivity extends Activity {
     	Intent intent = new Intent(this, MenuActivity.class);
     	intent.putExtra("Menu", (Parcelable) vendor.getMenu());
     	intent.putExtra("Activity", "Vendor");
-   	startActivity(intent);
+    	startActivity(intent);
    }
     public void viewReviews(View v){
     	Intent intent = new Intent(this, ReadReviewActivity.class);

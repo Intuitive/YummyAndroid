@@ -80,13 +80,13 @@ public class CartActivity extends Activity {
 	}
 	
 	//Go to home page when home button is clicked
-    public void home(View v){
+    public void goToHome(View v){
     	Intent intent = new Intent(this, MainActivity.class);
     	startActivity(intent);
     }
     
     //Go to checkout page when checkout button is clicked
-    public void checkout(View v){
+    public void goToCheckout(View v){
     	Intent intent = new Intent(this, OrderConfirmationActivity.class);
     	startActivity(intent);
     }
