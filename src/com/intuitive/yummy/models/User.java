@@ -29,7 +29,6 @@ public class User implements Model{
 	private Timestamp dateLastModified;
 	private Boolean isDeleted;
 	
-<<<<<<< HEAD
 	public static enum UserAccountType{
 		CUSTOMER(0), VENDOR_EMPLOYEE(1), VENDOR_ADMIN(2);
 	    
@@ -55,13 +54,12 @@ public class User implements Model{
 	        }
 	    }
 	};
-=======
+
 	public enum UserType{			
 		CUSTOMER,
 		EMPLOYEE,
 		ADMIN;
 	}
->>>>>>> bac9933... created CustomerActivity class and associated screens
 	
 	public User(){}
 	

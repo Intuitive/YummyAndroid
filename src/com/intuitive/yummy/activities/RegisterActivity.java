@@ -224,8 +224,7 @@ public class RegisterActivity extends Activity {
 		String f = firstname.toString();
 		String l = lastname.toString();
 		String e = email.toString();
-		String p = phone.toString();
-		User newUser = new User(u, f, l, e, p);
+		User newUser = new User(u, f, l, e);
 		// add the new item to the database
 		Toast.makeText(getApplicationContext(), "User added", Toast.LENGTH_LONG).show();
 		//newUser.addUser(newUser);
