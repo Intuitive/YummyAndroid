@@ -1,6 +1,8 @@
 package com.intuitive.yummy.activities;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Menu;
@@ -17,9 +19,11 @@ import com.intuitive.yummy.R;
 import com.intuitive.yummy.R.id;
 import com.intuitive.yummy.R.layout;
 import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.models.MenuItem;
+import com.intuitive.yummy.models.User;
 
 public class RegisterActivity extends Activity {
-	Button cancel;
+	Button cancel, register;
 	TextView required1, required2, required3, required4, required5, required6, required7;
 	EditText username, password1, password2, firstname, lastname, phone, email;
 	Pattern pattern;
@@ -68,7 +72,7 @@ public class RegisterActivity extends Activity {
 		lastname = (EditText)findViewById(R.id.lastname_field);
 		phone = (EditText)findViewById(R.id.phone_field);
 		email = (EditText)findViewById(R.id.email_field);
-		
+
 		cancel = (Button)findViewById(R.id.button_register_cancel);
         cancel.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -120,7 +124,7 @@ public class RegisterActivity extends Activity {
 			required7.setVisibility(TextView.VISIBLE);
     		Toast.makeText(getApplicationContext(), "Email in Wrong Format.  Please Double Check", Toast.LENGTH_LONG).show();
 		} else {
-			//register
+			registerNewUser();
 		}
 	}
 	
@@ -213,5 +217,19 @@ public class RegisterActivity extends Activity {
 		pattern = Pattern.compile(EMAIL_PATTERN);
 		matcher = pattern.matcher(email.getText().toString());
 		return matcher.matches();
+	}
+	
+	private void registerNewUser(){
+		String u = username.toString();
+		String f = firstname.toString();
+		String l = lastname.toString();
+		String e = email.toString();
+		String p = phone.toString();
+		User newUser = new User(u, f, l, e, p);
+		// add the new item to the database
+		Toast.makeText(getApplicationContext(), "User added", Toast.LENGTH_LONG).show();
+		//newUser.addUser(newUser);
+		finish();
+		//startRegisterActivity(v, newUser);
 	}
 }
