@@ -3,6 +3,7 @@ package com.intuitive.yummy.activities;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.Vendor.VendorStatus;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,10 +14,11 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
 
 public class VendorAdminAccountActivity extends Activity {
 	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, VendorStatus.CLOSED, null);
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +40,13 @@ public class VendorAdminAccountActivity extends Activity {
 			vendorStatus.setText("Open");
 		else
 			vendorStatus.setText("Close");
+		
+		if (intent.getBooleanExtra(IntentExtraKeys.PARAMETER,true)){
+			Button genInfo = (Button)findViewById(R.id.button_edit_general_info);
+			genInfo.setVisibility(View.GONE);
+			Button menuEdit = (Button)findViewById(R.id.button_edit_menu);
+			menuEdit.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -47,11 +56,11 @@ public class VendorAdminAccountActivity extends Activity {
 		return true;
 	}
 	
-	public void editGeneralInfo(View v) {
-    	Intent intent = new Intent(this, VendorEditActivity.class);
-    	intent.putExtra("Vendor", (Parcelable) vendor);
-    	intent.putExtra("VendorID", vendor.getId());
-    	startActivity(intent);
+	public void editGenInfo(View v) {
+			Intent intent = new Intent(this, VendorEditActivity.class);
+			intent.putExtra("Vendor", (Parcelable) vendor);
+			intent.putExtra("VendorID", vendor.getId());
+			startActivity(intent);
 	}
 	
 	public void editMenu(View v) {
@@ -59,5 +68,16 @@ public class VendorAdminAccountActivity extends Activity {
 		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
 	}
-
+	
+	public void viewPendOrder(View v){
+		Intent intent = new Intent(this, VendorEditActivity.class); //PendingOrderActivity.class will be made
+		intent.putExtra("VendorID", vendor.getId());
+		startActivity(intent);
+	}
+	
+	public void viewOrderHist(View v){
+		Intent intent = new Intent(this, VendorEditActivity.class); //OrderHistoryActivity.class will be made
+		intent.putExtra("VendorID", vendor.getId());
+		startActivity(intent);
+	}
 }
