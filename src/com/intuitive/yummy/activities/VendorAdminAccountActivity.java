@@ -3,6 +3,7 @@ package com.intuitive.yummy.activities;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.Vendor.VendorStatus;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,14 +17,8 @@ import android.widget.TextView;
 import android.widget.Button;
 
 public class VendorAdminAccountActivity extends Activity {
-<<<<<<< HEAD:src/com/intuitive/yummy/activities/VendorAdminAccountActivity.java
 	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, VendorStatus.CLOSED, null);
-
-=======
-	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, false, null, new com.intuitive.yummy.Menu(new ArrayList<MenuItem>()));
-	private String button = "View Pending Orders";
 	
->>>>>>> 9eee519df0fa9b0d753fe717ffe1deba83462b62:src/com/intuitive/yummy/VendorAdminAccountActivity.java
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,9 +41,9 @@ public class VendorAdminAccountActivity extends Activity {
 		else
 			vendorStatus.setText("Close");
 		
-		if (intent.getBooleanExtra("employee",true)){
-			Button genInfo = (Button)findViewById(R.id.button_edgeninfo_viewpendhist);
-			genInfo.setText(button);
+		if (intent.getBooleanExtra(IntentExtraKeys.PARAMETER,true)){
+			Button genInfo = (Button)findViewById(R.id.button_edit_general_info);
+			genInfo.setVisibility(View.GONE);
 			Button menuEdit = (Button)findViewById(R.id.button_edit_menu);
 			menuEdit.setVisibility(View.GONE);
 		}
@@ -61,12 +56,11 @@ public class VendorAdminAccountActivity extends Activity {
 		return true;
 	}
 	
-<<<<<<< HEAD:src/com/intuitive/yummy/activities/VendorAdminAccountActivity.java
-	public void editGeneralInfo(View v) {
-    	Intent intent = new Intent(this, VendorEditActivity.class);
-    	intent.putExtra("Vendor", (Parcelable) vendor);
-    	intent.putExtra("VendorID", vendor.getId());
-    	startActivity(intent);
+	public void editGenInfo(View v) {
+			Intent intent = new Intent(this, VendorEditActivity.class);
+			intent.putExtra("Vendor", (Parcelable) vendor);
+			intent.putExtra("VendorID", vendor.getId());
+			startActivity(intent);
 	}
 	
 	public void editMenu(View v) {
@@ -74,32 +68,16 @@ public class VendorAdminAccountActivity extends Activity {
 		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
 	}
-
-=======
-	public void genInfo_pendHist(View v) {
-		Button genInfo = (Button)findViewById(R.id.button_edgeninfo_viewpendhist);
-		if (genInfo.getText() == button) {
-			Intent intent = new Intent(this, VendorEditActivity.class); //PendingOrdersActivity.class will be made
-	    	intent.putExtra("Vendor", vendor);
-	    	startActivity(intent);
-		}
-		else {
-			Intent intent = new Intent(this, VendorEditActivity.class);
-    		intent.putExtra("Vendor", vendor);
-    		startActivity(intent);
-		}
-	}
 	
-	public void editMenu(View v){
-		Intent intent = new Intent(this, VendorEditActivity.class);
-		intent.putExtra("Vendor", vendor);
+	public void viewPendOrder(View v){
+		Intent intent = new Intent(this, VendorEditActivity.class); //PendingOrderActivity.class will be made
+		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
 	}
 	
 	public void viewOrderHist(View v){
 		Intent intent = new Intent(this, VendorEditActivity.class); //OrderHistoryActivity.class will be made
-		intent.putExtra("Vendor", vendor);
+		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
 	}
->>>>>>> 9eee519df0fa9b0d753fe717ffe1deba83462b62:src/com/intuitive/yummy/VendorAdminAccountActivity.java
 }

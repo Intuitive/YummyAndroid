@@ -5,89 +5,97 @@
 
 	<LinearLayout
 	    android:layout_width="wrap_content"
-	    android:layout_height="335dp"
+	    android:layout_height="wrap_content"
 	    android:layout_gravity="center_horizontal"
 	    android:orientation="vertical" >
 
 	    <LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="center_horizontal"
-		    android:orientation="horizontal" >
-		    <ImageView
-		        android:id="@+id/adminVendorPicture"
-		        android:contentDescription="@string/vendorPicture"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/no_image"
-		        android:layout_marginTop="36dp" />
-			<LinearLayout
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_gravity="center_horizontal"
-			    android:orientation="vertical" >
-			    <TextView
-			        android:id="@+id/adminVendorName"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-				    android:layout_marginTop="20dp"
-			        android:layout_marginLeft="5dp"
-			        android:textAppearance="?android:attr/textAppearanceLarge" />
-			    <TextView
-				    android:id="@+id/adminVendorAddress"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:layout_marginTop="10dp"
-			        android:layout_marginLeft="5dp"
-				    android:textAppearance="?android:attr/textAppearanceMedium" />
-			    <TextView
-				    android:id="@+id/adminVendorStatus"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:layout_marginTop="10dp"
-			        android:layout_marginLeft="5dp"
-				    android:textAppearance="?android:attr/textAppearanceMedium" />
-			</LinearLayout>
-		</LinearLayout>
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:orientation="horizontal" >
 
-		<LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="center"
-		    android:layout_marginTop="50dp"
-		    android:orientation="vertical" >
+	        <ImageView
+	            android:id="@+id/adminVendorPicture"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="36dp"
+	            android:contentDescription="@string/vendorPicture"
+	            android:src="@drawable/no_image" />
 
-			<Button
-			    android:id="@+id/button_edgeninfo_viewpendhist"
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:onClick="genInfo_pendHist"
-			    android:text="@string/edit_general_info" />
+	        <LinearLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:orientation="vertical" >
 
-			<Button
-<<<<<<< HEAD:res/layout/activity_vendor_admin_account.xml
-		        android:id="@+id/button_edit_menu"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-			    android:layout_gravity="center_horizontal"
-			    android:onClick="editMenu"
-		        android:text="@string/edit_menu" />
-=======
-			    android:id="@+id/button_edit_menu"
-			    android:layout_width="158dp"
-			    android:layout_height="wrap_content"
-			    android:onClick="editMenu"
-			    android:text="@string/edit_menu" />
+	            <TextView
+	                android:id="@+id/adminVendorName"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="5dp"
+	                android:layout_marginTop="20dp"
+	                android:textAppearance="?android:attr/textAppearanceLarge" />
 
->>>>>>> 9eee519df0fa9b0d753fe717ffe1deba83462b62:res/layout/activity_vender_admin_account.xml
-		</LinearLayout>
+	            <TextView
+	                android:id="@+id/adminVendorAddress"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="5dp"
+	                android:layout_marginTop="10dp"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-		<Button
-		    android:id="@+id/button_view_order_history"
-		    android:layout_width="158dp"
-		    android:layout_height="wrap_content"
-		    android:onClick="viewOrderHist"
-		    android:text="@string/view_order_history" />
+	            <TextView
+	                android:id="@+id/adminVendorStatus"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="5dp"
+	                android:layout_marginTop="10dp"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	        </LinearLayout>
+	    </LinearLayout>
+
+	    <LinearLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:layout_marginTop="50dp"
+	        android:layout_weight="0.28"
+	        android:orientation="vertical" >
+
+	        <Button
+	            android:id="@+id/button_edit_general_info"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:onClick="editGenInfo"
+	            android:text="@string/edit_general_info" />
+
+	        <Button
+	            android:id="@+id/button_edit_menu"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:onClick="editMenu"
+	            android:text="@string/edit_menu" />
+
+	        <Button
+	            android:id="@+id/button_view_pending_order"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:onClick="viewPendOrder"
+	            android:text="View Pending Order" />
+
+	        <Button
+	            android:id="@+id/button_view_order_history"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="0.02"
+	            android:text="@string/view_order_history" />
+
+	    </LinearLayout>
 
 	</LinearLayout>
+
 </ScrollView>
