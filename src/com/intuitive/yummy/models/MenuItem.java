@@ -171,12 +171,14 @@ public class MenuItem implements Model {
 	}
 	
 	public MenuItem(Parcel parcel) {
-		id = parcel.readInt();
+		if(parcel.readInt() == 1)
+			id = parcel.readInt();
 		if(parcel.readInt() == 1)
 			name = parcel.readString();
 		if(parcel.readInt() == 1)
 			category = parcel.readString();
-		price = parcel.readDouble();
+		if(parcel.readInt() == 1)
+			price = parcel.readDouble();
 		if(parcel.readInt() == 1)
 			description = parcel.readString();
 		if(parcel.readInt() == 1)

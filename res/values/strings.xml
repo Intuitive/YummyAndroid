@@ -101,11 +101,13 @@
     <!-- Vendor Edit Menu Item Activity -->
     <string name="title_activity_vendor_edit_menu_item">Vendor Edit Menu Item</string>
     <string name="edit_menu_item">Edit Menu Item</string>
-    <string name="item_name">Name:</string>
-    <string name="item_price">Price:</string>
-    <string name="item_description">Description:</string>
-    <string name="item_category">Category:</string>
+    <string name="item_name">Name</string>
+    <string name="item_price">Price</string>
+    <string name="item_description">Description</string>
+    <string name="item_category">Category</string>
     <string name="delete">Delete</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_menu_item">MenuItemActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

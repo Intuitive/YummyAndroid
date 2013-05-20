@@ -59,9 +59,9 @@ public class MenuActivity extends Activity implements RestResponseReceiver.Recei
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Log.d("yummy", "menu item clicked!");
 		
-		// TODO implement MenuItemActivity
-		//Intent intent = new Intent(this, MenuItemActivity.class);
-		//intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) menuItems.get(position));
+		Intent menuItemIntent= new Intent(this, MenuItemActivity.class);
+		menuItemIntent.putExtra(IntentExtraKeys.MODEL, (Parcelable) menuItems.get(position));
+		startActivity(menuItemIntent);
 	}
     
     @Override
@@ -87,7 +87,7 @@ public class MenuActivity extends Activity implements RestResponseReceiver.Recei
 		        
 		    case RestResultCode.FINISHED:
 		    
-		    	ArrayList<MenuItem> menuItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+		    	menuItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
 
 		    	if(menuItems.size() == 0){
 		    		// TODO display menu empty (or more likely, throw error since this shouldn't happen)
