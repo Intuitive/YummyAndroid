@@ -6,6 +6,7 @@ import com.intuitive.yummy.R.layout;
 import com.intuitive.yummy.R.menu;
 import com.intuitive.yummy.models.User;
 import com.intuitive.yummy.models.Vendor;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 import com.intuitive.yummy.webservices.RestResponseReceiver;
 import com.intuitive.yummy.webservices.RestService;
 
@@ -64,10 +65,12 @@ public class LoginActivity extends Activity implements RestResponseReceiver.Rece
     	if (enteredUsername.equals(adminUser) && enteredPassword.equals(pass)) {
         	Intent intent = new Intent(this, VendorAdminAccountActivity.class);
         	intent.putExtra("Activity", "Login");
+        	intent.putExtra(IntentExtraKeys.PARAMETER, false);
         	startActivity(intent);
     	} else if(enteredUsername.equals(employeeUser) && enteredPassword.equals(pass)){
     		Intent intent = new Intent(this, VendorAdminAccountActivity.class);
     		intent.putExtra("Activity", "Login");
+    		intent.putExtra(IntentExtraKeys.PARAMETER, true);
     		startActivity(intent);
     	} else if(enteredUsername.equals(customerUser) && enteredPassword.equals(pass)){
     		//Toast.makeText(getApplicationContext(), "hi customer", Toast.LENGTH_SHORT).show();
