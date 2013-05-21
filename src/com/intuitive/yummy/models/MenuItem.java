@@ -105,7 +105,13 @@ public class MenuItem implements Model {
 			out.writeInt(1);
 			out.writeInt(id);
 		}
-		
+		if (vendorId == null)
+			out.writeInt(0);
+		else
+		{
+			out.writeInt(1);
+			out.writeInt(vendorId);
+		}
 		if(name == null)
 			out.writeInt(0);
 		else
@@ -173,6 +179,8 @@ public class MenuItem implements Model {
 	public MenuItem(Parcel parcel) {
 		if(parcel.readInt() == 1)
 			id = parcel.readInt();
+		if(parcel.readInt() == 1)
+			vendorId = parcel.readInt();
 		if(parcel.readInt() == 1)
 			name = parcel.readString();
 		if(parcel.readInt() == 1)

@@ -44,12 +44,14 @@ public class MenuActivity extends Activity implements RestResponseReceiver.Recei
         
 		// get the vendor whose menu items we have to display
         Intent intent = getIntent();
-        Vendor vendor = (Vendor) intent.getParcelableExtra(IntentExtraKeys.VENDOR);
+        Integer vendorId = intent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
+        
+        if(vendorId < 0) throw new IllegalArgumentException("Vendor Id must be > 0");
         
         // set up our receiver and rest service intent
         responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
-        final Intent restServiceIntent = RestService.getReadManyByParamIntent(MenuItem.class, String.valueOf(vendor.getId()), this, responseReceiver);
+        final Intent restServiceIntent = RestService.getReadManyByParamIntent(MenuItem.class, String.valueOf(vendorId), this, responseReceiver);
         
         // start up service
         startService(restServiceIntent);

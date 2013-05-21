@@ -67,7 +67,7 @@
             android:paddingLeft="2pt"
             android:paddingRight="2pt"
             android:paddingTop="5pt"
-            android:text="0"
+            android:text="1"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="10pt" />
 
@@ -101,6 +101,7 @@
 
     <Button
         android:id="@+id/addToCartButton"
+        android:onClick="addMenuItemToCart" 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
