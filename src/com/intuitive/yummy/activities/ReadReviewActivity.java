@@ -15,16 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ReadReviewActivity extends Activity {
-	private VendorReview r5 = new VendorReview("Title", "Sample 5 star Review", 5);
-	private VendorReview r4 = new VendorReview("Title", "Sample 4 star Review", 4);
-	private VendorReview r3 = new VendorReview("Title", "Sample 3 star Review", 3);
-	private VendorReview r2 = new VendorReview("Title", "Sample 2 star Review", 2);
-	private VendorReview r1 = new VendorReview("Title", "Sample 1 star Review", 1);
-	private VendorReview r5l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 5 star Review", 5);
-	private VendorReview r4l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 4 star Review", 4);
-	private VendorReview r3l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 3 star Review", 3);
-	private VendorReview r2l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 2 star Review", 2);
-	private VendorReview r1l = new VendorReview("Longer Title", "Sample long long long long long long long long long long long long 1 star Review", 1);
+	private VendorReview r5 = new VendorReview("Great Place", "This place is great.  I love the food!", 5);
+	private VendorReview r4 = new VendorReview("Good Value", "Price is good for this place.", 4);
+	private VendorReview r3 = new VendorReview("SoSo", "Just an everyday food truck.", 3);
+	private VendorReview r2 = new VendorReview("Not So Good", "Need more selections.", 2);
+	private VendorReview r1 = new VendorReview("Bad", "Food make me sick!!!", 1);
+	private VendorReview r5l = new VendorReview("Best Food in Town", "This truck has the best food in town.  I been to a lot of trucks and this one taste the best!  Love it!", 5);
+	private VendorReview r4l = new VendorReview("Worth the Money", "If you don't like your previous food truck, try this one.  You might love it.  I did.", 4);
+	private VendorReview r3l = new VendorReview("Same As All Others", "There is nothing special about this food truck.  Its same as others around.", 3);
+	private VendorReview r2l = new VendorReview("Need More Selections", "I like the food, but the option is very limited.  I wish they have more.", 2);
+	private VendorReview r1l = new VendorReview("I Will Never Come Again", "The food make me almost go to the hospital.  I will never go to this truck again", 1);
 	
 	private ArrayList<VendorReview> reviews = new ArrayList<VendorReview> ();
 	private ListView listView;
