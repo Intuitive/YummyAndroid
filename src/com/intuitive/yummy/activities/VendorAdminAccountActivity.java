@@ -70,7 +70,7 @@ public class VendorAdminAccountActivity extends Activity {
 	}
 	
 	public void viewPendOrder(View v){
-		Intent intent = new Intent(this, VendorEditActivity.class); //PendingOrderActivity.class will be made
+		Intent intent = new Intent(this, PendingOrdersActivity.class);
 		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
 	}
