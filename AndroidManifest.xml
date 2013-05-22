@@ -90,6 +90,10 @@
             android:name="com.intuitive.yummy.activities.MenuItemActivity"
             android:label="@string/title_activity_menu_item" >
         </activity>
-    </application>
+        <activity
+            android:name="com.intuitive.yummy.activities.PendingOrdersActivity"
+            android:label="@string/title_activity_menu_item" >
+        </activity>
+        </application>
 
 </manifest>
