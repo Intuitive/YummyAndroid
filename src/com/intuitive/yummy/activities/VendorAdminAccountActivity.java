@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class VendorAdminAccountActivity extends Activity {
 	private Vendor vendor = new Vendor(1, "Jack's Pizza", "We sell Pizzas!", "123 Main St", new int[][] {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}}, VendorStatus.CLOSED, null);
@@ -79,5 +81,12 @@ public class VendorAdminAccountActivity extends Activity {
 		Intent intent = new Intent(this, VendorEditActivity.class); //OrderHistoryActivity.class will be made
 		intent.putExtra("VendorID", vendor.getId());
 		startActivity(intent);
+	}
+	
+	public void setWaitTime(View v){
+		Intent intent = new Intent(this, OrderConfirmationActivity.class);
+		EditText waitTime = (EditText)findViewById(R.id.waitTime);
+    	intent.putExtra("waitTime", waitTime.getText());
+    	Toast.makeText(getApplicationContext(), "Wait time set to " + waitTime.getText(), Toast.LENGTH_LONG).show();
 	}
 }

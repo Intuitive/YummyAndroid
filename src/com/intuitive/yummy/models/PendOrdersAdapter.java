@@ -32,7 +32,7 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 			row = inflater.inflate(layoutResourceId, parent, false);
 			holder = new OrderHolder();
-			holder.orderID = (TextView)row.findViewById(R.id.orderNumber);
+			holder.orderID = (TextView)row.findViewById(R.id.orderID);
 			holder.timeCreated = (TextView)row.findViewById(R.id.waitTime);
 			holder.waitTime = (TextView)row.findViewById(R.id.waitTime);
 			row.setTag(holder);
@@ -40,9 +40,9 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			holder = (OrderHolder)row.getTag();
 		}
 		Order ord = data[position];
-		holder.orderID.setText(ord.getId());
-		holder.timeCreated.setText(ord.getWaitTime());
-		holder.waitTime.setText(ord.getWaitTime());
+		holder.orderID.setText(Integer.toString(ord.getId()));
+		holder.timeCreated.setText(Integer.toString(ord.getWaitTime()));
+		holder.waitTime.setText(Integer.toString(ord.getWaitTime()));
 		
 		return row;
 	}

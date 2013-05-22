@@ -18,8 +18,8 @@ import android.widget.TextView;
 public class PendingOrdersActivity extends Activity{
 	
 	private Order ordprog1 = new Order(20, 15, OrderStatus.IN_PROGRESS, 15);
-	private Order ordprog2 = new Order(20, 15, OrderStatus.IN_PROGRESS, 20);
-	private Order ordfill = new Order(21, 15, OrderStatus.FULLFILLED, 15);
+	private Order ordprog2 = new Order(21, 15, OrderStatus.IN_PROGRESS, 20);
+	private Order ordfill = new Order(22, 15, OrderStatus.FULLFILLED, 15);
 	
 	private ArrayList<Order> orders = new ArrayList<Order> ();
 	private ListView listView;
@@ -50,11 +50,6 @@ public class PendingOrdersActivity extends Activity{
 	
 	public void toHome(View v){
     	Intent intent = new Intent(this, MainActivity.class);
-    	startActivity(intent);
-    }
-	
-	public void toCart(View v){
-    	Intent intent = new Intent(this, CartActivity.class);
     	startActivity(intent);
     }
 }
