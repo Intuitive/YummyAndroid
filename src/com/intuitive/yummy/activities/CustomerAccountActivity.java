@@ -39,7 +39,7 @@ public class CustomerAccountActivity extends Activity {
     	startActivity(intent);
     }
     
-    // will finish up this weekend
+   
     /*public void viewPastOrders(View v){
     	Intent intent = new Intent(this, )
     }*/

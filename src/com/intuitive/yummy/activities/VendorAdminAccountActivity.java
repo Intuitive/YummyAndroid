@@ -33,7 +33,7 @@ public class VendorAdminAccountActivity extends Activity {
         if (vendor.getPictureUrl() != null) {
         	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureUrl()));
         }
-        TextView vendorName = (TextView)findViewById(R.id.adminVendorName);
+        TextView vendorName = (TextView)findViewById(R.id.adminVendorName); 
 		vendorName.setText(vendor.getName());
 		TextView vendorAddress = (TextView)findViewById(R.id.adminVendorAddress);
 		vendorAddress.setText(vendor.getLocation());
@@ -41,7 +41,7 @@ public class VendorAdminAccountActivity extends Activity {
 		if (vendor.getStatus() == VendorStatus.OPEN)
 			vendorStatus.setText("Open");
 		else
-			vendorStatus.setText("Close");
+			vendorStatus.setText("Closed");
 		
 		if (intent.getBooleanExtra(IntentExtraKeys.PARAMETER, true)){
 			Button genInfo = (Button)findViewById(R.id.button_edit_general_info);

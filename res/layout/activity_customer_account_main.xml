@@ -15,26 +15,6 @@
 
     <!-- add android:onClick="viewPastOrders" when activity/screen is created -->
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_view_past_orders"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="42dp"
-        android:text="Last Name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView3"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="36dp"
-        android:text="First Name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <Button
         android:id="@+id/home_button"
         android:layout_width="wrap_content"
@@ -55,19 +35,26 @@
         android:onClick="goToCart"
         android:text="Cart" />
 
-    <TextView
-        android:id="@+id/customer_firstname"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/home_button"
+        android:layout_toLeftOf="@+id/button_view_past_orders"
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/customer_lastname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_alignLeft="@+id/customer_firstname" />
+        <TextView
+            android:id="@+id/customer_firstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/button_view_past_orders"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/customer_lastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
 
 </RelativeLayout>
