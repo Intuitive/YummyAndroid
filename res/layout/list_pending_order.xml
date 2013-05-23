@@ -9,11 +9,12 @@
         android:id="@+id/orderID"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="left"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:onClick="viewOrderDetail"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -35,5 +36,5 @@
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp" />
-
+	
 </LinearLayout>

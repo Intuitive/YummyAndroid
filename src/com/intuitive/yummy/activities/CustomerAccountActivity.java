@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CustomerAccountActivity extends Activity {
-	private User user = new User("nikb248", "Marco", "Polo", "nik@gmail.com");
+	private User user = new User("nikb248", "Nik", "Bournelis", "nik@gmail.com");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){

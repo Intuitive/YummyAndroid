@@ -145,8 +145,15 @@ public class VendorActivity extends Activity {
     public void viewMenu(View v){
     	Intent intent = new Intent(this, MenuActivity.class);
     	intent.putExtra(IntentExtraKeys.VENDOR, (Parcelable) vendor);
-   	startActivity(intent);
-   }
+    	startActivity(intent);
+    }
+    
+    public void viewPendOrder(View v){
+		Intent intent = new Intent(this, PendingOrdersActivity.class);
+		intent.putExtra("VendorID", vendor.getId());
+		startActivity(intent);
+	}
+    
     public void viewReviews(View v){
     	Intent intent = new Intent(this, ReadReviewActivity.class);
     	intent.putExtra("vendorId", vendor.getId());
