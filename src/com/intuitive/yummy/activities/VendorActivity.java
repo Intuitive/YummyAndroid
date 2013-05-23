@@ -33,6 +33,8 @@ public class VendorActivity extends Activity {
         
         String name = vendor.getName();
         String description = vendor.getDescription();
+        
+        int[][] hours = { {800, 1700}, {800, 1700}, {800, 1600}, {830, 1630}, {900, 1800}, {0, 0}, {0, 0} };
 
         //String address;
         String status;
@@ -43,14 +45,17 @@ public class VendorActivity extends Activity {
         String hourOfOperation = "";
     	for (int i = 0; i < 7; i++)
     	{
-    		if (vendor.getHours() == null)
+    		//if (vendor.getHours() == null)	// for demo
+    		if(hours == null)					//   purposes	
     			hourOfOperation = "Not Available";
     		else
     		{
-	    		int temp1 = vendor.getHours()[i][0];
+	    		//int temp1 = vendor.getHours()[i][0];		
+    			int temp1 = hours[i][0];					// for demo
 	    		int openHour = (int)Math.floor(temp1/100);
 	    		int openMinute = temp1%100;
-	    		int temp2 = vendor.getHours()[i][1];
+	    		//int temp2 = vendor.getHours()[i][1];		
+	    		int temp2 = hours[i][1];					// for demo
 	    		int closeHour = (int)Math.floor(temp2/100);
 	    		int closeMinute = temp2%100;
 	    		        		
@@ -140,8 +145,15 @@ public class VendorActivity extends Activity {
     public void viewMenu(View v){
     	Intent intent = new Intent(this, MenuActivity.class);
     	intent.putExtra(IntentExtraKeys.VENDOR, (Parcelable) vendor);
-   	startActivity(intent);
-   }
+    	startActivity(intent);
+    }
+    
+    public void viewPendOrder(View v){
+		Intent intent = new Intent(this, PendingOrdersActivity.class);
+		intent.putExtra("VendorID", vendor.getId());
+		startActivity(intent);
+	}
+    
     public void viewReviews(View v){
     	Intent intent = new Intent(this, ReadReviewActivity.class);
     	intent.putExtra("vendorId", vendor.getId());

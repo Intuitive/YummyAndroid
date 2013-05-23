@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PendingOrdersActivity extends Activity{
 	
@@ -28,7 +29,7 @@ public class PendingOrdersActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pending_orders);
-        
+		
 		orders.add(ordprog1);
 		orders.add(ordprog2);
 		orders.add(ordfill);
@@ -52,4 +53,11 @@ public class PendingOrdersActivity extends Activity{
     	Intent intent = new Intent(this, MainActivity.class);
     	startActivity(intent);
     }
+	
+	public void toOrderDetails(View v){
+		Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_LONG).show();
+		Intent intent = new Intent(this, OrderDetailActivity.class);
+		intent.putExtra("OrderId", "20");
+		startActivity(intent);
+	}
 }
