@@ -46,13 +46,14 @@ public class RestService extends IntentService {
 		READALL,
 		READSINGLE,
 		UPDATE,
-		DELETE
+		DELETE,
+		CREATE_JSON
 	}
 	
 	public final static String BundleObjectKey = "OBJECTS";
 	
 	private final static HashMap<Class<?>,String> controllerNames = new HashMap<Class<?>, String>() {
-		private static final long serialVersionUId = 1L;
+		private static final long serialVersionUID = 1L;
 	{
 		put(Vendor.class, "vendors");
 		put(User.class, "users");
@@ -63,23 +64,28 @@ public class RestService extends IntentService {
 	
 	// for now, all controllers will have the same action name uri's
 	private final static HashMap<Action,String> actionNames = new HashMap<Action, String>() {
-		private static final long serialVersionUId = 1L;
+		private static final long serialVersionUID = 1L;
 	{
 		put(Action.CREATE, "add");
 		put(Action.READSINGLE, "view");
 		put(Action.READALL, "index");
 		put(Action.UPDATE, "edit");
 		put(Action.DELETE, "delete");
+		put(Action.CREATE_JSON, "add");
 	}};
 	
 	private final static HashMap<Action,String> actionMethodMapping = new HashMap<Action, String>() {
-		private static final long serialVersionUId = 1L;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 	{
 		put(Action.CREATE, "POST");
 		put(Action.READSINGLE, "GET");
 		put(Action.READALL, "GET");
 		put(Action.UPDATE, "POST");
 		put(Action.DELETE, "POST");
+		put(Action.CREATE_JSON, "JSON");
 	}};
 	
 	/**
@@ -104,13 +110,16 @@ public class RestService extends IntentService {
 		url.append("/".concat(actionNames.get(action)));
 		
 		// add parameters
-		if(action == Action.READALL){
+		if(action == Action.READALL || action == Action.READSINGLE){
 			// TODO add support for option params i.e., paging, limit, etc
 			if(intent.hasExtra(IntentExtraKeys.MODEL_ID))
 				url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
-			if(intent.hasExtra(IntentExtraKeys.PARAMETER)){
-				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER)));
-			}
+			if(intent.hasExtra(IntentExtraKeys.PARAMETER1))
+				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER1)));
+			if(intent.hasExtra(IntentExtraKeys.PARAMETER2))
+				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER2)));
+			if(intent.hasExtra(IntentExtraKeys.PARAMETER3))
+				url.append("/".concat(intent.getStringExtra(IntentExtraKeys.PARAMETER3)));
 		}
 		else if(action == Action.UPDATE){
 			url.append("/".concat(String.valueOf(intent.getIntExtra(IntentExtraKeys.MODEL_ID, 0))));
@@ -215,7 +224,7 @@ public class RestService extends IntentService {
 		intent.putExtra(IntentExtraKeys.ACTION, Action.READALL);
 		
 		intent.putExtra(IntentExtraKeys.MODEL_CLASS, modelClass);
-		intent.putExtra(IntentExtraKeys.PARAMETER, parameter);
+		intent.putExtra(IntentExtraKeys.PARAMETER1, parameter);
 		
 		return intent;
 	}
@@ -313,10 +322,12 @@ public class RestService extends IntentService {
         		}
         		Log.d("yummy", postData_logMsg.toString());
         	}
-        	
+        	String jsonString = intent.getStringExtra(IntentExtraKeys.JSON_STRING);
+        	if(actionMethodMapping.get(action) == "JSON")
+        		Log.d("yummy", jsonString);
         	
         	// fire HTTP request and handle response
-        	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams);
+        	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams, jsonString);
         	Log.d("yummy", "JSON response: ".concat(json.toString()));
 
         	try {

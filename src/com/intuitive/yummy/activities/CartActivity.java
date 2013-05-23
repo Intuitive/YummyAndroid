@@ -1,9 +1,11 @@
 package com.intuitive.yummy.activities;
 
+import java.text.NumberFormat;
+import java.util.List;
+
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.id;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.models.OrderItem;
+import com.intuitive.yummy.sqlitedb.SQLiteDB;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -30,29 +32,42 @@ public class CartActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cart);
 
-		//adding cell to each row with dummy data
+		SQLiteDB cache = new SQLiteDB(this);
+		Double totalPrice = 0.0;
 		t1 = (TableLayout) findViewById(R.id.table1);
-		for (int i = 0; i < addedItems.length; i++) {
+		
+		
+		List<OrderItem> orderItems = cache.getAllOrderItems();
+		
+		for (OrderItem orderItem : orderItems) {
 			TableRow tr = new TableRow(this);
 			TextView tv1 = new TextView(this);
 			TextView tv2 = new TextView(this);
 			TextView tv3 = new TextView(this);
 			//user defined function
-			createView(tr, tv1, Integer.toString(1));
-			createView(tr, tv2, addedItems[i]);
-			createView(tr, tv3, Double.toString(price[i]));
+			
+			// order: quantity, item name, price
+			createView(tr, tv1, String.valueOf(orderItem.getQuantity()));
+			createView(tr, tv2, orderItem.getName());
+			String price = NumberFormat.getCurrencyInstance().format(orderItem.getPrice());
+			createView(tr, tv3, price);
+			
 			//add row to table
 			t1.addView(tr);
-		}
+			
+			// keep track of totalPrice
+			totalPrice += orderItem.getPrice();
+	    }
 		
 		//adding the last row for the total amount using dummy data
+
 		TableRow tr2 = new TableRow(this);
 		TextView tv4 = new TextView(this);
 		TextView tv5 = new TextView(this);
 		TextView tv6 = new TextView(this);
 		createView(tr2, tv4, "Total:");
 		createView(tr2, tv5, "   ");
-		createView(tr2, tv6, Double.toString(price[0] + price[1] + price[2] + price[3] ));
+		createView(tr2, tv6, NumberFormat.getCurrencyInstance().format(totalPrice));
 		t1.addView(tr2);
 	}
 

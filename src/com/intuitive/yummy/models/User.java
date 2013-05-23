@@ -6,6 +6,14 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.intuitive.yummy.models.Order.OrderStatus;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
+import com.intuitive.yummy.webservices.RestResponseReceiver;
+import com.intuitive.yummy.webservices.RestService;
+import com.intuitive.yummy.webservices.RestService.Action;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Parcel;
 import android.util.Log;
 
@@ -305,5 +313,25 @@ public class User implements Model{
 		if(isDeleted != null) postData.put("deleted", isDeleted ? "true" : "false");
 		
 		return postData;
+	}
+	
+	public static Intent getUsersIntent(Integer userId, String username, Activity activity, RestResponseReceiver receiver){
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.READSINGLE);
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, User.class);
+		
+		// -1's must be used rather than NULL's
+		if(userId == null)
+			intent.putExtra(IntentExtraKeys.PARAMETER1, "-1");
+		else
+			intent.putExtra(IntentExtraKeys.PARAMETER1, String.valueOf(userId));
+		
+		if(username != null)
+			intent.putExtra(IntentExtraKeys.PARAMETER2, username);
+
+		
+		return intent;
 	}
 }

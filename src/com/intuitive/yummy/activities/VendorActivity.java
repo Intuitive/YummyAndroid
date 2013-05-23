@@ -29,7 +29,7 @@ public class VendorActivity extends Activity {
         
         //Get the data that is being passed by the parent activity, in this case, vendor
         Intent intent = getIntent();
-        vendor = (Vendor) intent.getParcelableExtra("Vendor");
+        vendor = (Vendor) intent.getParcelableExtra(IntentExtraKeys.MODEL);
         
         String name = vendor.getName();
         String description = vendor.getDescription();
@@ -121,10 +121,12 @@ public class VendorActivity extends Activity {
         TextView vendorDescription = (TextView) findViewById(R.id.vendorDescription);
         vendorDescription.setText(description);
         
+        /*
         ImageView vendorPicture = (ImageView) findViewById(R.id.vendorPicture);
         if (vendor.getPictureUrl() != null) {
         	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureUrl()));
         }
+        */
         
         TextView vendorStatus = (TextView) findViewById(R.id.currentStatus);
         vendorStatus.setText(status);

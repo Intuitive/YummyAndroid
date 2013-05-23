@@ -12,11 +12,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class SQLiteDB extends SQLiteOpenHelper {
 
 	private static final int dbVersion = 1;
-	private static final String dbName = "YummyDatabase";
+	private static final String dbName = "yummy";
 	private static final String shoppingCartTableName = "shoppingCart";
 
 	// OrderItems Table Columns names
@@ -33,18 +34,17 @@ public class SQLiteDB extends SQLiteOpenHelper {
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String CREATE_CONTACTS_TABLE = 
+		String CREATE_ORDER_ITEMS_TABLE = 
 				"CREATE TABLE " + shoppingCartTableName 
 				+ "("
-						+ shoppingCart_Id + " INTEGER PRIMARY KEY,"
-						+ shoppingCart_MenuItemId + "INTEGER,"
-						+ shoppingCart_Name + " TEXT,"
+						+ shoppingCart_Id + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ shoppingCart_Name + " VARCHAR(50),"
+						+ shoppingCart_MenuItemId + " INTEGER,"
+						+ shoppingCart_Price + " INTEGER,"
 						+ shoppingCart_Quantity + " INTEGER,"
-						+ shoppingCart_SpecialInstructions + " TEXT,"
-						+ shoppingCart_Price + " INTEGER"
-						
+						+ shoppingCart_SpecialInstructions + " VARCHAR(150)"
 				+ ")";
-		db.execSQL(CREATE_CONTACTS_TABLE);
+		db.execSQL(CREATE_ORDER_ITEMS_TABLE);
 	}
 
 	// Upgrading database
@@ -64,15 +64,24 @@ public class SQLiteDB extends SQLiteOpenHelper {
 	// Adding new orderItem
 	public void addOrderItem(MenuItem menuItem, int quantity, String specialInstructions) {
 		SQLiteDatabase db = this.getWritableDatabase();
-
+		
+		// store price in cents
+		Integer price = ((Double)(menuItem.getPrice() * 100.0)).intValue();
+		if(specialInstructions == null) specialInstructions = "";
+		
 		ContentValues values = new ContentValues();
+		//values.put(shoppingCart_Name, value)
 		values.put(shoppingCart_Name, menuItem.getName());
 		values.put(shoppingCart_MenuItemId, menuItem.getId());
-		values.put(shoppingCart_Price, menuItem.getPrice() * 100.0);
+		values.put(shoppingCart_Price, price);
 		values.put(shoppingCart_Quantity, quantity);
 		values.put(shoppingCart_SpecialInstructions, specialInstructions);
 
-		db.insert(shoppingCartTableName, null, values);
+		long result = db.insert(shoppingCartTableName, null, values);
+		if(result == -1L)
+			Log.e("yummy", "Order Item row not inserted");
+		else
+			Log.e("yummy", "Order Item row inserted successfully");
 		db.close();
 	}
 
@@ -107,7 +116,10 @@ public class SQLiteDB extends SQLiteOpenHelper {
 		return orderItem;
 	}
 
-	// Getting All OrderItems
+	/**
+	 * Gets all the OrderItems in the cache
+	 * @return A list of OrderItems
+	 */
 	public List<OrderItem> getAllOrderItems() {
 		
 		List<OrderItem> orderItemList = new ArrayList<OrderItem>();
@@ -121,10 +133,11 @@ public class SQLiteDB extends SQLiteOpenHelper {
 			do {
 				OrderItem orderItem = new OrderItem();
 				orderItem.setId(cursor.isNull(0) ? null : cursor.getInt(0));
-				orderItem.setMenuItemId(cursor.isNull(1) ? null : cursor.getInt(1));
-				orderItem.setName(cursor.isNull(2) ? null : cursor.getString(2));
-				orderItem.setQuantity(cursor.isNull(3) ? null : cursor.getInt(3));
-				orderItem.setPrice(cursor.isNull(0) ? null : cursor.getInt(4)/100.0);
+				orderItem.setName(cursor.isNull(1) ? null : cursor.getString(1));
+				orderItem.setMenuItemId(cursor.isNull(2) ? null : cursor.getInt(2));
+				orderItem.setPrice(cursor.isNull(3) ? null : cursor.getInt(3)/100.0);
+				orderItem.setQuantity(cursor.isNull(4) ? null : cursor.getInt(4));
+				orderItem.setSpecialInstructions(cursor.isNull(5) ? null : cursor.getString(5));
 				
 				orderItemList.add(orderItem);
 			} while (cursor.moveToNext());

@@ -1,10 +1,18 @@
 package com.intuitive.yummy.models;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.intuitive.yummy.webservices.IntentExtraKeys;
+import com.intuitive.yummy.webservices.RestResponseReceiver;
+import com.intuitive.yummy.webservices.RestService;
+import com.intuitive.yummy.webservices.RestService.Action;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -14,7 +22,7 @@ public class Order implements Model {
 	/**
 	 * TODO this is default UId
 	 */
-	private static final long serialVersionUId = 1L;
+	private static final long serialVersionUID = 1L;
 	private static final String modelName = "Order";
 	
 	private Integer id;
@@ -23,10 +31,23 @@ public class Order implements Model {
 	private Integer waitTime;
 	private Double totalPrice;
 	private Integer paymentMethod;
+	private Integer duration;
+	private Timestamp dateCreated;
 	private OrderStatus status = OrderStatus.IN_PROGRESS;
 	
 	public enum OrderStatus { 
-		IN_PROGRESS(0), FULLFILLED(1) ;
+		IN_PROGRESS(0){
+			@Override
+            public String toString() {
+				return "IN_PROGRESS";
+			}
+		},
+		
+		FULFILLED(1){
+			public String toString() {
+				return "FULFILLED";
+			}
+		};
 		
 		private final int value;
 	    private OrderStatus(int value) {
@@ -42,6 +63,7 @@ public class Order implements Model {
 		this.id = id;
 		this.waitTime = waitTime;
 		this.status = status;
+		this.waitTime = waitTime;
 	}
 	
 	public Order(Parcel parcel) {
@@ -59,7 +81,16 @@ public class Order implements Model {
 		if (parcel.readInt() == 1)
 			paymentMethod = parcel.readInt();
 		if (parcel.readInt() == 1)
-			status = parcel.readInt() == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULLFILLED;
+			duration = parcel.readInt();
+		if(parcel.readInt() == 1){
+			try{
+				dateCreated = Timestamp.valueOf(parcel.readString());
+			}catch(IllegalArgumentException e){
+				dateCreated = null;
+			}
+		}
+		if (parcel.readInt() == 1)
+			status = parcel.readInt() == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULFILLED;
 		
 	}
 
@@ -107,6 +138,18 @@ public class Order implements Model {
 		this.status = status;
 	}
 	
+	public Integer getDuration() {
+		return duration;
+	}
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+	public Timestamp getDateCreated() {
+		return dateCreated;
+	}
+	public void setDateCreated(Timestamp dateCreated) {
+		this.dateCreated = dateCreated;
+	}
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -151,6 +194,18 @@ public class Order implements Model {
 			out.writeInt(1);
 			out.writeInt(paymentMethod);
 		}
+		if (paymentMethod == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(duration);
+		}
+		if(dateCreated == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeString(dateCreated.toString());
+		}
 		if (status == null)
 			out.writeInt(0);
 		else{
@@ -180,13 +235,13 @@ public class Order implements Model {
 			waitTime = json.getInt("wait_time");
 			totalPrice = json.getDouble("total_price");
 			paymentMethod = json.getInt("payment_method");
-			status = json.getInt("status") == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULLFILLED;
-			
+			status = json.getInt("status") == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULFILLED;
+			duration = json.optInt("duration", 0);
+			dateCreated = Timestamp.valueOf(json.getString("date_created"));
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to Order object.");
 			e.printStackTrace();
 		}
-		
 	}
 	
 	@Override
@@ -204,7 +259,8 @@ public class Order implements Model {
 		if(waitTime != null) postData.put("wait_time", String.valueOf(waitTime));
 		if(totalPrice != null) postData.put("total_price", String.valueOf(totalPrice));
 		if(paymentMethod != null) postData.put("payment_method", String.valueOf(paymentMethod));
-		
+		if(duration != null) postData.put("payment_method", String.valueOf(duration));
+		if(dateCreated != null) postData.put("date_created", dateCreated.toString());
 		String s_status = status == OrderStatus.IN_PROGRESS ? "0" : "1";
 		postData.put("status", s_status);
 		
@@ -220,7 +276,43 @@ public class Order implements Model {
 	    public Order[] newArray(int size) {
 	        return new Order[size];
 	    }
-
 	};
 	
+	/**
+	 * Get an intent to instruct the RestService to get an Order based on the criteria passed.
+	 * Do NOT use to get all orders. Instead, use the RestService.getReadManyIntent method.
+	 * @param vendorId
+	 * @param userId
+	 * @param orderStatus
+	 * @param activity
+	 * @param receiver
+	 * @return
+	 */
+	public static Intent getOrdersIntent(Integer vendorId, Integer userId, OrderStatus orderStatus, Activity activity, RestResponseReceiver receiver){
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, RestService.class);
+		intent.putExtra(IntentExtraKeys.RECEIVER, receiver);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.READALL);
+		
+		intent.putExtra(IntentExtraKeys.MODEL_CLASS, Order.class);
+		
+		// -1's must be used rather than NULL's
+		if(vendorId == null)
+			intent.putExtra(IntentExtraKeys.PARAMETER1, "-1");
+		else
+			intent.putExtra(IntentExtraKeys.PARAMETER1, String.valueOf(vendorId));
+		
+		if(userId == null)
+			intent.putExtra(IntentExtraKeys.PARAMETER2, "-1");
+		else
+			intent.putExtra(IntentExtraKeys.PARAMETER2, String.valueOf(userId));
+
+		
+		if(orderStatus == null)
+			intent.putExtra(IntentExtraKeys.PARAMETER3, "-1");
+		else
+			intent.putExtra(IntentExtraKeys.PARAMETER3, String.valueOf(orderStatus.getValue()));
+		
+		return intent;
+	}
 }

@@ -24,7 +24,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
 	public RestResponseReceiver responseReceiver;
 	ArrayList<Vendor> vendors;
 	// dummy data for vendors
-	private com.intuitive.yummy.models.Menu menu = new com.intuitive.yummy.models.Menu();
+	//private com.intuitive.yummy.models.Menu menu = new com.intuitive.yummy.models.Menu();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +138,7 @@ public class SearchResultsActivity extends ListActivity implements RestResponseR
     	Vendor vendor = vendors.get(position);
     	Intent intent = new Intent(this, VendorActivity.class);
     	
-    	intent.putExtra("Vendor", (Parcelable) vendor);
-    	intent.putExtra("VendorID", vendor.getId());
+    	intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) vendor);
     	startActivity(intent);    	
     }
     

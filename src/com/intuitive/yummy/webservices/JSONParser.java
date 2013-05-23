@@ -13,6 +13,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import org.json.JSONException;
@@ -29,7 +30,7 @@ public class JSONParser {
     public JSONParser() {}
  
     public JSONObject makeHttpRequest(String url, String method,
-            ArrayList<PostParameter> params) {
+            ArrayList<PostParameter> params, String jsonString) {
  
         // Making HTTP request
         try {
@@ -56,7 +57,16 @@ public class JSONParser {
                 // TODO check response code
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
-            }           
+            }else if(method.equals("JSON")){
+            	DefaultHttpClient httpClient = new DefaultHttpClient();
+            	HttpPost request = new HttpPost(url);
+            	StringEntity jsonEntity =new StringEntity(jsonString);
+            	
+            	request.setEntity(jsonEntity);
+                HttpResponse httpResponse = httpClient.execute(request);
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+            }
  
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

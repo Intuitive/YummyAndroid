@@ -27,7 +27,7 @@ public class VendorEditMenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        final int vendorId = (Integer) intent.getSerializableExtra("VendorID");
+        final int vendorId = (Integer) intent.getSerializableExtra(IntentExtraKeys.MODEL_ID);
         ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
         
         // TODO Connect to the server and get the list of menuitem using the vendorID

@@ -3,26 +3,29 @@ package com.intuitive.yummy.activities;
 import java.util.ArrayList;
 
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.models.Order.OrderStatus;
 import com.intuitive.yummy.models.PendOrdersAdapter;
 import com.intuitive.yummy.models.Order;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
+import com.intuitive.yummy.webservices.RestResponseReceiver;
+import com.intuitive.yummy.webservices.RestResultCode;
+import com.intuitive.yummy.webservices.RestService;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class PendingOrdersActivity extends Activity{
+public class PendingOrdersActivity extends Activity implements RestResponseReceiver.Receiver{
 	
-	private Order ordprog1 = new Order(20, 15, OrderStatus.IN_PROGRESS, 15);
-	private Order ordprog2 = new Order(21, 15, OrderStatus.IN_PROGRESS, 20);
-	private Order ordfill = new Order(22, 15, OrderStatus.FULLFILLED, 15);
+	private ArrayList<Order> orders;
+	public RestResponseReceiver responseReceiver;
+	//private ArrayList<Order> orders = new ArrayList<Order> ();
 	
-	private ArrayList<Order> orders = new ArrayList<Order> ();
 	private ListView listView;
 	
 	@Override
@@ -33,13 +36,21 @@ public class PendingOrdersActivity extends Activity{
 		orders.add(ordprog1);
 		orders.add(ordprog2);
 		orders.add(ordfill);
+		Intent incomingIntent = getIntent();
 		
-		Order[] ordersArray = new Order[orders.size()];
-		orders.toArray(ordersArray);
+		// Get vendor id from intent
+		if(!incomingIntent.hasExtra(IntentExtraKeys.MODEL_ID)) throw new IllegalArgumentException("Vendor Id must be > 0");
+		Integer vendorId = incomingIntent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
 		
-		PendOrdersAdapter adapter = new PendOrdersAdapter(this, R.layout.list_pending_order, ordersArray);
-		listView = (ListView)findViewById(R.id.listPendingOrders);
-		listView.setAdapter(adapter);
+		// Get orders that are still in progress
+		responseReceiver = new RestResponseReceiver(new Handler());
+        responseReceiver.setReceiver(this);
+        
+        final Intent restServiceIntent = Order.getOrdersIntent(vendorId, null, null, this, responseReceiver);
+        startService(restServiceIntent);
+            
+        // setup UI
+		setContentView(R.layout.activity_pending_orders);
 	}
 	
 	@Override
@@ -60,4 +71,37 @@ public class PendingOrdersActivity extends Activity{
 		intent.putExtra("OrderId", "20");
 		startActivity(intent);
 	}
+	@Override
+	public void onReceiveResult(int resultCode, Bundle resultData) {
+		switch (resultCode) {
+
+		case RestResultCode.RUNNING:
+			// TODO show progress
+			break;
+
+		case RestResultCode.FINISHED:
+
+			// Get orders from result
+			orders = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+
+			// Load orders into the list
+			PendOrdersAdapter adapter = new PendOrdersAdapter(this, R.layout.list_pending_order, orders);
+			listView = (ListView) findViewById(R.id.listPendingOrders);
+			listView.setAdapter(adapter);
+
+
+
+			// TODO hide progress
+			break;
+		case RestResultCode.ERROR:
+			//RestResultCode.ERROR.getValue()
+			break;
+		}
+
+	}
+
+	
+
 }
+
+

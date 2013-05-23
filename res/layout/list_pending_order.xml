@@ -6,35 +6,26 @@
     android:padding="10dp" >
 
     <TextView
-        android:id="@+id/orderID"
+        android:id="@+id/orderId"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
         android:gravity="left"
         android:onClick="viewOrderDetail"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/timeCreated"
+        android:id="@+id/timeRemaining"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="left"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp" 
+        android:text="10:00" />
 
-    <TextView
-        android:id="@+id/waitTime"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="left"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp" />
-	
 </LinearLayout>
