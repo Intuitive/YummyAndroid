@@ -3,11 +3,19 @@ package com.intuitive.yummy.activities;
 import java.text.NumberFormat;
 import java.util.List;
 
+
+import com.google.gson.Gson;
 import com.intuitive.yummy.R;
+import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.models.OrderItem;
 import com.intuitive.yummy.sqlitedb.SQLiteDB;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
+import com.intuitive.yummy.webservices.RestResponseReceiver;
+import com.intuitive.yummy.webservices.RestService;
+import com.intuitive.yummy.webservices.RestService.Action;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,13 +26,15 @@ import android.widget.TableRow.LayoutParams;
 import android.view.Menu;
 import android.view.View;
 
-public class CartActivity extends Activity {
+public class CartActivity extends Activity implements RestResponseReceiver.Receiver{
 
 	//Dummy data
-	String[] addedItems = { "16 inch Cheese Pizza", "16 inch Pepperoni Pizza",
-			"16 inch Sausage Pizza", "Cheese Pizza Slice" };
-	double[] price = { 10, 11, 12, 1.5 };
+	//String[] addedItems = { "16 inch Cheese Pizza", "16 inch Pepperoni Pizza",
+		//	"16 inch Sausage Pizza", "Cheese Pizza Slice" };
+	//double[] price = { 10, 11, 12, 1.5 };
 
+	List<OrderItem> orderItems;
+	public RestResponseReceiver responseReceiver;
 	TableLayout t1;
 
 	@Override
@@ -37,7 +47,7 @@ public class CartActivity extends Activity {
 		t1 = (TableLayout) findViewById(R.id.table1);
 		
 		
-		List<OrderItem> orderItems = cache.getAllOrderItems();
+		orderItems = cache.getAllOrderItems();
 		
 		for (OrderItem orderItem : orderItems) {
 			TableRow tr = new TableRow(this);
@@ -102,7 +112,31 @@ public class CartActivity extends Activity {
     
     //Go to checkout page when checkout button is clicked
     public void goToCheckout(View v){
-    	Intent intent = new Intent(this, OrderConfirmationActivity.class);
+    	// send order to server
+    	Gson gson = new Gson();
+    	String jsonString = gson.toJson(orderItems);
+    	
+    	
+    	responseReceiver = new RestResponseReceiver(new Handler());
+        responseReceiver.setReceiver(this);
+    	
+    	
+    	final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.CREATE);
+		intent.putExtra(IntentExtraKeys.RECEIVER, responseReceiver);
+      	intent.putExtra(IntentExtraKeys.JSON_STRING, jsonString);
+      	intent.putExtra(IntentExtraKeys.MODEL_CLASS, Order.class);
+    	
+      	
+      	/*
+      	Intent intent = new Intent(this, OrderConfirmationActivity.class);
     	startActivity(intent);
+    	*/
     }
+
+	@Override
+	public void onReceiveResult(int resultCode, Bundle resultData) {
+		// TODO Auto-generated method stub
+		
+	}
 }
