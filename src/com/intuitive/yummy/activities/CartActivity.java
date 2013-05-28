@@ -1,6 +1,7 @@
 package com.intuitive.yummy.activities;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -8,17 +9,21 @@ import com.google.gson.Gson;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.models.OrderItem;
+import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.sqlitedb.SQLiteDB;
 import com.intuitive.yummy.webservices.IntentExtraKeys;
 import com.intuitive.yummy.webservices.RestResponseReceiver;
+import com.intuitive.yummy.webservices.RestResultCode;
 import com.intuitive.yummy.webservices.RestService;
 import com.intuitive.yummy.webservices.RestService.Action;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.widget.ArrayAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -120,23 +125,43 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
     	responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
     	
-    	
+    	/*
     	final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
-		intent.putExtra(IntentExtraKeys.ACTION, Action.CREATE);
+		intent.putExtra(IntentExtraKeys.ACTION, Action.CREATE_JSON);
 		intent.putExtra(IntentExtraKeys.RECEIVER, responseReceiver);
       	intent.putExtra(IntentExtraKeys.JSON_STRING, jsonString);
       	intent.putExtra(IntentExtraKeys.MODEL_CLASS, Order.class);
-    	
-      	
-      	/*
-      	Intent intent = new Intent(this, OrderConfirmationActivity.class);
-    	startActivity(intent);
+    	startService(intent);
     	*/
+        
+        Intent intent = new Intent(this, OrderConfirmationActivity.class);
+        startActivity(intent);
     }
 
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-		// TODO Auto-generated method stub
+		switch (resultCode) {
+	    
+		case RestResultCode.RUNNING:
+	        // TODO show progress
+	        break;
+	        
+	    case RestResultCode.FINISHED:
+	    	
+	    	
+	    	ArrayList<Order> orders = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+	    	
+	    	Intent intent = new Intent(this, OrderConfirmationActivity.class);
+	    	intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) orders.get(0));
+        	startActivity(intent);
+
+	        
+	        // TODO hide progress
+	        break;
+	    case RestResultCode.ERROR:
+	        	//RestResultCode.ERROR.getValue()
+	        break;
+	}
 		
 	}
 }

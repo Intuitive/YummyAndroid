@@ -20,9 +20,8 @@ import android.view.View;
 public class OrderDetailActivity extends Activity {
 
 	//Dummy data
-	String[] orderedItems = { "16 inch Cheese Pizza", "16 inch Pepperoni Pizza",
-			"16 inch Sausage Pizza", "Cheese Pizza Slice" };
-	String[] specialInstructions = {"double cheese", "", "light sauce", "" };
+	String[] orderedItems = { "Cheese Slice", "Pepperoni Slice" };
+	//String[] specialInstructions = {"doub", "light sauce"};
 
 	TableLayout t1;
 
@@ -41,7 +40,7 @@ public class OrderDetailActivity extends Activity {
 			//user defined function
 			createView(tr, tv1, Integer.toString(1));
 			createView(tr, tv2, orderedItems[i]);
-			createView(tr, tv3, specialInstructions[i]);
+			createView(tr, tv3, "");
 			//add row to table
 			t1.addView(tr);
 		}
@@ -52,7 +51,7 @@ public class OrderDetailActivity extends Activity {
 		TextView tv5 = new TextView(this);
 		TextView tv6 = new TextView(this);
 		createView(tr2, tv4, "Total:");
-		createView(tr2, tv5, "   ");
+		createView(tr2, tv5, "$4.25");
 		createView(tr2, tv6, "   ");
 		t1.addView(tr2);
 	}

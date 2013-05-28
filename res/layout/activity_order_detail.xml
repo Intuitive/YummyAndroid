@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Ready for Pick up"
+        android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ToggleButton
@@ -67,6 +67,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:onClick="toggleOrderReady" />
+        android:onClick="toggleOrderReady"
+        android:textOn="Completed" 
+        android:textOff="In Progress"/>
 
 </LinearLayout>

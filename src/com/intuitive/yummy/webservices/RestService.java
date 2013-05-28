@@ -303,7 +303,7 @@ public class RestService extends IntentService {
         	
         	// get postData if action is a POST action
         	ArrayList<PostParameter> postParams = null;
-        	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE)
+        	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE && action != Action.CREATE_JSON)
         	{
         		Model modelObject = intent.getParcelableExtra(IntentExtraKeys.MODEL);
         		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
@@ -313,7 +313,7 @@ public class RestService extends IntentService {
         	// log URL and post data
         	// TODO take this out for production? or use debug var to check
         	Log.v("yummy", "Making HTTP request to URL: " + requestUrl);
-        	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE)
+        	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE && action != Action.CREATE_JSON)
         	{
         		StringBuilder postData_logMsg = new StringBuilder();
         		postData_logMsg.append("POST data:\n");
@@ -335,7 +335,7 @@ public class RestService extends IntentService {
         		String success = json.getString("success");
         		b.putBoolean(IntentExtraKeys.SUCCESS, success.equals("true"));
         		
-        		if(action == Action.READALL || action == Action.READSINGLE){
+        		if(action == Action.READALL || action == Action.READSINGLE || action == Action.CREATE_JSON){
 	        			if (success.equals("false"))
 	            			throw new Exception();
 	            		

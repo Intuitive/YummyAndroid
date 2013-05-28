@@ -33,9 +33,6 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pending_orders);
 		
-		orders.add(ordprog1);
-		orders.add(ordprog2);
-		orders.add(ordfill);
 		Intent incomingIntent = getIntent();
 		
 		// Get vendor id from intent
