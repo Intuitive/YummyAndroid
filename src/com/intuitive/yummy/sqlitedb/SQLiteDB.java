@@ -170,7 +170,11 @@ public class SQLiteDB extends SQLiteOpenHelper {
 		db.close();
 	}
 
-
+	public void deleteAllOrderItems(){
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(shoppingCartTableName, null, null);
+	}
+	
 	public int getOrderItemsCount() {
 		String countQuery = "SELECT  * FROM " + shoppingCartTableName;
 		SQLiteDatabase db = this.getReadableDatabase();

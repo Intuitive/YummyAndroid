@@ -6,22 +6,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.NameValuePair;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
  
@@ -66,18 +59,12 @@ public class JSONParser {
             }else if(method.equals("JSON")){
             	DefaultHttpClient httpClient = new DefaultHttpClient();
             	HttpPost request = new HttpPost(url);
-            	/*
-            	JSONArray jsonArray= new JSONArray(jsonString);
-            	JSONObject jsonObj = new JSONObject();
-            	jsonObj.put("data", jsonArray);
-            	StringEntity jsonEntity =new StringEntity(jsonObj.toString());
-            	jsonEntity.setContentType("application/json");
-            	*/
             	
             	ArrayList<PostParameter> postList = new ArrayList<PostParameter>();
             	postList.add(new PostParameter("app_data", jsonString));
             	request.setEntity(new UrlEncodedFormEntity(postList));
             	
+            	//Log.d("request data", new UrlEncodedFormEntity(postList).toString());
                 HttpResponse httpResponse = httpClient.execute(request);
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
