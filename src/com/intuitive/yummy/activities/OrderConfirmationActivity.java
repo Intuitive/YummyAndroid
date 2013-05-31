@@ -1,15 +1,12 @@
 package com.intuitive.yummy.activities;
 
-import java.util.Random;
-
 import com.intuitive.yummy.R;
-import com.intuitive.yummy.R.id;
-import com.intuitive.yummy.R.layout;
-import com.intuitive.yummy.R.menu;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.Menu;
 import android.view.View;
 
@@ -22,16 +19,21 @@ public class OrderConfirmationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_order_confirmation);
 		
-		//random number generator just for dummy data
-		Random generator = new Random();
+		Intent intent = this.getIntent();
+		Integer orderId = intent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
+		Integer waitTime = intent.getIntExtra("waitTime", -1);
 		
 		//find the textfield to be used in xml
-		TextView number = (TextView) findViewById(R.id.orderNumber);
-		TextView minutes = (TextView) findViewById(R.id.waitTime);
+		TextView orderNumber = (TextView) findViewById(R.id.orderNumber);
+		TextView waitTime_tv = (TextView) findViewById(R.id.waitTime);
 		
 		//show order number on the app
-		number.setText(Integer.toString(generator.nextInt(100)));
-		minutes.setText(Integer.toString(generator.nextInt(60)) + " minutes");
+		orderNumber.setText(String.valueOf(orderId));
+		waitTime_tv.setText(String.valueOf(waitTime) + " minutes");
+		
+		// set to bold
+		orderNumber.setTypeface(null, Typeface.BOLD);
+		waitTime_tv.setTypeface(null, Typeface.BOLD);
 	}
 
 	@Override
