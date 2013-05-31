@@ -84,6 +84,8 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		createView(tr2, tv5, "   ");
 		createView(tr2, tv6, NumberFormat.getCurrencyInstance().format(totalPrice));
 		t1.addView(tr2);
+		
+		cache.close();
 	}
 
 	@Override
@@ -125,17 +127,17 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
     	responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
     	
-    	/*
+    	
     	final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, RestService.class);
 		intent.putExtra(IntentExtraKeys.ACTION, Action.CREATE_JSON);
 		intent.putExtra(IntentExtraKeys.RECEIVER, responseReceiver);
       	intent.putExtra(IntentExtraKeys.JSON_STRING, jsonString);
       	intent.putExtra(IntentExtraKeys.MODEL_CLASS, Order.class);
     	startService(intent);
-    	*/
+    	
         
-        Intent intent = new Intent(this, OrderConfirmationActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, OrderConfirmationActivity.class);
+        //startActivity(intent);
     }
 
 	@Override
@@ -148,11 +150,16 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	        
 	    case RestResultCode.FINISHED:
 	    	
+	    	// clean out cart
+	    	SQLiteDB cache = new SQLiteDB(this);
+	    	cache.deleteAllOrderItems();
+	    	cache.close();	    	
 	    	
+	    	// get order and pass it to OrderConfirmation
 	    	ArrayList<Order> orders = resultData.getParcelableArrayList(RestService.BundleObjectKey);
-	    	
 	    	Intent intent = new Intent(this, OrderConfirmationActivity.class);
-	    	intent.putExtra(IntentExtraKeys.MODEL, (Parcelable) orders.get(0));
+	    	intent.putExtra(IntentExtraKeys.MODEL_ID, orders.get(0).getId());
+	    	intent.putExtra("waitTime", orders.get(0).getWaitTime());
         	startActivity(intent);
 
 	        
