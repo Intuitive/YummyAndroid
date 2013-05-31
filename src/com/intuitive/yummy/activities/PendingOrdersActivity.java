@@ -3,6 +3,7 @@ package com.intuitive.yummy.activities;
 import java.util.ArrayList;
 
 import com.intuitive.yummy.R;
+import com.intuitive.yummy.models.Order.OrderStatus;
 import com.intuitive.yummy.models.PendOrdersAdapter;
 import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.webservices.IntentExtraKeys;
@@ -43,7 +44,7 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
         
-        final Intent restServiceIntent = Order.getOrdersIntent(vendorId, null, null, this, responseReceiver);
+        final Intent restServiceIntent = Order.getOrdersIntent(vendorId, null, OrderStatus.IN_PROGRESS, this, responseReceiver);
         startService(restServiceIntent);
             
         // setup UI

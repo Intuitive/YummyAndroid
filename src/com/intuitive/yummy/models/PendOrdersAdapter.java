@@ -74,9 +74,10 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 		Order order = orders.get(position);
 		holder.orderId.setText("Order #: " + Integer.toString(order.getId()));
 		holder.orderId.setTag(Integer.toString(order.getId()));
-		// calculate time remaining [now - (dateCreated + waitTime)]
+		// calculate time remaining [(dateCreated + waitTime) - now]
 		long timeOrderIsDue = order.getDateCreated().getTime() + order.getWaitTime() * 60000L;
 		long timeRemaining = timeOrderIsDue - new Date().getTime();
+		if(timeRemaining < 0) timeRemaining = 0L;
 		
 		timers.add(new OrderCountDownTimer(timeRemaining, 1*1000, position));
 		timers.get(position).start();

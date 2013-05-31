@@ -311,9 +311,7 @@ public class RestService extends IntentService {
         		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
         	}        	
         	
-        	
-        	// log URL and post data
-        	// TODO take this out for production? or use debug var to check
+        	// --------------------LOGGING--------------------
         	Log.v("yummy", "Making HTTP request to URL: " + requestUrl);
         	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE && action != Action.CREATE_JSON)
         	{
@@ -327,6 +325,7 @@ public class RestService extends IntentService {
         	String jsonString = intent.getStringExtra(IntentExtraKeys.JSON_STRING);
         	if(actionMethodMapping.get(action) == "JSON")
         		Log.d("yummy", jsonString);
+        	// ------------------END LOGGING------------------
         	
         	// fire HTTP request and handle response
         	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams, jsonString);
