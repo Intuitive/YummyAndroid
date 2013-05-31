@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.intuitive.yummy.models.MenuItem;
 import com.intuitive.yummy.models.OrderItem;
-import com.intuitive.yummy.models.OrderItem;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -173,6 +172,7 @@ public class SQLiteDB extends SQLiteOpenHelper {
 	public void deleteAllOrderItems(){
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(shoppingCartTableName, null, null);
+		db.close();
 	}
 	
 	public int getOrderItemsCount() {
