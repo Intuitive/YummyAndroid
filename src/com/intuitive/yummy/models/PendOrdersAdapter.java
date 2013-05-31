@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.activities.MainActivity;
 import com.intuitive.yummy.activities.OrderDetailActivity;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -50,14 +51,19 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			holder.timeRemaining = (TextView)row.findViewById(R.id.timeRemaining);
 			row.setTag(holder);
 			
-			holder.orderId.setOnClickListener( new OnClickListener(){
+			row.setOnClickListener(new OnClickListener(){
 				@Override
-				public void onClick(View v){
+				public void onClick(View v) {
+					String orderId = (String) v.findViewById(R.id.orderId).getTag();
+					
+					// pass orderId to OrderDetail screen
 					Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
-					//intent.putExtra("OrderID", orderID.getText());
-			    	v.getContext().startActivity(intent);
+					intent.putExtra(IntentExtraKeys.MODEL_ID, orderId);
+					v.getContext().startActivity(intent);
 				}
 			});
+			
+			
 		} else {
 			holder = (OrderHolder)row.getTag();
 		}
@@ -67,7 +73,7 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 
 		Order order = orders.get(position);
 		holder.orderId.setText("Order #: " + Integer.toString(order.getId()));
-		
+		holder.orderId.setTag(Integer.toString(order.getId()));
 		// calculate time remaining [now - (dateCreated + waitTime)]
 		long timeOrderIsDue = order.getDateCreated().getTime() + order.getWaitTime() * 60000L;
 		long timeRemaining = timeOrderIsDue - new Date().getTime();

@@ -62,8 +62,8 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
     	startActivity(intent);
     }
 	
-	public void toOrderDetails(View v){
-		Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_LONG).show();
+	public void viewOrderDetail(View v){
+		
 		Intent intent = new Intent(this, OrderDetailActivity.class);
 		intent.putExtra("OrderId", "20");
 		startActivity(intent);
