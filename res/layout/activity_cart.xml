@@ -51,8 +51,31 @@
                 android:background="#000000"
                 android:gravity="center"
                 android:text="Price" />
-        </TableRow>
+        </TableRow>  
     </TableLayout>
+
+    <TableRow
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/listOrderItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/orderItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
 
     <Button
         android:id="@+id/payButton"

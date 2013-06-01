@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.models.OrderItem;
+import com.intuitive.yummy.models.OrderItemAdapter;
+import com.intuitive.yummy.models.ReviewAdapter;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.sqlitedb.SQLiteDB;
 import com.intuitive.yummy.webservices.IntentExtraKeys;
@@ -24,6 +26,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -38,7 +41,8 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		//	"16 inch Sausage Pizza", "Cheese Pizza Slice" };
 	//double[] price = { 10, 11, 12, 1.5 };
 
-	List<OrderItem> orderItems;
+	private ListView row;
+	ArrayList<OrderItem> orderItems;
 	public RestResponseReceiver responseReceiver;
 	TableLayout t1;
 
@@ -52,7 +56,7 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		t1 = (TableLayout) findViewById(R.id.table1);
 		
 		
-		orderItems = cache.getAllOrderItems();
+		orderItems = (ArrayList<OrderItem>) cache.getAllOrderItems();
 		
 		for (OrderItem orderItem : orderItems) {
 			TableRow tr = new TableRow(this);
@@ -150,6 +154,12 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	        
 	    case RestResultCode.FINISHED:
 	    	
+	    	orderItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+	    	
+	    	OrderItemAdapter adapter = new OrderItemAdapter(this, R.layout.list_order_item, orderItems);
+	    	row = (ListView)findViewById(R.id.listOrderItem);
+	    	row.setAdapter(adapter);
+	    	
 	    	// clean out cart
 	    	SQLiteDB cache = new SQLiteDB(this);
 	    	cache.deleteAllOrderItems();
@@ -168,7 +178,7 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	    case RestResultCode.ERROR:
 	        	//RestResultCode.ERROR.getValue()
 	        break;
-	}
+		}
 		
 	}
 }

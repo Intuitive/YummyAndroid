@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Cart implements Serializable {
 	
-	private ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+	private ArrayList<OrderItem> items = new ArrayList<OrderItem>();
 	private double totalPrice = 0;
 	
 	//Update the total price of all items
@@ -17,12 +17,12 @@ public class Cart implements Serializable {
 		}
 	}
 	//Add an item to the cart
-	public void addItem(MenuItem item){
+	public void addItem(OrderItem item){
 		items.add(item);
 		update();
 	}
 	//Remove an item from the cart
-	public void removeItem(MenuItem item) {
+	public void removeItem(OrderItem item) {
 		for (int i = 0; i < items.size(); i++)
 		{
 			if (items.get(i).getName().equals(item.getName()))
@@ -31,7 +31,7 @@ public class Cart implements Serializable {
 		update();
 	}
 	//Return the items in the cart
-	public ArrayList<MenuItem> getItems(){
+	public ArrayList<OrderItem> getItems(){
 		return items;
 	}
 	//Return the total price
@@ -45,7 +45,7 @@ public class Cart implements Serializable {
 	}
 	
 	//Constructor
-	Cart(ArrayList<MenuItem> items){
+	Cart(ArrayList<OrderItem> items){
 		this.items = items;
 		update();
 	}
