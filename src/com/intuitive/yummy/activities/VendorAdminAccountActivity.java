@@ -92,9 +92,22 @@ public class VendorAdminAccountActivity extends Activity implements RestResponse
 	}
 	
 	public void setWaitTime(View v){
-		Intent intent = new Intent(this, OrderConfirmationActivity.class);
-		EditText waitTime = (EditText)findViewById(R.id.waitTime);
-    	intent.putExtra("waitTime", waitTime.getText());
+		RestResponseReceiver responseReceiver = new RestResponseReceiver(new Handler());
+        responseReceiver.setReceiver(this);
+        
+        EditText waitTime = (EditText)findViewById(R.id.waitTime);
+        
+        //Edgar just uncomment this and change it to the setWaitTime or setDuration that you made.
+        /*if (waitTime.getText() == null){
+        	vendor.setWaitTime(20);
+        }
+        else{
+        	vendor.setWaitTime(Integer.parseInt(waitTime.getText().toString()));
+        }*/
+        
+        Intent updateVendor = RestService.getUpdateIntent(vendor, this, responseReceiver);
+		startService(updateVendor);
+		
     	Toast.makeText(getApplicationContext(), "Wait time set to " + waitTime.getText(), Toast.LENGTH_LONG).show();
 	}
 
