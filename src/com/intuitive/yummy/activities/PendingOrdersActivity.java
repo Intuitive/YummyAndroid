@@ -3,6 +3,7 @@ package com.intuitive.yummy.activities;
 import java.util.ArrayList;
 
 import com.intuitive.yummy.R;
+import com.intuitive.yummy.models.MenuItem;
 import com.intuitive.yummy.models.PendOrdersAdapter;
 import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.webservices.IntentExtraKeys;
@@ -15,13 +16,20 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class PendingOrdersActivity extends Activity implements RestResponseReceiver.Receiver{
-	
+	private static int YOrder = 1;
+	private static int NOrder = 2;
 	private ArrayList<Order> orders;
 	public RestResponseReceiver responseReceiver;
 	//private ArrayList<Order> orders = new ArrayList<Order> ();
@@ -67,7 +75,9 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		Intent intent = new Intent(this, OrderDetailActivity.class);
 		intent.putExtra("OrderId", "20");
 		startActivity(intent);
+		
 	}
+	
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {
@@ -85,8 +95,7 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 			PendOrdersAdapter adapter = new PendOrdersAdapter(this, R.layout.list_pending_order, orders);
 			listView = (ListView) findViewById(R.id.listPendingOrders);
 			listView.setAdapter(adapter);
-
-
+			registerForContextMenu(listView);
 
 			// TODO hide progress
 			break;
@@ -96,9 +105,29 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		}
 
 	}
-
 	
-
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		menu.setHeaderTitle("Is the order complete?");
+        menu.add(android.view.Menu.NONE, YOrder, android.view.Menu.NONE, "Yes");
+        menu.add(android.view.Menu.NONE, NOrder, android.view.Menu.NONE, "No");
+	}
+	
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem item) {
+		//AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    		switch (item.getItemId()) {
+    		case 1:
+    			Intent intent = new Intent(this, OrderDetailActivity.class);
+    	    	intent.putExtra("orderComp", true);
+    			Toast.makeText(getApplicationContext(), "test", 2).show();
+    			return true;
+    		case 2:
+    			closeContextMenu();
+    		default:
+    			return super.onContextItemSelected(item);
+    		}
+	}
 }
 
 
