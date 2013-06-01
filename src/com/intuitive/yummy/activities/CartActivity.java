@@ -24,6 +24,8 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -31,6 +33,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TableRow.LayoutParams;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.View;
 
@@ -41,10 +44,10 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		//	"16 inch Sausage Pizza", "Cheese Pizza Slice" };
 	//double[] price = { 10, 11, 12, 1.5 };
 
-	private ListView row;
+	
 	ArrayList<OrderItem> orderItems;
 	public RestResponseReceiver responseReceiver;
-	TableLayout t1;
+	private ListView listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,43 +55,20 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		setContentView(R.layout.activity_cart);
 
 		SQLiteDB cache = new SQLiteDB(this);
-		Double totalPrice = 0.0;
-		t1 = (TableLayout) findViewById(R.id.table1);
 		
+		Double totalPrice = 0.0;
 		
 		orderItems = (ArrayList<OrderItem>) cache.getAllOrderItems();
 		
-		for (OrderItem orderItem : orderItems) {
-			TableRow tr = new TableRow(this);
-			TextView tv1 = new TextView(this);
-			TextView tv2 = new TextView(this);
-			TextView tv3 = new TextView(this);
-			//user defined function
-			
-			// order: quantity, item name, price
-			createView(tr, tv1, String.valueOf(orderItem.getQuantity()));
-			createView(tr, tv2, orderItem.getName());
-			String price = NumberFormat.getCurrencyInstance().format(orderItem.getPrice());
-			createView(tr, tv3, price);
-			
-			//add row to table
-			t1.addView(tr);
-			
-			// keep track of totalPrice
-			totalPrice += orderItem.getPrice();
-	    }
+		OrderItemAdapter adapter = new OrderItemAdapter(this, R.layout.list_order_item, orderItems);
+		listView = (ListView)findViewById(R.id.listOrderItem);
+		listView.setAdapter(adapter);
 		
-		//adding the last row for the total amount using dummy data
-
-		TableRow tr2 = new TableRow(this);
-		TextView tv4 = new TextView(this);
-		TextView tv5 = new TextView(this);
-		TextView tv6 = new TextView(this);
-		createView(tr2, tv4, "Total:");
-		createView(tr2, tv5, "   ");
-		createView(tr2, tv6, NumberFormat.getCurrencyInstance().format(totalPrice));
-		t1.addView(tr2);
-		
+		for( int i = 0; i < orderItems.size(); i ++ ){
+			totalPrice += orderItems.get(i).getPrice();
+		}
+		String total = NumberFormat.getCurrencyInstance().format(totalPrice); 
+		((TextView)findViewById(R.id.total_price)).setText(total);
 		cache.close();
 	}
 
@@ -97,22 +77,6 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_cart, menu);
 		return true;
-	}
-
-	//Function to add each cell to row
-	public void createView(TableRow tr, TextView t, String viewdata) {
-		//content of each cell
-		t.setText(viewdata);
-		t.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
-		t.setTextColor(Color.WHITE);
-		t.setBackgroundColor(Color.BLACK);
-		//creating borders
-		t.setPadding(20, 0, 0, 0);
-		tr.setPadding(0, 1, 0, 1);
-		tr.setBackgroundColor(Color.WHITE);
-		//add textview to row
-		tr.addView(t);
 	}
 	
 	//Go to home page when home button is clicked
@@ -154,11 +118,12 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	        
 	    case RestResultCode.FINISHED:
 	    	
-	    	orderItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
-	    	
-	    	OrderItemAdapter adapter = new OrderItemAdapter(this, R.layout.list_order_item, orderItems);
-	    	row = (ListView)findViewById(R.id.listOrderItem);
-	    	row.setAdapter(adapter);
+	    	//orderItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+	    
+	    	/*OrderItemAdapter adapter = new OrderItemAdapter(this, R.layout.list_order_item, orderItems);
+	    	listView = (ListView)findViewById(R.id.listOrderItem);
+	    	listView.setAdapter(adapter);
+	    	*/
 	    	
 	    	// clean out cart
 	    	SQLiteDB cache = new SQLiteDB(this);
@@ -179,6 +144,5 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	        	//RestResultCode.ERROR.getValue()
 	        break;
 		}
-		
 	}
 }

@@ -4,13 +4,29 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/homeButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="goToHome"
-        android:text="Home" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:onClick="goToHome"
+            android:text="Home" />
+
+        <Button
+            android:id="@+id/payButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:onClick="goToCheckout"
+            android:text="Checkout" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/title"
@@ -19,70 +35,44 @@
         android:gravity="center"
         android:text="Your Shopping Cart" />
 
-    <TableLayout
-        android:id="@+id/table1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:stretchColumns="*" >
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dip"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="Qty" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dip"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="Item" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dip"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="Price" />
-        </TableRow>  
-    </TableLayout>
-
-    <TableRow
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/listOrderItem"
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/quantity"
+            android:id="@+id/total_price_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Total: "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/orderItem"
+            android:id="@+id/total_price"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+    <ListView
+        android:id="@+id/listOrderItem"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp" >
+    </ListView>
 
     <Button
-        android:id="@+id/payButton"
+        android:id="@+id/homeButton"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="goToCheckout"
-        android:text="Checkout" />
+        android:onClick="goToHome"
+        android:text="Home" />
 
 </LinearLayout>
