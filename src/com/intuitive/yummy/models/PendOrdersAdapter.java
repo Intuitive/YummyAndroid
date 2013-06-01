@@ -18,12 +18,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class PendOrdersAdapter extends ArrayAdapter<Order> {
 	Context context;
 	int layoutResourceId;
+	ListView listView;
 	
 	ArrayList<Order> orders = null;
 	ArrayList<OrderHolder> orderRows = new ArrayList<OrderHolder>();
@@ -50,9 +52,10 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			holder.timeRemaining = (TextView)row.findViewById(R.id.timeRemaining);
 			row.setTag(holder);
 			
+			
 		} else {
 			holder = (OrderHolder)row.getTag();
-		}
+		}		
 		orderRows.add(holder);
 		
 		// put setonclicklistener
@@ -87,7 +90,7 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 
 		@Override
 		public void onFinish() {
-			orderRows.get(orderIndex).timeRemaining.setText("0:00");
+			orderRows.get(orderIndex).timeRemaining.setText("3:00");
 		}
 
 		@SuppressLint("DefaultLocale")
@@ -101,6 +104,14 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			// TODO change color of text depending on how much time is left
 			//Log.d("yummy", "tick!");
 			orderRows.get(orderIndex).timeRemaining.setText(timeRemaining);
+			if (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) < 2){
+				orderRows.get(orderIndex).timeRemaining.setTextColor(0xff0000);
+			} else if (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) < 5 
+					&& TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) > 2){
+				orderRows.get(orderIndex).timeRemaining.setTextColor(0xffff00);
+			} else {
+				orderRows.get(orderIndex).timeRemaining.setTextColor(0x008000);
+			}
 		}
 	}
 }
