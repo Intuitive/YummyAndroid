@@ -18,6 +18,8 @@ public class Cart implements Serializable {
 	}
 	//Add an item to the cart
 	public void addItem(OrderItem item){
+		// TODO perform error checking to make sure items from 
+		// 		different trucks aren't mixed in the same cart/order
 		items.add(item);
 		update();
 	}
