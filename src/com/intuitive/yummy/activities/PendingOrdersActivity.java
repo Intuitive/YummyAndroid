@@ -24,6 +24,7 @@ import android.widget.Toast;
 public class PendingOrdersActivity extends Activity implements RestResponseReceiver.Receiver{
 	
 	private ArrayList<Order> orders;
+	public Integer vendorId;
 	public RestResponseReceiver responseReceiver;
 	//private ArrayList<Order> orders = new ArrayList<Order> ();
 	
@@ -38,7 +39,7 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		
 		// Get vendor id from intent
 		if(!incomingIntent.hasExtra(IntentExtraKeys.MODEL_ID)) throw new IllegalArgumentException("Vendor Id must be > 0");
-		Integer vendorId = incomingIntent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
+		vendorId = incomingIntent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
 		
 		// Get orders that are still in progress
 		responseReceiver = new RestResponseReceiver(new Handler());

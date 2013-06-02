@@ -1,8 +1,6 @@
 package com.intuitive.yummy.models;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +33,7 @@ public class Vendor implements Model {
 	private Timestamp dateCreated;
 	private Timestamp dateLastModified;
 	private Boolean isDeleted; // TODO consider renaming to isActive
+	private Integer waitTime;
 	
 	// used to make open and closed status' clearer
 	public enum VendorStatus{
@@ -103,6 +102,7 @@ public class Vendor implements Model {
 			pictureUrl = json.getString("picture_url");
 			dateCreated = Timestamp.valueOf(json.getString("date_created"));
 			dateLastModified = Timestamp.valueOf(json.getString("date_last_modified"));
+			waitTime = json.getInt("wait_time");
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to Vendor object.");
 			e.printStackTrace();
@@ -144,7 +144,10 @@ public class Vendor implements Model {
 	public void setMenu(Menu menu) {
 		this.menu = menu;
 	}
-	
+	public void setWaitTime(Integer waitTime) {
+		this.waitTime = waitTime;
+	}	
+
 	/* getters */
 	public Integer getId() {
 		return id;
@@ -182,7 +185,10 @@ public class Vendor implements Model {
 	public String getModelName(){
 		return modelName;
 	}
-
+	public Integer getWaitTime() {
+		return waitTime;
+	}
+	
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -266,14 +272,19 @@ public class Vendor implements Model {
 			else
 				out.writeInt(0);
 		}
+		
+		if(waitTime == null)
+			out.writeInt(0);
+		else{
+			out.writeInt(1);
+			out.writeInt(waitTime);
+		}
 	}
-
 
 	@Override
 	public Model createFromParcel(Parcel parcel) {
 		return new Vendor(parcel);
 	}
-
 	
 	public Vendor(Parcel parcel){
 		
@@ -315,6 +326,9 @@ public class Vendor implements Model {
 
 		if(parcel.readInt() == 1)
 			isDeleted = parcel.readInt() == 1;
+		
+		if(parcel.readInt() == 1)
+			waitTime = parcel.readInt();
 	}
 
 	public static final Parcelable.Creator<Vendor> CREATOR = new Creator<Vendor>() {
@@ -343,12 +357,11 @@ public class Vendor implements Model {
 		if(description != null) postData.put("description", description);
 		if(location != null) postData.put("location", location);
 		if(status != null) postData.put("status", status == VendorStatus.OPEN ? "true" : "false");
-		// TODO skipping Menu for now
 		if(pictureUrl != null) postData.put("picture_url", pictureUrl);
 		if(dateCreated != null) postData.put("date_created", dateCreated.toString());
 		if(dateLastModified != null) postData.put("date_last_modified", dateLastModified.toString());
 		if(isDeleted != null) postData.put("deleted", isDeleted ? "true" : "false");
-		
+		if(waitTime != null) postData.put("wait_time", String.valueOf(waitTime));
 		return postData;
 	}	
 	

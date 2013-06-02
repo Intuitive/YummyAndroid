@@ -54,11 +54,13 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			row.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					String orderId = (String) v.findViewById(R.id.orderId).getTag();
+					String orderId = (String) v.findViewById(R.id.orderId).getTag(R.string.order_id_tag);
+					String vendorId = (String) v.findViewById(R.id.orderId).getTag(R.string.vendor_id_tag);
 					
 					// pass orderId to OrderDetail screen
 					Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
 					intent.putExtra(IntentExtraKeys.MODEL_ID, orderId);
+					intent.putExtra("vendorId", vendorId);
 					v.getContext().startActivity(intent);
 				}
 			});
@@ -73,7 +75,8 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 
 		Order order = orders.get(position);
 		holder.orderId.setText("Order #: " + Integer.toString(order.getId()));
-		holder.orderId.setTag(Integer.toString(order.getId()));
+		holder.orderId.setTag(R.string.order_id_tag, Integer.toString(order.getId()));
+		holder.orderId.setTag(R.string.vendor_id_tag, Integer.toString(order.getVendorId()));
 		// calculate time remaining [(dateCreated + waitTime) - now]
 		long timeOrderIsDue = order.getDateCreated().getTime() + order.getWaitTime() * 60000L;
 		long timeRemaining = timeOrderIsDue - new Date().getTime();

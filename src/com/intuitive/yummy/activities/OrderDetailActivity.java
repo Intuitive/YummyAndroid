@@ -34,8 +34,12 @@ import android.view.View;
 public class OrderDetailActivity extends Activity implements RestResponseReceiver.Receiver{
 
 	public String orderId = null;
+	public String vendorId = null;
 	public RestResponseReceiver responseReceiver;
 	public ArrayList<OrderItem> orderItems;
+	
+	public static int ORDER_ID_TAG = 1;
+	public static int VENDOR_ID_TAG = 2;
 	
 	TableLayout orderItemsTable;
 
@@ -47,6 +51,7 @@ public class OrderDetailActivity extends Activity implements RestResponseReceive
 		// grab order id from intent
 		Intent intent = getIntent();
 		orderId = intent.getStringExtra(IntentExtraKeys.MODEL_ID);
+		vendorId = intent.getStringExtra("vendorId");
 		
 		// request order items from db
 		responseReceiver = new RestResponseReceiver(new Handler());
@@ -98,59 +103,67 @@ public class OrderDetailActivity extends Activity implements RestResponseReceive
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		switch (resultCode) {
-	    
-		case RestResultCode.RUNNING:
-	        // TODO show progress
-	        break;
-	        
-	    case RestResultCode.FINISHED:
-	    
-	    	orderItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
-	    	
-	    	if(orderItems != null){
-		    	// add order items to table
-		    	Double totalPrice = 0.0;
-		    	orderItemsTable = (TableLayout) findViewById(R.id.table1);
-				for (int i = 0; i < orderItems.size(); i++) {
-					// create order item row
-					TableRow orderItemRow = new TableRow(this);
-					TextView quantity = new TextView(this);
-					TextView orderItemName = new TextView(this);
-					TextView specialInstructions = new TextView(this);
-					createCell(orderItemRow, quantity, String.valueOf(orderItems.get(i).getQuantity()));
-					createCell(orderItemRow, orderItemName, orderItems.get(i).getName());
-					createCell(orderItemRow, specialInstructions, orderItems.get(i).getSpecialInstructions());
-					
-					// add to table
-					orderItemsTable.addView(orderItemRow);
-					
-					// add up total price
-					totalPrice += orderItems.get(i).getPrice();
-				}
+		    
+			case RestResultCode.RUNNING:
+		        // TODO show progress
+		        break;
 		        
-				// add last row for total price
-				TableRow totalPriceRow = new TableRow(this);
-				TextView totalLabel = new TextView(this);
-				TextView totalPrice_v = new TextView(this);
-				TextView emptyRightCell = new TextView(this);
-				createCell(totalPriceRow, totalLabel, "Total:");
-				createCell(totalPriceRow, totalPrice_v, NumberFormat.getCurrencyInstance().format(totalPrice));
-				createCell(totalPriceRow, emptyRightCell, "   ");
-				orderItemsTable.addView(totalPriceRow);
-	    	}else{
-	    		Toast.makeText(getApplicationContext(), "Order is ready", Toast.LENGTH_LONG).show();
-	    		
-	    		// disable button (once an order is fullfilled it cannot be "unfullfilled"
-	    		ToggleButton fullfillToggle = (ToggleButton) findViewById(R.id.order_ready_button);
-	    		fullfillToggle.setEnabled(false);
-	    		fullfillToggle.setFocusable(false);
-	    	}
-	        // TODO hide progress
-	        break;
-	    case RestResultCode.ERROR:
-	        	//RestResultCode.ERROR.getValue()
-	        break;
+		    case RestResultCode.FINISHED:
+		    
+		    	orderItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+		    	
+		    	if(orderItems != null){
+			    	// add order items to table
+			    	Double totalPrice = 0.0;
+			    	orderItemsTable = (TableLayout) findViewById(R.id.table1);
+					for (int i = 0; i < orderItems.size(); i++) {
+						// create order item row
+						TableRow orderItemRow = new TableRow(this);
+						TextView quantity = new TextView(this);
+						TextView orderItemName = new TextView(this);
+						TextView specialInstructions = new TextView(this);
+						createCell(orderItemRow, quantity, String.valueOf(orderItems.get(i).getQuantity()));
+						createCell(orderItemRow, orderItemName, orderItems.get(i).getName());
+						createCell(orderItemRow, specialInstructions, orderItems.get(i).getSpecialInstructions());
+						
+						// add to table
+						orderItemsTable.addView(orderItemRow);
+						
+						// add up total price
+						totalPrice += orderItems.get(i).getPrice();
+					}
+			        
+					// add last row for total price
+					TableRow totalPriceRow = new TableRow(this);
+					TextView totalLabel = new TextView(this);
+					TextView totalPrice_v = new TextView(this);
+					TextView emptyRightCell = new TextView(this);
+					createCell(totalPriceRow, totalLabel, "Total:");
+					createCell(totalPriceRow, totalPrice_v, NumberFormat.getCurrencyInstance().format(totalPrice));
+					createCell(totalPriceRow, emptyRightCell, "   ");
+					orderItemsTable.addView(totalPriceRow);
+		    	}else{
+		    		Toast.makeText(getApplicationContext(), "Order is ready", Toast.LENGTH_LONG).show();
+		    		
+		    		// disable button (once an order is fullfilled it cannot be "unfullfilled"
+		    		ToggleButton fullfillToggle = (ToggleButton) findViewById(R.id.order_ready_button);
+		    		fullfillToggle.setEnabled(false);
+		    		fullfillToggle.setFocusable(false);
+		    	}
+		        // TODO hide progress
+		        break;
+		    case RestResultCode.ERROR:
+		        	//RestResultCode.ERROR.getValue()
+		        break;
+		}
 	}
-		
-	}
+	
+	@Override
+	public void onBackPressed() {
+		// we need to re-create the pending orders activity in order to refresh
+		Intent intent = new Intent(this, PendingOrdersActivity.class);
+		intent.putExtra(IntentExtraKeys.MODEL_ID, Integer.valueOf(vendorId));
+		startActivity(intent);
+	    finish();
+	 }
 }
