@@ -110,4 +110,7 @@
     <string name="title_activity_menu_item">MenuItemActivity</string>
     <string name="action_settings">Settings</string>
 
+    <!--Pending Orders Activity -->
+    <string name="order_id_tag">order_id_tag</string>
+    <string name="vendor_id_tag">vendor_id_tag</string>
 </resources>

@@ -32,6 +32,7 @@
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.SearchActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -48,14 +49,17 @@
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.VendorAdminAccountActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.RegisterActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.VendorEditActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -81,10 +85,12 @@
 
         <activity
             android:name="com.intuitive.yummy.activities.VendorEditMenuItemActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:label="@string/title_activity_vendor_edit_menu_item" >
         </activity>
         <activity
             android:name="com.intuitive.yummy.activities.VendorEditMenuActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:label="@string/title_activity_vendor_edit_menu" >
         </activity>
         <activity

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.MenuItem;
+import com.intuitive.yummy.models.Order.OrderStatus;
 import com.intuitive.yummy.models.PendOrdersAdapter;
 import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.webservices.IntentExtraKeys;
@@ -37,6 +38,7 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 	private static int YOrder = 1;
 	private static int NOrder = 2;
 	private ArrayList<Order> orders;
+	public Integer vendorId;
 	public RestResponseReceiver responseReceiver;
 	//private ArrayList<Order> orders = new ArrayList<Order> ();
 	
@@ -51,13 +53,13 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		
 		// Get vendor id from intent
 		if(!incomingIntent.hasExtra(IntentExtraKeys.MODEL_ID)) throw new IllegalArgumentException("Vendor Id must be > 0");
-		Integer vendorId = incomingIntent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
+		vendorId = incomingIntent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
 		
 		// Get orders that are still in progress
 		responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
         
-        final Intent restServiceIntent = Order.getOrdersIntent(vendorId, null, null, this, responseReceiver);
+        final Intent restServiceIntent = Order.getOrdersIntent(vendorId, null, OrderStatus.IN_PROGRESS, this, responseReceiver);
         startService(restServiceIntent);
             
         // setup UI

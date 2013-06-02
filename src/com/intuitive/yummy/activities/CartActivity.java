@@ -101,6 +101,8 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		String total = NumberFormat.getCurrencyInstance().format(totalPrice); 
 		((TextView)findViewById(R.id.total_price)).setText(total);
 		cache.close();
+		
+		cache.close();
 	}
 	
 	@Override
@@ -155,6 +157,10 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	    	listView = (ListView)findViewById(R.id.listOrderItem);
 	    	listView.setAdapter(adapter);
 	    	*/
+	    	// clean out cart
+	    	SQLiteDB cache = new SQLiteDB(this);
+	    	cache.deleteAllOrderItems();
+	    	cache.close();	    	
 	    	
 	    	// clean out cart
 	    	SQLiteDB cache = new SQLiteDB(this);

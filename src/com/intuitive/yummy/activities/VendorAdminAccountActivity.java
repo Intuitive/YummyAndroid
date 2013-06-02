@@ -14,11 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
@@ -26,24 +29,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class VendorAdminAccountActivity extends Activity implements RestResponseReceiver.Receiver{
+	
 	private Vendor vendor;
 	private int[][] vendorHours = {{830,1700}, {830,1700}, {830,1700}, {830,1700}, {830,1700}, {0,0}, {0,0}};
 	Integer vendorId;
+	
+	RestResponseReceiver responseReceiver; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vendor_admin_account);
         Intent intent = getIntent();
-		
+        
         // setup rest receiver
-        RestResponseReceiver responseReceiver = new RestResponseReceiver(new Handler());
+        responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
         
         // get id of vendor to get
         vendorId = intent.getIntExtra(IntentExtraKeys.MODEL_ID, -1);
         if(vendorId == -1) throw new IllegalArgumentException("Vendor id not found on intent.");
-        
         
         final Intent getVendorIntent = RestService.getReadByIdIntent(vendorId, Vendor.class, this, responseReceiver);
         
@@ -56,7 +61,9 @@ public class VendorAdminAccountActivity extends Activity implements RestResponse
 			Button menuEdit = (Button)findViewById(R.id.button_edit_menu);
 			menuEdit.setVisibility(View.GONE);
 		}
-                
+        
+        // ensure wait time doesn't bring up keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);        
 	}
 
 	@Override
@@ -92,6 +99,10 @@ public class VendorAdminAccountActivity extends Activity implements RestResponse
 	}
 	
 	public void setWaitTime(View v){
+		vendor.setWaitTime(Integer.parseInt(((EditText) findViewById(R.id.waitTime)).getText().toString()));
+		Intent intent = RestService.getUpdateIntent(vendor, this, responseReceiver);
+		startService(intent);
+    	
 		RestResponseReceiver responseReceiver = new RestResponseReceiver(new Handler());
         responseReceiver.setReceiver(this);
         
@@ -122,30 +133,40 @@ public class VendorAdminAccountActivity extends Activity implements RestResponse
 
 		case RestResultCode.FINISHED:
 
-			// to test reads
-			ArrayList<Vendor> vendorSet = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+			ArrayList<Vendor> vendorSet = null;
+			vendorSet = resultData.getParcelableArrayList(RestService.BundleObjectKey);
 			
-			if(vendorSet.size() == 0) Log.e("yummy", "No vendor found with id " + String.valueOf(vendorId));
-					
-			vendor = vendorSet.get(0);
-			vendor.setHours(vendorHours);
-			
-			/*ImageView vendorPicture = (ImageView) findViewById(R.id.adminVendorPicture);
-	        if (vendor.getPictureUrl() != null) {
-	        	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureUrl()));
-	        }*/
-	        
-	        ((TextView)findViewById(R.id.adminVendorName)).setText(vendor.getName());
-			((TextView)findViewById(R.id.adminVendorAddress)).setText(vendor.getLocation());
-			
-			TextView vendorStatus = (TextView) findViewById(R.id.adminVendorStatus);
-			if (vendor.getStatus() == VendorStatus.OPEN)
-				vendorStatus.setText("Open");
-			else
-				vendorStatus.setText("Close");
-			
-			
-			
+			// vendor is null on startup so we get the vendor and update the UI
+			if(vendor == null){
+				if(vendorSet.size() == 0) Log.e("yummy", "No vendor found with id " + String.valueOf(vendorId));
+						
+				// setup vendor
+				vendor = vendorSet.get(0);
+				vendor.setHours(vendorHours);
+				
+		        ((TextView)findViewById(R.id.adminVendorName)).setText(vendor.getName());
+				((TextView)findViewById(R.id.adminVendorAddress)).setText(vendor.getLocation());
+				
+				TextView vendorStatus = (TextView) findViewById(R.id.adminVendorStatus);
+				if (vendor.getStatus() == VendorStatus.OPEN)
+					vendorStatus.setText("Open");
+				else
+					vendorStatus.setText("Close");
+				
+				// setup picture
+				/*ImageView vendorPicture = (ImageView) findViewById(R.id.adminVendorPicture);
+		        if (vendor.getPictureUrl() != null) {
+		        	vendorPicture.setImageBitmap(BitmapFactory.decodeFile(vendor.getPictureUrl()));
+		        }*/
+		        
+				((EditText) findViewById(R.id.waitTime)).setText(String.valueOf(vendor.getWaitTime()));
+			}
+			// vendor is not null when it's already been loaded and we've updated it (we still get the vendor sent back in vendorSet)
+			else{
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+				Toast.makeText(getApplicationContext(), "Wait time set to " + String.valueOf(vendor.getWaitTime()), Toast.LENGTH_LONG).show();
+			}
 			
 			// TODO hide progress
 			break;
