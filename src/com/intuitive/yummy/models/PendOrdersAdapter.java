@@ -50,14 +50,6 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			holder.timeRemaining = (TextView)row.findViewById(R.id.timeRemaining);
 			row.setTag(holder);
 			
-			holder.orderId.setOnClickListener( new OnClickListener(){
-				@Override
-				public void onClick(View v){
-					Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
-					//intent.putExtra("OrderID", orderID.getText());
-			    	v.getContext().startActivity(intent);
-				}
-			});
 		} else {
 			holder = (OrderHolder)row.getTag();
 		}

@@ -17,8 +17,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import android.widget.AdapterView.OnItemClickListener;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 
 public class PendingOrdersActivity extends Activity implements RestResponseReceiver.Receiver{
 	
@@ -63,7 +69,7 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
     }
 	
 	public void toOrderDetails(View v){
-		Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_LONG).show();
+		//Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(this, OrderDetailActivity.class);
 		intent.putExtra("OrderId", "20");
 		startActivity(intent);
@@ -85,6 +91,15 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 			PendOrdersAdapter adapter = new PendOrdersAdapter(this, R.layout.list_pending_order, orders);
 			listView = (ListView) findViewById(R.id.listPendingOrders);
 			listView.setAdapter(adapter);
+			
+			// info @ http://stackoverflow.com/questions/2558591/remove-listview-items-in-android
+			listView.setOnItemClickListener(new OnItemClickListener(){
+				public void onItemClick(AdapterView<?> a, View v, int position, long id){
+					Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
+					//intent.putExtra("OrderID", orderID.getText());
+			    	v.getContext().startActivity(intent);
+				}
+			});
 
 
 
@@ -96,9 +111,6 @@ public class PendingOrdersActivity extends Activity implements RestResponseRecei
 		}
 
 	}
-
-	
-
 }
 
 

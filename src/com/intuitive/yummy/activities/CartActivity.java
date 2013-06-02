@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.models.Order;
 import com.intuitive.yummy.models.OrderItem;
+import com.intuitive.yummy.models.OrderItemAdapter;
+import com.intuitive.yummy.models.ReviewAdapter;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.sqlitedb.SQLiteDB;
 import com.intuitive.yummy.webservices.IntentExtraKeys;
@@ -21,15 +23,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TableRow.LayoutParams;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.View;
+
+import android.widget.AdapterView.OnItemClickListener;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 
 public class CartActivity extends Activity implements RestResponseReceiver.Receiver{
 
@@ -38,77 +51,63 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 		//	"16 inch Sausage Pizza", "Cheese Pizza Slice" };
 	//double[] price = { 10, 11, 12, 1.5 };
 
-	List<OrderItem> orderItems;
+	
+	ArrayList<OrderItem> orderItems;
 	public RestResponseReceiver responseReceiver;
-	TableLayout t1;
+	private ListView listView;
+	SQLiteDB cache = null;
+	Double totalPrice = 0.0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cart);
 
-		SQLiteDB cache = new SQLiteDB(this);
-		Double totalPrice = 0.0;
-		t1 = (TableLayout) findViewById(R.id.table1);
+		cache = new SQLiteDB(this);
 		
-		
-		orderItems = cache.getAllOrderItems();
-		
-		for (OrderItem orderItem : orderItems) {
-			TableRow tr = new TableRow(this);
-			TextView tv1 = new TextView(this);
-			TextView tv2 = new TextView(this);
-			TextView tv3 = new TextView(this);
-			//user defined function
+		orderItems = (ArrayList<OrderItem>) cache.getAllOrderItems();
 			
-			// order: quantity, item name, price
-			createView(tr, tv1, String.valueOf(orderItem.getQuantity()));
-			createView(tr, tv2, orderItem.getName());
-			String price = NumberFormat.getCurrencyInstance().format(orderItem.getPrice());
-			createView(tr, tv3, price);
-			
-			//add row to table
-			t1.addView(tr);
-			
-			// keep track of totalPrice
-			totalPrice += orderItem.getPrice();
-	    }
+		final OrderItemAdapter adapter = new OrderItemAdapter(this, R.layout.list_order_item, orderItems);		
+		listView = (ListView)findViewById(R.id.listOrderItem);
+		listView.setAdapter(adapter);
 		
-		//adding the last row for the total amount using dummy data
-
-		TableRow tr2 = new TableRow(this);
-		TextView tv4 = new TextView(this);
-		TextView tv5 = new TextView(this);
-		TextView tv6 = new TextView(this);
-		createView(tr2, tv4, "Total:");
-		createView(tr2, tv5, "   ");
-		createView(tr2, tv6, NumberFormat.getCurrencyInstance().format(totalPrice));
-		t1.addView(tr2);
+		// --------------------------------
+		// http://stackoverflow.com/questions/2558591/remove-listview-items-in-android
+		listView.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> a, View v, int position, long id){
+				AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
+				builder.setMessage("Remove this item from your order?");
+				final int positionToRemove = position;
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int which){
+						totalPrice -= orderItems.get(positionToRemove).getPrice();
+						cache.deleteOrderItem(orderItems.get(positionToRemove));
+						orderItems.remove(positionToRemove);
+						adapter.notifyDataSetChanged();
+					}
+				});
+				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {}
+				});
+				builder.show();
+			}			
+		});
+		// --------------------------------		
 		
+		
+		for( int i = 0; i < orderItems.size(); i ++ ){
+			totalPrice += ( orderItems.get(i).getPrice() * orderItems.get(i).getQuantity() );
+		}
+		String total = NumberFormat.getCurrencyInstance().format(totalPrice); 
+		((TextView)findViewById(R.id.total_price)).setText(total);
 		cache.close();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_cart, menu);
 		return true;
-	}
-
-	//Function to add each cell to row
-	public void createView(TableRow tr, TextView t, String viewdata) {
-		//content of each cell
-		t.setText(viewdata);
-		t.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
-		t.setTextColor(Color.WHITE);
-		t.setBackgroundColor(Color.BLACK);
-		//creating borders
-		t.setPadding(20, 0, 0, 0);
-		tr.setPadding(0, 1, 0, 1);
-		tr.setBackgroundColor(Color.WHITE);
-		//add textview to row
-		tr.addView(t);
 	}
 	
 	//Go to home page when home button is clicked
@@ -150,6 +149,13 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	        
 	    case RestResultCode.FINISHED:
 	    	
+	    	//orderItems = resultData.getParcelableArrayList(RestService.BundleObjectKey);
+	    
+	    	/*OrderItemAdapter adapter = new OrderItemAdapter(this, R.layout.list_order_item, orderItems);
+	    	listView = (ListView)findViewById(R.id.listOrderItem);
+	    	listView.setAdapter(adapter);
+	    	*/
+	    	
 	    	// clean out cart
 	    	SQLiteDB cache = new SQLiteDB(this);
 	    	cache.deleteAllOrderItems();
@@ -168,7 +174,6 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	    case RestResultCode.ERROR:
 	        	//RestResultCode.ERROR.getValue()
 	        break;
-	}
-		
+		}
 	}
 }
