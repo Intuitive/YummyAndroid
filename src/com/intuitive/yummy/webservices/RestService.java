@@ -9,6 +9,7 @@ import org.json.JSONArray;
 
 import com.intuitive.yummy.models.Model;
 import com.intuitive.yummy.models.Order;
+import com.intuitive.yummy.models.OrderItem;
 import com.intuitive.yummy.models.User;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.MenuItem;
@@ -59,6 +60,7 @@ public class RestService extends IntentService {
 		put(User.class, "users");
 		put(MenuItem.class, "menuItems");
 		put(Order.class, "orders");
+		put(OrderItem.class, "orderItems");
 	}};
 	
 	
@@ -309,9 +311,7 @@ public class RestService extends IntentService {
         		postParams = PostParameter.hashMapToNameValuePairs(modelObject.getPostData());
         	}        	
         	
-        	
-        	// log URL and post data
-        	// TODO take this out for production? or use debug var to check
+        	// --------------------LOGGING--------------------
         	Log.v("yummy", "Making HTTP request to URL: " + requestUrl);
         	if(actionMethodMapping.get(action) == "POST" && action != Action.DELETE && action != Action.CREATE_JSON)
         	{
@@ -325,6 +325,7 @@ public class RestService extends IntentService {
         	String jsonString = intent.getStringExtra(IntentExtraKeys.JSON_STRING);
         	if(actionMethodMapping.get(action) == "JSON")
         		Log.d("yummy", jsonString);
+        	// ------------------END LOGGING------------------
         	
         	// fire HTTP request and handle response
         	JSONObject json = jParser.makeHttpRequest(requestUrl, actionMethodMapping.get(action), postParams, jsonString);
@@ -347,16 +348,25 @@ public class RestService extends IntentService {
 	        			// create list to return via bundle
 		        		ArrayList<Model> objectList = new ArrayList<Model>();
 		        		int count = json.getInt("count");
+		        		
 		        		if(count == 1){
 		        			// TODO problem here
-		        			JSONObject obj_json = json.getJSONObject("data");
-		
-		        			Model object = (Model) modelType.newInstance();
-		        			JSONObject jsonObject = obj_json.getJSONObject(object.getModelName());
-		        			object.parseJson(jsonObject);
-		
-		        			objectList.add(object);
-		        		}else if(count > 1){
+		        			try{
+		        				
+		        				JSONObject obj_json = json.getJSONObject("data");
+		        				Model object = (Model) modelType.newInstance();
+			        			JSONObject jsonObject = obj_json.getJSONObject(object.getModelName());
+			        			object.parseJson(jsonObject);
+			        			objectList.add(object);
+			        			
+		        			}catch(JSONException e){
+		        				// if JSONObject conversion fails, data may hold array of 1
+		        				// so then we try the next if case
+		        				count++;
+		        			}
+		        		}
+		        		
+		        		if(count > 1){
 			        		JSONArray objects_json = json.optJSONArray("data"); 
 		        			
 			        		// convert JSONArray items to model objects

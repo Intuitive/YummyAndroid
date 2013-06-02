@@ -15,7 +15,7 @@
         android:layout_marginTop="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" 
         android:gravity="left"
-        android:onClick="viewOrderDetail" />
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/timeRemaining"
@@ -26,6 +26,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp" 
-        android:text="10:00" />
+        android:text="10:00" 
+        android:focusable="false"/>
 
 </LinearLayout>

@@ -1,7 +1,10 @@
 package com.intuitive.yummy.models;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -237,7 +240,16 @@ public class Order implements Model {
 			paymentMethod = json.getInt("payment_method");
 			status = json.getInt("status") == 0 ? OrderStatus.IN_PROGRESS : OrderStatus.FULFILLED;
 			duration = json.optInt("duration", 0);
-			dateCreated = Timestamp.valueOf(json.getString("date_created"));
+			
+			// timestamp comes in as UTC but Timestamp.valueOf thinks it's in local timezone
+			Timestamp dateCreated_utcPlusOffset = Timestamp.valueOf(json.getString("date_created"));			
+			
+			// so we've got to take that offset back off for our timezone 
+			TimeZone tz = TimeZone.getTimeZone("America/New_York");
+			int offset = tz.getOffset(new Date().getTime());;
+			long dateCreated_UTC = dateCreated_utcPlusOffset.getTime() + offset;
+			
+			dateCreated = new Timestamp(dateCreated_UTC);
 		} catch (JSONException e) {
 			Log.e("Yummy", "JSON object did not map to Order object.");
 			e.printStackTrace();
