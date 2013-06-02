@@ -1,5 +1,8 @@
 package com.intuitive.yummy.activities;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.R.id;
 import com.intuitive.yummy.R.layout;
@@ -14,6 +17,7 @@ import com.intuitive.yummy.webservices.RestResultCode;
 import com.intuitive.yummy.webservices.RestService;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,7 +30,7 @@ import android.widget.ToggleButton;
 import android.view.Menu;
 import android.view.View;
 
-public class OrderDetailActivity extends Activity {
+public class OrderDetailActivity extends Activity implements RestResponseReceiver.Receiver{
 
 	public String orderId = null;
 	public String vendorId = null;
@@ -55,31 +59,7 @@ public class OrderDetailActivity extends Activity {
         responseReceiver.setReceiver(this);
         
 		final Intent getOrderItemsIntent = RestService.getReadManyByParamIntent(OrderItem.class, orderId, this, responseReceiver);
-		startService(getOrderItemsIntent);		
-		//adding cell to each row with dummy data
-		t1 = (TableLayout) findViewById(R.id.table1);
-		for (int i = 0; i < orderedItems.length; i++) {
-			TableRow tr = new TableRow(this);
-			TextView tv1 = new TextView(this);
-			TextView tv2 = new TextView(this);
-			TextView tv3 = new TextView(this);
-			//user defined function
-			createView(tr, tv1, Integer.toString(1));
-			createView(tr, tv2, orderedItems[i]);
-			createView(tr, tv3, "");
-			//add row to table
-			t1.addView(tr);
-		}
-		
-		//adding the last row for the total amount using dummy data
-		TableRow tr2 = new TableRow(this);
-		TextView tv4 = new TextView(this);
-		TextView tv5 = new TextView(this);
-		TextView tv6 = new TextView(this);
-		createView(tr2, tv4, "Total:");
-		createView(tr2, tv5, "$4.25");
-		createView(tr2, tv6, "   ");
-		t1.addView(tr2);
+		startService(getOrderItemsIntent);
 	}
 
 	@Override

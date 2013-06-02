@@ -9,6 +9,7 @@ import org.json.JSONArray;
 
 import com.intuitive.yummy.models.Model;
 import com.intuitive.yummy.models.Order;
+import com.intuitive.yummy.models.OrderItem;
 import com.intuitive.yummy.models.User;
 import com.intuitive.yummy.models.Vendor;
 import com.intuitive.yummy.models.MenuItem;
@@ -59,6 +60,7 @@ public class RestService extends IntentService {
 		put(User.class, "users");
 		put(MenuItem.class, "menuItems");
 		put(Order.class, "orders");
+		put(OrderItem.class, "orderItems");
 	}};
 	
 	
@@ -348,23 +350,31 @@ public class RestService extends IntentService {
 		        		int count = json.getInt("count");
 		        		if(count == 1){
 		        			// TODO problem here
-		        			JSONObject obj_json = json.getJSONObject("data");
-		
-		        			Model object = (Model) modelType.newInstance();
-		        			JSONObject jsonObject = obj_json.getJSONObject(object.getModelName());
-		        			object.parseJson(jsonObject);
-		
-		        			objectList.add(object);
-		        		}else if(count > 1){
+		        			try{
+
+		        				JSONObject obj_json = json.getJSONObject("data");
+		        				Model object = (Model) modelType.newInstance();
+			        			JSONObject jsonObject = obj_json.getJSONObject(object.getModelName());
+			        			object.parseJson(jsonObject);
+			        			objectList.add(object);
+
+		        			}catch(JSONException e){
+		        				// if JSONObject conversion fails, data may hold array of 1
+		        				// so then we try the next if case
+		        				count++;
+		        			}
+		        		}
+
+		        		if(count > 1){
 			        		JSONArray objects_json = json.optJSONArray("data"); 
-		        			
+
 			        		// convert JSONArray items to model objects
 		        			for(int i=0; i<objects_json.length(); i++){
 		        				// create a new Model type and fill it using the JSON data
 		        				Model object = (Model) modelType.newInstance();
 		        				JSONObject jsonObject = objects_json.getJSONObject(i).getJSONObject(object.getModelName());
 		        				object.parseJson(jsonObject);
-		        				
+
 		        				objectList.add(object);
 		        			}
 		        		}

@@ -55,7 +55,8 @@ public class VendorAdminAccountActivity extends Activity implements RestResponse
         startService(getVendorIntent);
         
         // setup UI based on account type (PARAMETER1 == isAdmin)
-        if (intent.getBooleanExtra(IntentExtraKeys.PARAMETER1, false)){
+        // if they're not an Admin, hide the admin stuff
+        if (!intent.getBooleanExtra(IntentExtraKeys.PARAMETER1, false)){
 			Button genInfo = (Button)findViewById(R.id.button_edit_general_info);
 			genInfo.setVisibility(View.GONE);
 			Button menuEdit = (Button)findViewById(R.id.button_edit_menu);
@@ -107,14 +108,12 @@ public class VendorAdminAccountActivity extends Activity implements RestResponse
         responseReceiver.setReceiver(this);
         
         EditText waitTime = (EditText)findViewById(R.id.waitTime);
-        
-        //Edgar just uncomment this and change it to the setWaitTime or setDuration that you made.
-        /*if (waitTime.getText() == null){
+        if (waitTime.getText() == null){
         	vendor.setWaitTime(20);
         }
         else{
         	vendor.setWaitTime(Integer.parseInt(waitTime.getText().toString()));
-        }*/
+        }
         
         Intent updateVendor = RestService.getUpdateIntent(vendor, this, responseReceiver);
 		startService(updateVendor);

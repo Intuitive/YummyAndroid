@@ -85,7 +85,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="center_horizontal"
 	            android:onClick="viewPendOrder"
-	            android:text="View Pending Order" />
+	            android:text="View Pending Orders" />
 
 	        <Button
 	            android:id="@+id/button_view_order_history"

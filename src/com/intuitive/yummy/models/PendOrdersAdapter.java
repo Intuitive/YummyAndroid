@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.intuitive.yummy.R;
 import com.intuitive.yummy.activities.MainActivity;
 import com.intuitive.yummy.activities.OrderDetailActivity;
+import com.intuitive.yummy.webservices.IntentExtraKeys;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -119,6 +120,8 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			// TODO change color of text depending on how much time is left
 			//Log.d("yummy", "tick!");
 			orderRows.get(orderIndex).timeRemaining.setText(timeRemaining);
+			
+			/*
 			if (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) < 2){
 				orderRows.get(orderIndex).timeRemaining.setTextColor(0xff0000);
 			} else if (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) < 5 
@@ -127,6 +130,7 @@ public class PendOrdersAdapter extends ArrayAdapter<Order> {
 			} else {
 				orderRows.get(orderIndex).timeRemaining.setTextColor(0x008000);
 			}
+			*/
 		}
 	}
 }

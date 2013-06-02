@@ -160,12 +160,7 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	    	// clean out cart
 	    	SQLiteDB cache = new SQLiteDB(this);
 	    	cache.deleteAllOrderItems();
-	    	cache.close();	    	
-	    	
-	    	// clean out cart
-	    	SQLiteDB cache = new SQLiteDB(this);
-	    	cache.deleteAllOrderItems();
-	    	cache.close();	    	
+	    	cache.close();	    	   	
 	    	
 	    	// get order and pass it to OrderConfirmation
 	    	ArrayList<Order> orders = resultData.getParcelableArrayList(RestService.BundleObjectKey);
@@ -174,7 +169,6 @@ public class CartActivity extends Activity implements RestResponseReceiver.Recei
 	    	intent.putExtra("waitTime", orders.get(0).getWaitTime());
         	startActivity(intent);
 
-	        
 	        // TODO hide progress
 	        break;
 	    case RestResultCode.ERROR:
